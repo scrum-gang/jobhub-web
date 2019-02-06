@@ -4,7 +4,7 @@ import Login from './Features/Login/Login';
 class App extends Component {
   public render() {
     return (
-      <div className="App">
+      <div>
         <Login />
       </div>
     );
