@@ -1,12 +1,18 @@
 import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+
 import Login from './Features/Authentication/Login';
 
 class App extends Component {
   public render() {
     return (
-      <div>
-        <Login />
-      </div>
+      <main>
+        <Switch>
+          <Route path="/" exact />
+          <Route path="/login" component={Login} />
+          <Route />
+        </Switch>
+      </main>
     );
   }
 }
