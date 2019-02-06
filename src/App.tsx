@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Login from './Features/Login/Login';
+import Login from './Features/Authentication/Login';
 
 class App extends Component {
   public render() {
