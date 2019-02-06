@@ -4,22 +4,11 @@ import React from 'react';
 
 const styles = (theme: Theme) =>
   createStyles({
-    card: {
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-      paddingBottom: 12,
-      paddingLeft: 12,
-      paddingTop: 12,
-    },
-    container: {
-      display: 'flex',
-      flexGrow: 1,
-      flexWrap: 'wrap',
-      height: "70vh"
-    },
     dense: {
       marginTop: 16,
+    },
+    grid: {
+      minHeight: '100vh'
     },
     margin: {
       margin: theme.spacing.unit
@@ -40,23 +29,23 @@ interface IState {
 
 class Login extends React.Component<IProps, IState> {
   public state = {
-    email: 'test@gmail.com',
-    password: '123'
+    email: '',
+    password: ''
   };
 
   public render() {
     const { classes } = this.props;
     return (
-      <form className={classes.container} noValidate autoComplete="off">
+      <form noValidate autoComplete="off">
         <Grid
           container
           spacing={0}
           direction="column"
           alignItems="center"
           justify="center"
-          style={{ minHeight: '100vh' }}
+          className={classes.grid}
         >
-          <Card className={classes.card}>
+          <Card>
             <CardContent>
               <Grid container justify="center" direction="column">
                 <TextField
