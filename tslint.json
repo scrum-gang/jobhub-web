@@ -6,7 +6,7 @@
     ],
     "jsRules": {},
     "rules": {
-        "no-implicit-dependencies": false
+      
     },
     "rulesDirectory": []
 }
