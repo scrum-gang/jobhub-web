@@ -1,6 +1,7 @@
 import { Button, Card, CardContent, createStyles, Grid, TextField, Theme, withStyles, WithStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -19,6 +20,8 @@ const styles = (theme: Theme) =>
       width: 200,
     }
   });
+
+const RegistrationLink:React.FunctionComponent = props => <Link to="/register" {...props} />
 
 export interface IProps extends WithStyles<typeof styles> { }
 
@@ -63,6 +66,9 @@ class Login extends React.Component<IProps, IState> {
                   variant="outlined"
                 />
                 <Button size="medium" className={classes.margin} color="primary" variant="contained">Sign In</Button>
+                <Button className={classes.margin} variant="contained" component={RegistrationLink}>
+                  Register
+                </Button>
               </Grid>
             </CardContent>
           </Card>
