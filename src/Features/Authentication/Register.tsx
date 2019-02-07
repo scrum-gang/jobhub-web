@@ -18,7 +18,8 @@ const styles = (theme: Theme) =>
     },
     grid: {
       height: "100vh",
-      width: "100vw"
+      padding: 0,
+      width: "100%"
     },
     margin: {
       margin: theme.spacing.unit
