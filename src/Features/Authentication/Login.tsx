@@ -1,15 +1,25 @@
-import { Button, Card, CardContent, createStyles, Grid, TextField, Theme, withStyles, WithStyles } from '@material-ui/core';
-import classNames from 'classnames';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Button,
+  Card,
+  CardContent,
+  createStyles,
+  Grid,
+  TextField,
+  Theme,
+  withStyles,
+  WithStyles
+} from "@material-ui/core";
+import classNames from "classnames";
+import React from "react";
+import { Link } from "react-router-dom";
 
 const styles = (theme: Theme) =>
   createStyles({
     dense: {
-      marginTop: 16,
+      marginTop: 16
     },
     grid: {
-      minHeight: '100vh'
+      minHeight: "100vh"
     },
     margin: {
       margin: theme.spacing.unit
@@ -17,23 +27,25 @@ const styles = (theme: Theme) =>
     textField: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
-      width: 200,
+      width: 200
     }
   });
 
-const RegistrationLink:React.FunctionComponent = props => <Link to="/register" {...props} />
+const RegistrationLink: React.FunctionComponent = props => (
+  <Link to="/register" {...props} />
+);
 
-export interface IProps extends WithStyles<typeof styles> { }
+export interface IProps extends WithStyles<typeof styles> {}
 
 interface IState {
-  email: string,
-  password: string
+  email: string;
+  password: string;
 }
 
 class Login extends React.Component<IProps, IState> {
   public state = {
-    email: '',
-    password: ''
+    email: "",
+    password: ""
   };
 
   public render() {
@@ -65,8 +77,19 @@ class Login extends React.Component<IProps, IState> {
                   margin="dense"
                   variant="outlined"
                 />
-                <Button size="medium" className={classes.margin} color="primary" variant="contained">Sign In</Button>
-                <Button className={classes.margin} variant="contained" component={RegistrationLink}>
+                <Button
+                  size="medium"
+                  className={classes.margin}
+                  color="primary"
+                  variant="contained"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  className={classes.margin}
+                  variant="contained"
+                  component={RegistrationLink}
+                >
                   Register
                 </Button>
               </Grid>
@@ -74,7 +97,7 @@ class Login extends React.Component<IProps, IState> {
           </Card>
         </Grid>
       </form>
-    )
+    );
   }
 }
 
