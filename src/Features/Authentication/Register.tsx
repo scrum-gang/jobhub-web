@@ -7,6 +7,7 @@ import {
   Paper,
   TextField,
   Theme,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core";
@@ -46,7 +47,9 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
       <Paper className={classes.paper}>
         <form>
           <Grid container justify="space-around" direction="column">
-            <h1>Register</h1>
+            <Typography component="h2" variant="h4" gutterBottom>
+              Register
+            </Typography>
             <TextField
               id="email"
               className={classes.textField}
