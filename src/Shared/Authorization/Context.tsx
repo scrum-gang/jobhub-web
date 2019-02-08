@@ -1,5 +1,5 @@
 import * as React from "react";
-import IAuthInfo from "../../config/types/authInfo";
+import IAuthInfo from "./authInfo";
 
 const defaultState: IAuthInfo = {
   isLoading: false,

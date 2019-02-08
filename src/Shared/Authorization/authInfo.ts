@@ -1,4 +1,4 @@
-import IUser from "./user"
+import IUser from "../../config/types/user"
 
 export default interface IAuthorizationInfo {
   userInfo?: IUser;
