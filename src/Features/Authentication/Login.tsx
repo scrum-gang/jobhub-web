@@ -12,7 +12,7 @@ import {
 import classNames from "classnames";
 import React from "react";
 import { Link } from "react-router-dom";
-import { AuthConsumer, Protection } from "../../Shared/Authorization";
+import { AuthRedirect, Protection } from "../../Shared/Authorization";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -53,7 +53,7 @@ class Login extends React.Component<IProps, IState> {
     const { classes } = this.props;
     return (
       <React.Fragment>
-        <AuthConsumer protection={Protection.LOGGED_OUT} />
+        <AuthRedirect protection={Protection.LOGGED_OUT} />
         <form noValidate autoComplete="off">
           <Grid
             container

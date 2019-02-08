@@ -11,7 +11,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { AuthConsumer, Protection } from "../../Shared/Authorization";
+import { AuthRedirect, Protection } from "../../Shared/Authorization";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -40,7 +40,7 @@ interface IProps extends WithStyles<typeof styles> {}
 const Register: React.FunctionComponent<IProps> = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthConsumer protection={Protection.LOGGED_OUT} />
+      <AuthRedirect protection={Protection.LOGGED_OUT} />
       <Grid
         container
         className={classes.grid}
