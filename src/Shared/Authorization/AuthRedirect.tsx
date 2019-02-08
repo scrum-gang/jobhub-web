@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 
 import { Consumer as ContextConsumer } from "./Context";
 import Protection from "./protections";
-import { AuthRedirect } from ".";
 
 interface IProps {
   protection: Protection;
