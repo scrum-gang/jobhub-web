@@ -1,14 +1,9 @@
 import * as React from "react";
 import { defaultState, Provider as ContextProvider } from "./Context";
 
-interface IProps {
-  authEndpoint: string;
-}
+import userAPI from "../../api/userAPI";
 
-const Provider: React.FunctionComponent<IProps> = ({
-  authEndpoint,
-  children
-}) => {
+const Provider: React.FunctionComponent = ({ children }) => {
   const [isLoading, setLoading] = React.useState(defaultState.isLoading);
   const [userInfo, setUserInfo] = React.useState(defaultState.userInfo);
   const [sessionExpiry, setSessionExpiry] = React.useState(
@@ -16,17 +11,20 @@ const Provider: React.FunctionComponent<IProps> = ({
   );
 
   React.useEffect(() => {
-    if (!userInfo && authEndpoint) {
+    if (!isLoading && !userInfo) {
       fetchInfo();
     }
-  });
+  }, []);
 
-  const toggleLoading = () => {
-    setLoading(!isLoading);
-  };
-
-  const fetchInfo = () => {
-    // todo
+  const fetchInfo = async () => {
+    setLoading(true);
+    try {
+      const info = (await userAPI.getSelf()).data;
+      setUserInfo(info);
+    } catch (e) {
+      setUserInfo(undefined);
+    }
+    setLoading(false);
   };
 
   return (

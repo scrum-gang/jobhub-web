@@ -9,7 +9,7 @@ import { AuthProvider } from "./Shared/Authorization";
 class App extends Component {
   public render() {
     return (
-      <AuthProvider authEndpoint={""}>
+      <AuthProvider>
         <Switch>
           <Route path="/" component={Dashboard} exact />
           <Route path="/login" component={Login} />
