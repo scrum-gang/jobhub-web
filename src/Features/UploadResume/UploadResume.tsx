@@ -29,7 +29,7 @@ const styles = (theme: Theme) =>
       width: "100%"
     },
     icon: {
-      color: "#1e90ff" ,
+      color: "#1e90ff",
       fontSize: "inherit",
       height: "auto",
       margin: theme.spacing.unit,
@@ -56,33 +56,32 @@ interface IProps extends WithStyles<typeof styles> {}
 
 const UploadResume: React.FunctionComponent<IProps> = ({ classes }) => {
   return (
-    // <React.Fragment>
-    //   <AuthRedirect protection={Protection.LOGGED_IN} />
-    //     <h1>WIP</h1>
-    // </React.Fragment>
+    <React.Fragment>
+      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <Grid
+        container
+        className={classes.grid}
+        justify="center"
+        alignItems="center"
+      >
+        <Paper className={classes.paper}>
+          <Grid container justify="center">
+            <CloudUpload className={classes.icon} />
+            <Typography component="h2" variant="h4" gutterBottom>
+              Drag and drop files
+            </Typography>
 
-    <Grid
-      container
-      className={classes.grid}
-      justify="center"
-      alignItems="center"
-    >
-      <Paper className={classes.paper}>
-        <Grid container justify="center">
-          <CloudUpload className={classes.icon}/>
-          <Typography component="h2" variant="h4" gutterBottom>
-            Drag and drop files
-          </Typography>
-          <Button
-            variant="contained"
-            color="default"
-            className={classes.button}
-          >
-            Browse
-          </Button>
-        </Grid>
-      </Paper>
-    </Grid>
+            <Button
+              variant="contained"
+              color="default"
+              className={classes.button}
+            >
+              Browse
+            </Button>
+          </Grid>
+        </Paper>
+      </Grid>
+    </React.Fragment>
   );
 };
 
