@@ -1,34 +1,45 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 import {
   Button,
-  Card,
-  CardContent,
   createStyles,
   Grid,
-  TextField,
+  Paper,
   Theme,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
     dense: {
       marginTop: 16
     },
-    grid: {
+    fullHeight: {
       minHeight: "100vh"
+    },
+    h1: {
+      fontSize: "5rem",
+      textAlign: "center"
+    },
+    loginContainer: {
+      maxWidth: 400,
+      padding: 6 * theme.spacing.unit,
+      width: "90%"
     },
     margin: {
       margin: theme.spacing.unit
     },
     textField: {
       marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 200
+      marginRight: theme.spacing.unit
     }
   });
 
@@ -36,70 +47,82 @@ const RegistrationLink: React.FunctionComponent = props => (
   <Link to="/register" {...props} />
 );
 
-export interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {}
 
-interface IState {
-  email: string;
-  password: string;
-}
-
-class Login extends React.Component<IProps, IState> {
-  public state = {
-    email: "",
-    password: ""
-  };
+class Login extends React.Component<IProps> {
 
   public render() {
     const { classes } = this.props;
     return (
       <React.Fragment>
         <AuthRedirect protection={Protection.LOGGED_OUT} />
-        <form noValidate autoComplete="off">
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            className={classes.grid}
-          >
-            <Card>
-              <CardContent>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justify="center"
+          className={classes.fullHeight}
+        >
+          <Paper className={classes.loginContainer}>
+            <Typography
+              variant="h1"
+              color="primary"
+              gutterBottom={true}
+              className={classes.h1}
+            >
+              JobHub
+            </Typography>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={loginSchema}
+              onSubmit={values => {
+                console.log(values);
+              }}
+            >
+              <Form>
                 <Grid container justify="center" direction="column">
-                  <TextField
-                    id="outlined-name"
-                    label="Email"
-                    className={classNames(classes.textField, classes.dense)}
-                    margin="dense"
+                  <Field
+                    name="email"
+                    type="email"
+                    label="email"
                     variant="outlined"
+                    margin="dense"
+                    className={classes.textField}
+                    component={TextField}
                   />
-                  <TextField
-                    id="outlined-name"
-                    label="Password"
-                    className={classNames(classes.textField, classes.dense)}
-                    margin="dense"
+                  <Field
+                    name="password"
+                    type="password"
+                    label="password"
                     variant="outlined"
+                    margin="dense"
+                    className={classes.textField}
+                    component={TextField}
                   />
                   <Button
-                    size="medium"
+                    size="large"
                     className={classes.margin}
                     color="primary"
                     variant="contained"
+                    type="submit"
                   >
                     Sign In
                   </Button>
+
                   <Button
                     className={classes.margin}
                     variant="contained"
                     component={RegistrationLink}
+                    type="button"
                   >
                     Register
                   </Button>
                 </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        </form>
+              </Form>
+            </Formik>
+          </Paper>
+        </Grid>
       </React.Fragment>
     );
   }
