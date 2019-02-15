@@ -21,27 +21,16 @@ import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
-    dense: {
-      marginTop: 16
+    buttonsGrid: {
+      marginTop: theme.spacing.unit
     },
     fullHeight: {
       minHeight: "100vh"
-    },
-    h1: {
-      fontSize: "5rem",
-      textAlign: "center"
     },
     loginContainer: {
       maxWidth: 400,
       padding: 6 * theme.spacing.unit,
       width: "90%"
-    },
-    margin: {
-      margin: theme.spacing.unit
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit
     }
   });
 
@@ -67,10 +56,11 @@ class Login extends React.Component<IProps> {
         >
           <Paper className={classes.loginContainer}>
             <Typography
-              variant="h1"
+              component="h1"
+              variant="h2"
+              align="center"
               color="primary"
               gutterBottom={true}
-              className={classes.h1}
             >
               JobHub
             </Typography>
@@ -87,7 +77,6 @@ class Login extends React.Component<IProps> {
                     label="email"
                     variant="outlined"
                     margin="dense"
-                    className={classes.textField}
                     component={TextField}
                   />
                   <Field
@@ -96,27 +85,32 @@ class Login extends React.Component<IProps> {
                     label="password"
                     variant="outlined"
                     margin="dense"
-                    className={classes.textField}
                     component={TextField}
                   />
-                  <Button
-                    size="large"
-                    className={classes.margin}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    Sign In
-                  </Button>
-
-                  <Button
-                    className={classes.margin}
-                    variant="contained"
-                    component={RegistrationLink}
-                    type="button"
-                  >
-                    Register
-                  </Button>
+                  <Grid container spacing={16} className={classes.buttonsGrid}>
+                    <Grid item xs={12} sm={6}>
+                      <Button
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        type="submit"
+                        fullWidth
+                      >
+                        Sign In
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Button
+                        size="large"
+                        variant="contained"
+                        component={RegistrationLink}
+                        type="button"
+                        fullWidth
+                      >
+                        Register
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Form>
             </Formik>
@@ -128,10 +122,9 @@ class Login extends React.Component<IProps> {
 
   private handleSubmit = (values: { email: string; password: string }) => {
     const context = this.context;
-    return userAPI.login(values)
-      .then((response) => {
-        return context.updateProvider(response);
-      })
+    return userAPI.login(values).then(response => {
+      return context.updateProvider(response);
+    });
   };
 }
 
