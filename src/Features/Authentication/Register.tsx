@@ -10,13 +10,14 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 
 import userAPI from "../../api/userAPI";
 import UserType from "../../config/types/accountTypes";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import registrationSchema from "./registrationSchema";
+import { Redirect } from "react-router";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -38,8 +39,31 @@ const styles = (theme: Theme) =>
 interface IProps extends WithStyles<typeof styles> {}
 
 const Register: React.FunctionComponent<IProps> = ({ classes }) => {
+  const [isRegistered, setRegistered] = React.useState(false);
+
+  const handleSubmit = (
+    values: {
+      email: string;
+      password: string;
+      confirm: string;
+    },
+    actions: FormikActions<any>
+  ) => {
+    return userAPI
+      .register({
+        email: values.email,
+        password: values.password,
+        type: UserType.APPLICANT
+      })
+      .then(response => {
+        actions.setSubmitting(false);
+        setRegistered(true);
+      });
+  };
+
   return (
     <React.Fragment>
+      {isRegistered && <Redirect to="/confirm" />}
       <AuthRedirect protection={Protection.LOGGED_OUT} />
       <Grid
         container
@@ -104,18 +128,6 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
       </Grid>
     </React.Fragment>
   );
-};
-
-const handleSubmit = (values: {
-  email: string;
-  password: string;
-  confirm: string;
-}) => {
-  return userAPI.register({
-    email: values.email,
-    password: values.password,
-    type: UserType.APPLICANT
-  });
 };
 
 export default withStyles(styles)(Register);
