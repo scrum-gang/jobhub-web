@@ -2,11 +2,15 @@ import * as React from "react";
 import IAuthInfo from "./authInfo";
 
 const defaultState: IAuthInfo = {
+  clearCache: () => null,
   isLoading: false,
-  sessionExpiry: new Date(),
+  token: "",
+  updateProvider: () => null,
   userInfo: undefined
 };
 
-const { Consumer, Provider } = React.createContext(defaultState);
+const AuthorizationContext = React.createContext(defaultState);
+const { Consumer, Provider } = AuthorizationContext;
 
 export { Provider, Consumer, defaultState };
+export default AuthorizationContext;

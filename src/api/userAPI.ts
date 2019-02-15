@@ -1,7 +1,9 @@
 import { AxiosPromise } from "axios";
 
-import IUser from "../config/types/user";
 import api from "./api";
+
+import ILoginResponse from "../config/types/loginResponse";
+import IUser from "../config/types/user";
 
 class UserAPI {
   constructor() {
@@ -14,6 +16,7 @@ class UserAPI {
   public login = (payload: { email: string; password: string }) => {
     return api.endpoints["/login"].create(payload).then(({ data }) => {
       api.setJWT(data.token);
+      return data as ILoginResponse;
     });
   };
 

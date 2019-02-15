@@ -14,7 +14,9 @@ import {
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 
+import userAPI from "../../api/userAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
@@ -50,7 +52,6 @@ const RegistrationLink: React.FunctionComponent = props => (
 interface IProps extends WithStyles<typeof styles> {}
 
 class Login extends React.Component<IProps> {
-
   public render() {
     const { classes } = this.props;
     return (
@@ -76,9 +77,7 @@ class Login extends React.Component<IProps> {
             <Formik
               initialValues={{ email: "", password: "" }}
               validationSchema={loginSchema}
-              onSubmit={values => {
-                console.log(values);
-              }}
+              onSubmit={this.handleSubmit}
             >
               <Form>
                 <Grid container justify="center" direction="column">
@@ -126,6 +125,16 @@ class Login extends React.Component<IProps> {
       </React.Fragment>
     );
   }
+
+  private handleSubmit = (values: { email: string; password: string }) => {
+    const context = this.context;
+    return userAPI.login(values)
+      .then((response) => {
+        return context.updateProvider(response);
+      })
+  };
 }
+
+Login.contextType = AuthorizationContext;
 
 export default withStyles(styles)(Login);

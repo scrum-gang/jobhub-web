@@ -34,11 +34,11 @@ class API {
   };
 
   public setJWT = (token: string) => {
-    this.instance.defaults.headers.Authorization = `Bearer ${token}`;
+    this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
   };
 
   public clearJWT = () => {
-    this.instance.defaults.headers.Authorization = undefined;
+    this.instance.defaults.headers.common.Authorization = undefined;
   };
 
   private createCRUDEndpoints = (entityUrl: string) => {
