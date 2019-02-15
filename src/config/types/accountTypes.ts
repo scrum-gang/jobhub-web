@@ -1,7 +1,6 @@
 enum UserType {
-  APPLICANT = "applicant",
-  MODERATOR = "moderator",
-  RECRUITER = "recruiter"
+  APPLICANT = "Applicant",
+  RECRUITER = "Recruiter"
 }
 
 export default UserType;

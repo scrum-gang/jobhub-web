@@ -1,13 +1,12 @@
 import accountType from "./accountTypes";
 
 interface IUser {
+  _id: string;
   email: string;
   password: string;
   type: accountType;
-  links: {
-    github: string;
-    linkedin: string;
-  };
+  verified: boolean;
+  __v: number;
 }
 
 export default IUser;

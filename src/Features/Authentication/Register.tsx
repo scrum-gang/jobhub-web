@@ -5,41 +5,65 @@ import {
   createStyles,
   Grid,
   Paper,
-  TextField,
   Theme,
   Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core";
+import { Field, Form, Formik, FormikActions } from "formik";
+import { TextField } from "formik-material-ui";
+
+import userAPI from "../../api/userAPI";
+import UserType from "../../config/types/accountTypes";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import registrationSchema from "./registrationSchema";
+import { Redirect } from "react-router";
 
 const styles = (theme: Theme) =>
   createStyles({
-    button: {
-      marginTop: 20
+    buttonsGrid: {
+      marginTop: theme.spacing.unit
     },
     grid: {
       height: "100vh",
       padding: 0,
       width: "100%"
     },
-    margin: {
-      margin: theme.spacing.unit
-    },
-    paper: {
-      maxWidth: "600px",
-      padding: `${6 * theme.spacing.unit}px ${12 * theme.spacing.unit}px`
-    },
-    textField: {
-      width: 250
+    registerContainer: {
+      maxWidth: 400,
+      padding: 6 * theme.spacing.unit,
+      width: "90%"
     }
   });
 
 interface IProps extends WithStyles<typeof styles> {}
 
 const Register: React.FunctionComponent<IProps> = ({ classes }) => {
+  const [isRegistered, setRegistered] = React.useState(false);
+
+  const handleSubmit = (
+    values: {
+      email: string;
+      password: string;
+      confirm: string;
+    },
+    actions: FormikActions<any>
+  ) => {
+    return userAPI
+      .register({
+        email: values.email,
+        password: values.password,
+        type: UserType.APPLICANT
+      })
+      .then(response => {
+        actions.setSubmitting(false);
+        setRegistered(true);
+      });
+  };
+
   return (
     <React.Fragment>
+      {isRegistered && <Redirect to="/confirm" />}
       <AuthRedirect protection={Protection.LOGGED_OUT} />
       <Grid
         container
@@ -47,55 +71,59 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
         justify="center"
         alignItems="center"
       >
-        <Paper className={classes.paper}>
-          <form>
-            <Grid container justify="space-around" direction="column">
-              <Typography component="h2" variant="h4" gutterBottom>
-                Register
-              </Typography>
-              <TextField
-                id="email"
-                className={classes.textField}
-                variant="outlined"
-                label="Email"
-                margin="dense"
-              />
-              <TextField
-                id="password"
-                variant="outlined"
-                label="Password"
-                margin="dense"
-                type="password"
-              />
-              <TextField
-                id="confirm"
-                variant="outlined"
-                label="Confirm Password"
-                type="password"
-                margin="dense"
-              />
-              <TextField
-                id="github"
-                variant="outlined"
-                label="GitHub URL"
-                margin="dense"
-              />
-              <TextField
-                id="linkedin"
-                variant="outlined"
-                label="LinkedIn URL"
-                margin="dense"
-              />
-              <Button
-                className={classes.button}
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Register
-              </Button>
-            </Grid>
-          </form>
+        <Paper className={classes.registerContainer}>
+          <Formik
+            initialValues={{ email: "", password: "", confirm: "" }}
+            validationSchema={registrationSchema}
+            onSubmit={handleSubmit}
+          >
+            <Form>
+              <Grid container justify="space-around" direction="column">
+                <Typography
+                  component="h1"
+                  variant="h4"
+                  color="primary"
+                  align="center"
+                  gutterBottom
+                >
+                  Register
+                </Typography>
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  margin="dense"
+                />
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  margin="dense"
+                />
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  name="confirm"
+                  label="Confirm Password"
+                  type="password"
+                  margin="dense"
+                />
+                <Button
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  className={classes.buttonsGrid}
+                >
+                  Register
+                </Button>
+              </Grid>
+            </Form>
+          </Formik>
         </Paper>
       </Grid>
     </React.Fragment>

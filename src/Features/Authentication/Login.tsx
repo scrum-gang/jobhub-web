@@ -1,34 +1,36 @@
+import React from "react";
+import { Link } from "react-router-dom";
+
 import {
   Button,
-  Card,
-  CardContent,
   createStyles,
   Grid,
-  TextField,
+  Paper,
   Theme,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import classNames from "classnames";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import { TextField } from "formik-material-ui";
+
+import userAPI from "../../api/userAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import AuthorizationContext from "../../Shared/Authorization/Context";
+import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
-    dense: {
-      marginTop: 16
+    buttonsGrid: {
+      marginTop: theme.spacing.unit
     },
-    grid: {
+    fullHeight: {
       minHeight: "100vh"
     },
-    margin: {
-      margin: theme.spacing.unit
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 200
+    loginContainer: {
+      maxWidth: 400,
+      padding: 6 * theme.spacing.unit,
+      width: "90%"
     }
   });
 
@@ -36,73 +38,96 @@ const RegistrationLink: React.FunctionComponent = props => (
   <Link to="/register" {...props} />
 );
 
-export interface IProps extends WithStyles<typeof styles> {}
+interface IProps extends WithStyles<typeof styles> {}
 
-interface IState {
-  email: string;
-  password: string;
-}
-
-class Login extends React.Component<IProps, IState> {
-  public state = {
-    email: "",
-    password: ""
-  };
-
+class Login extends React.Component<IProps> {
   public render() {
     const { classes } = this.props;
     return (
       <React.Fragment>
         <AuthRedirect protection={Protection.LOGGED_OUT} />
-        <form noValidate autoComplete="off">
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            className={classes.grid}
-          >
-            <Card>
-              <CardContent>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justify="center"
+          className={classes.fullHeight}
+        >
+          <Paper className={classes.loginContainer}>
+            <Typography
+              component="h1"
+              variant="h2"
+              align="center"
+              color="primary"
+              gutterBottom={true}
+            >
+              JobHub
+            </Typography>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={loginSchema}
+              onSubmit={this.handleSubmit}
+            >
+              <Form>
                 <Grid container justify="center" direction="column">
-                  <TextField
-                    id="outlined-name"
-                    label="Email"
-                    className={classNames(classes.textField, classes.dense)}
-                    margin="dense"
+                  <Field
+                    name="email"
+                    type="email"
+                    label="email"
                     variant="outlined"
-                  />
-                  <TextField
-                    id="outlined-name"
-                    label="Password"
-                    className={classNames(classes.textField, classes.dense)}
                     margin="dense"
-                    variant="outlined"
+                    component={TextField}
                   />
-                  <Button
-                    size="medium"
-                    className={classes.margin}
-                    color="primary"
-                    variant="contained"
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    className={classes.margin}
-                    variant="contained"
-                    component={RegistrationLink}
-                  >
-                    Register
-                  </Button>
+                  <Field
+                    name="password"
+                    type="password"
+                    label="password"
+                    variant="outlined"
+                    margin="dense"
+                    component={TextField}
+                  />
+                  <Grid container spacing={16} className={classes.buttonsGrid}>
+                    <Grid item xs={12} sm={6}>
+                      <Button
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        type="submit"
+                        fullWidth
+                      >
+                        Sign In
+                      </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Button
+                        size="large"
+                        variant="contained"
+                        component={RegistrationLink}
+                        type="button"
+                        fullWidth
+                      >
+                        Register
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        </form>
+              </Form>
+            </Formik>
+          </Paper>
+        </Grid>
       </React.Fragment>
     );
   }
+
+  private handleSubmit = (values: { email: string; password: string }) => {
+    const context = this.context;
+    return userAPI.login(values).then(response => {
+      return context.updateProvider(response);
+    });
+  };
 }
+
+Login.contextType = AuthorizationContext;
 
 export default withStyles(styles)(Login);
