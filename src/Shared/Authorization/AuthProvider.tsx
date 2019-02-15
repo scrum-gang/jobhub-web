@@ -40,7 +40,7 @@ const Provider: React.FunctionComponent = ({ children }) => {
       const info = (await userAPI.getSelf()).data;
       setUserInfo(info);
     } catch (e) {
-        if (e.message === "The token has expired") {
+        if (e.data.message === "The token has expired") {
           clearCache();
         }
     }
