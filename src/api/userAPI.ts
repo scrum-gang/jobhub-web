@@ -4,6 +4,7 @@ import api from "./api";
 
 import ILoginResponse from "../config/types/loginResponse";
 import IUser from "../config/types/user";
+import UserType from "../config/types/accountTypes";
 
 class UserAPI {
   constructor() {
@@ -18,6 +19,14 @@ class UserAPI {
       api.setJWT(data.token);
       return data as ILoginResponse;
     });
+  };
+
+  public register = (payload: {
+    email: string;
+    password: string;
+    type: UserType;
+  }) => {
+    return api.endpoints["/signup"].create(payload);
   };
 
   public getSelf = () => {
