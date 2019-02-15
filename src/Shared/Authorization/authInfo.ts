@@ -5,6 +5,6 @@ export default interface IAuthorizationInfo {
   userInfo?: IUser;
   token?: string;
   isLoading: boolean;
-  clearCache: () => void;
+  clearStateAndCache: () => void;
   updateProvider: (response: ILoginResponse) => void;
 }

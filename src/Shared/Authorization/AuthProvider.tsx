@@ -11,10 +11,12 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const [userInfo, setUserInfo] = React.useState(defaultState.userInfo);
   const [token, setToken] = React.useState(defaultState.token);
 
+  // read from cache on page load
   React.useEffect(() => {
     loadFromCache();
   }, []);
 
+  // on userInfo update, update cache
   React.useEffect(() => {
     if (userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -23,6 +25,8 @@ const Provider: React.FunctionComponent = ({ children }) => {
     }
   }, [userInfo]);
 
+  // on token update, update cache and api instance
+  // and attempt to fetch user info again
   React.useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -33,6 +37,8 @@ const Provider: React.FunctionComponent = ({ children }) => {
     }
   }, [token]);
 
+  // fetch user info
+  // if token expired, then clear cache
   const fetchInfo = async () => {
     setLoading(true);
 
@@ -40,19 +46,21 @@ const Provider: React.FunctionComponent = ({ children }) => {
       const info = (await userAPI.getSelf()).data;
       setUserInfo(info);
     } catch (e) {
-        if (e.data.message === "The token has expired") {
-          clearCache();
-        }
+      if (e.data.message === "The token has expired") {
+        clearStateAndCache();
+      }
     }
 
     setLoading(false);
   };
 
+  // helper function to update the provider from a consumer
   const updateProvider = (response: ILoginResponse) => {
     setToken(response.token);
     return fetchInfo();
   };
 
+  // load stuff from cache
   const loadFromCache = () => {
     const infoString = localStorage.getItem("userInfo");
     if (infoString) {
@@ -66,7 +74,7 @@ const Provider: React.FunctionComponent = ({ children }) => {
     }
   };
 
-  const clearCache = () => {
+  const clearStateAndCache = () => {
     setUserInfo(undefined);
     setToken(undefined);
     api.clearJWT();
@@ -75,7 +83,13 @@ const Provider: React.FunctionComponent = ({ children }) => {
 
   return (
     <ContextProvider
-      value={{ isLoading, updateProvider, userInfo, token, clearCache }}
+      value={{
+        clearStateAndCache,
+        isLoading,
+        token,
+        updateProvider,
+        userInfo
+      }}
     >
       {children}
     </ContextProvider>

@@ -2,7 +2,7 @@ import * as React from "react";
 import IAuthInfo from "./authInfo";
 
 const defaultState: IAuthInfo = {
-  clearCache: () => null,
+  clearStateAndCache: () => null,
   isLoading: false,
   token: "",
   updateProvider: () => null,
