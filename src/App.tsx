@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 
+import { CssBaseline } from "@material-ui/core";
+
 import ConfirmMessage from "./Features/Authentication/ConfirmMessage";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
@@ -11,6 +13,7 @@ class App extends Component {
   public render() {
     return (
       <AuthProvider>
+        <CssBaseline />
         <Switch>
           <Route path="/" component={Dashboard} exact />
           <Route path="/login" component={Login} />
