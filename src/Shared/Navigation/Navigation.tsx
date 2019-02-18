@@ -12,6 +12,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   Theme,
   Toolbar,
   Typography,
@@ -19,11 +21,11 @@ import {
   WithStyles
 } from "@material-ui/core";
 import {
+  AccountCircle,
   Attachment as AttachmentIcon,
   Extension as ExtensionIcon,
   Home as HomeIcon,
   Menu as MenuIcon,
-  PowerSettingsNew as LogoutIcon,
   Search as SearchIcon,
   Work as WorkIcon
 } from "@material-ui/icons";
@@ -54,6 +56,9 @@ const styles = (theme: Theme) =>
     drawerPaper: {
       width: drawerWidth
     },
+    grow: {
+      flexGrow: 1
+    },
     link: {
       textDecoration: "none"
     },
@@ -71,6 +76,15 @@ const styles = (theme: Theme) =>
       display: "flex",
       justifyContent: "center",
       ...theme.mixins.toolbar
+    },
+    toolbar2: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "space-between",
+      ...theme.mixins.toolbar,
+      [theme.breakpoints.up("sm")]: {
+        justifyContent: "flex-end"
+      }
     }
   });
 
@@ -103,11 +117,6 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       icon: <ExtensionIcon />,
       text: "Chrome Extension"
     },
-    {
-      icon: <LogoutIcon />,
-      route: "/",
-      text: "Log Out"
-    }
   ];
 
   const drawer = (
@@ -148,6 +157,15 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
   );
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
+
+  const handleMenuOpen = (event: React.SyntheticEvent) => {
+    setMenuAnchor(event.currentTarget as HTMLElement);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -156,7 +174,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
   return (
     <div className={classes.root}>
       <AppBar className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar2}>
           <IconButton
             color="primary"
             aria-label="Open drawer"
@@ -165,6 +183,33 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
           >
             <MenuIcon />
           </IconButton>
+          <div>
+            <IconButton
+              aria-owns={!!menuAnchor ? "menu-appbar" : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuOpen}
+              color="primary"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={menuAnchor}
+              anchorOrigin={{
+                horizontal: "right",
+                vertical: "top"
+              }}
+              transformOrigin={{
+                horizontal: "right",
+                vertical: "top"
+              }}
+              open={!!menuAnchor}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={() => {}}>My account</MenuItem>
+              <MenuItem onClick={() => {}}>Log Out</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>
