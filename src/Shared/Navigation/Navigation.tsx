@@ -136,7 +136,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
