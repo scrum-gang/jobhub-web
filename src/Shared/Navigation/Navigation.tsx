@@ -7,6 +7,7 @@ import {
   Drawer,
   Hidden,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemIcon,
@@ -26,13 +27,15 @@ import {
   Search as SearchIcon,
   Work as WorkIcon
 } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
 const styles = (theme: Theme) =>
   createStyles({
     appBar: {
+      background: "transparent",
+      boxShadow: "none",
       marginLeft: drawerWidth,
       [theme.breakpoints.up("sm")]: {
         width: `calc(100% - ${drawerWidth}px)`
@@ -96,8 +99,8 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       text: "Resumé"
     },
     {
+      href: "https://github.com/scrum-gang/jobhub-chrome",
       icon: <ExtensionIcon />,
-      route: "/",
       text: "Chrome Extension"
     },
     {
@@ -116,14 +119,30 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       </div>
       <Divider />
       <List>
-        {drawerItems.map(({ icon, route, text }) => (
-          <Link to={route} key={text} className={classes.link}>
+        {drawerItems.map(({ icon, route, text, href }) => {
+          const listItem = (
             <ListItem button>
               <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText
+                primary={text}
+                primaryTypographyProps={{ variant: "overline" }}
+              />
             </ListItem>
-          </Link>
-        ))}
+          );
+          if (!!route) {
+            return (
+              <RouterLink to={route} key={text} className={classes.link}>
+                {listItem}
+              </RouterLink>
+            );
+          } else if (!!href) {
+            return (
+              <Link href={href} target="_blank" rel="noopener">
+                {listItem}
+              </Link>
+            );
+          }
+        })}
       </List>
     </React.Fragment>
   );
@@ -139,7 +158,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
-            color="inherit"
+            color="primary"
             aria-label="Open drawer"
             onClick={handleDrawerToggle}
             className={classes.menuButton}
