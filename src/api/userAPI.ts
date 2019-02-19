@@ -12,6 +12,7 @@ class UserAPI {
     api.createEntity("/users/self");
     api.createEntity("/login");
     api.createEntity("/signup");
+    api.createEntity("/resend");
   }
 
   public login = (payload: { email: string; password: string }) => {
@@ -31,6 +32,10 @@ class UserAPI {
 
   public getSelf = () => {
     return api.endpoints["/users/self"].getAll() as AxiosPromise<IUser>;
+  };
+
+  public resendVerification = (payload: { email: string }) => {
+    return api.endpoints["/resend"].create(payload);
   };
 }
 
