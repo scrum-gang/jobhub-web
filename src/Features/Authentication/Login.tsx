@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Button,
@@ -131,7 +132,7 @@ class Login extends React.Component<IProps> {
         return context.updateProvider(response);
       })
       .catch(error => {
-        console.error(error);
+        toast.error(error.response.data.message);
       })
       .finally(() => {
         actions.setSubmitting(false);

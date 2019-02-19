@@ -18,6 +18,7 @@ import UserType from "../../config/types/accountTypes";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import registrationSchema from "./registrationSchema";
 import { Redirect } from "react-router";
+import { toast } from "react-toastify";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -59,7 +60,7 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
         setRegistered(true);
       })
       .catch(error => {
-        console.error(error);
+        toast.error(error.response.data.message);
       })
       .finally(() => {
         actions.setSubmitting(false);

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import ConfirmMessage from "./Features/Authentication/ConfirmMessage";
 import Login from "./Features/Authentication/Login";
@@ -18,6 +20,7 @@ class App extends Component {
           <Route path="/confirm" component={ConfirmMessage} />
           <Route />
         </Switch>
+        <ToastContainer />
       </AuthProvider>
     );
   }
