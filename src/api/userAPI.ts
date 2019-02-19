@@ -2,9 +2,9 @@ import { AxiosPromise } from "axios";
 
 import api from "./api";
 
+import UserType from "../config/types/accountTypes";
 import ILoginResponse from "../config/types/loginResponse";
 import IUser from "../config/types/user";
-import UserType from "../config/types/accountTypes";
 
 class UserAPI {
   constructor() {
