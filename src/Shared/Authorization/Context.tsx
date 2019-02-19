@@ -3,8 +3,7 @@ import IAuthInfo from "./authInfo";
 
 const defaultState: IAuthInfo = {
   clearStateAndCache: () => null,
-  isLoading: false,
-  token: "",
+  isLoading: true,
   updateProvider: () => null,
   userInfo: undefined
 };
