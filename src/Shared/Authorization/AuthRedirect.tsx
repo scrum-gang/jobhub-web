@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import { Consumer as ContextConsumer } from "./Context";
 import Protection from "./protections";
 
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+
 interface IProps {
   protection: Protection;
 }
@@ -11,8 +13,10 @@ interface IProps {
 const Consumer: React.FunctionComponent<IProps> = ({ protection }) => (
   <React.Fragment>
     <ContextConsumer>
-      {({ userInfo }) => {
-        if (protection === Protection.LOGGED_IN && !userInfo) {
+      {({ userInfo, isLoading }) => {
+        if (isLoading) {
+          return <LoadingSpinner />;
+        } else if (protection === Protection.LOGGED_IN && !userInfo) {
           return <Redirect to="/login" />;
         } else if (protection === Protection.LOGGED_OUT && userInfo) {
           return <Redirect to="/" />;
