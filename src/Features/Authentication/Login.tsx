@@ -19,6 +19,7 @@ import userAPI from "../../api/userAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import AuthorizationContext from "../../Shared/Authorization/Context";
 import loginSchema from "./loginSchema";
+import ConfirmMessage from "./ConfirmMessageModal";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -39,13 +40,30 @@ const RegistrationLink: React.FunctionComponent = props => (
   <Link to="/register" {...props} />
 );
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IState {
+  email: string;
+  isUnconfirmed: boolean;
+}
 
-class Login extends React.Component<IProps> {
+class Login extends React.Component<WithStyles, IState> {
+  constructor(props: WithStyles) {
+    super(props);
+    this.state = {
+      email: "",
+      isUnconfirmed: false
+    };
+  }
   public render() {
     const { classes } = this.props;
+    const { isUnconfirmed, email } = this.state;
     return (
       <React.Fragment>
+        {isUnconfirmed && (
+          <ConfirmMessage
+            email={email}
+            onCloseCallback={this.handleCloseModal}
+          />
+        )}
         <AuthRedirect protection={Protection.LOGGED_OUT} />
         <Grid
           container
@@ -121,6 +139,10 @@ class Login extends React.Component<IProps> {
     );
   }
 
+  private handleCloseModal = () => {
+    this.setState({ isUnconfirmed: false });
+  };
+
   private handleSubmit = (
     values: { email: string; password: string },
     actions: FormikActions<any>
@@ -132,7 +154,11 @@ class Login extends React.Component<IProps> {
         return context.updateProvider(response);
       })
       .catch(error => {
-        toast.error(error.response.data.message);
+        if (error.response.data.message === "Unverified user.") {
+          this.setState({ isUnconfirmed: true, email: values.email });
+        } else {
+          toast.error(error.response.data.message);
+        }
       })
       .finally(() => {
         actions.setSubmitting(false);

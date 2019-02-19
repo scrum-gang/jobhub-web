@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-import ConfirmMessage from "./Features/Authentication/ConfirmMessage";
+import ConfirmMessage from "./Features/Authentication/ConfirmMessageModal";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
