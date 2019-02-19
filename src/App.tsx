@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+// tslint:disable-next-line
+import "react-toastify/dist/ReactToastify.css";
 
 import { CssBaseline } from "@material-ui/core";
 
-import ConfirmMessage from "./Features/Authentication/ConfirmMessage";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
@@ -16,7 +19,6 @@ class App extends Component {
       <Route path="/" component={Dashboard} exact />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/confirm" component={ConfirmMessage} />
       <Route />
     </Switch>
   );
@@ -25,6 +27,7 @@ class App extends Component {
     return (
       <AuthProvider>
         <CssBaseline />
+        <ToastContainer />
         <AuthConsumer>
           {({ userInfo }) =>
             !!userInfo ? <Navigation>{this.routes}</Navigation> : this.routes

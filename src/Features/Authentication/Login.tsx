@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Button,
@@ -11,12 +12,13 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 
 import userAPI from "../../api/userAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import AuthorizationContext from "../../Shared/Authorization/Context";
+import ConfirmMessage from "./ConfirmMessageModal";
 import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
@@ -38,13 +40,30 @@ const RegistrationLink: React.FunctionComponent = props => (
   <Link to="/register" {...props} />
 );
 
-interface IProps extends WithStyles<typeof styles> {}
+interface IState {
+  email: string;
+  isUnconfirmed: boolean;
+}
 
-class Login extends React.Component<IProps> {
+class Login extends React.Component<WithStyles, IState> {
+  constructor(props: WithStyles) {
+    super(props);
+    this.state = {
+      email: "",
+      isUnconfirmed: false
+    };
+  }
   public render() {
     const { classes } = this.props;
+    const { isUnconfirmed, email } = this.state;
     return (
       <React.Fragment>
+        {isUnconfirmed && (
+          <ConfirmMessage
+            email={email}
+            onCloseCallback={this.handleCloseModal}
+          />
+        )}
         <AuthRedirect protection={Protection.LOGGED_OUT} />
         <Grid
           container
@@ -120,11 +139,30 @@ class Login extends React.Component<IProps> {
     );
   }
 
-  private handleSubmit = (values: { email: string; password: string }) => {
+  private handleCloseModal = () => {
+    this.setState({ isUnconfirmed: false });
+  };
+
+  private handleSubmit = (
+    values: { email: string; password: string },
+    actions: FormikActions<any>
+  ) => {
     const context = this.context;
-    return userAPI.login(values).then(response => {
-      return context.updateProvider(response);
-    });
+    return userAPI
+      .login(values)
+      .then(response => {
+        return context.updateProvider(response);
+      })
+      .catch(error => {
+        if (error.response.data.message === "Unverified user.") {
+          this.setState({ isUnconfirmed: true, email: values.email });
+        } else {
+          toast.error(error.response.data.message);
+        }
+      })
+      .finally(() => {
+        actions.setSubmitting(false);
+      });
   };
 }
 

@@ -12,7 +12,7 @@ import {
 
 interface IProps extends WithStyles<typeof styles> {
   callToAction: React.ReactNode;
-  title: string;
+  title?: string;
   message?: string;
   imageSource: string;
 }
@@ -28,10 +28,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       margin: "0 auto",
-      marginTop: theme.spacing.unit * 8,
-      maxWidth: 400,
       padding: theme.spacing.unit * 8,
-      width: "90%"
     }
   });
 
@@ -48,7 +45,7 @@ const MessagePage: React.FunctionComponent<IProps> = ({
         container
         direction="column"
         alignContent="center"
-        spacing={40}
+        spacing={32}
         justify="center"
       >
         <Grid item className={classes.centered}>

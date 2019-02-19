@@ -206,8 +206,8 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               open={!!menuAnchor}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => {}}>My account</MenuItem>
-              <MenuItem onClick={() => {}}>Log Out</MenuItem>
+              <MenuItem onClick={() => {/**/}}>My account</MenuItem>
+              <MenuItem onClick={() => {/**/}}>Log Out</MenuItem>
             </Menu>
           </div>
         </Toolbar>
