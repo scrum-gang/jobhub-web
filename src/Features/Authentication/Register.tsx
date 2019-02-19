@@ -56,8 +56,13 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
         type: UserType.APPLICANT
       })
       .then(response => {
-        actions.setSubmitting(false);
         setRegistered(true);
+      })
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        actions.setSubmitting(false);
       });
   };
 

@@ -11,7 +11,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 
 import userAPI from "../../api/userAPI";
@@ -120,11 +120,22 @@ class Login extends React.Component<IProps> {
     );
   }
 
-  private handleSubmit = (values: { email: string; password: string }) => {
+  private handleSubmit = (
+    values: { email: string; password: string },
+    actions: FormikActions<any>
+  ) => {
     const context = this.context;
-    return userAPI.login(values).then(response => {
-      return context.updateProvider(response);
-    });
+    return userAPI
+      .login(values)
+      .then(response => {
+        return context.updateProvider(response);
+      })
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        actions.setSubmitting(false);
+      });
   };
 }
 
