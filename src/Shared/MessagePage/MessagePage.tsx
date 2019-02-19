@@ -28,9 +28,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       margin: "0 auto",
-      maxWidth: 400,
       padding: theme.spacing.unit * 8,
-      width: "90%"
     }
   });
 

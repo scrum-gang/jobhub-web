@@ -18,8 +18,8 @@ import { TextField } from "formik-material-ui";
 import userAPI from "../../api/userAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import AuthorizationContext from "../../Shared/Authorization/Context";
-import loginSchema from "./loginSchema";
 import ConfirmMessage from "./ConfirmMessageModal";
+import loginSchema from "./loginSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
