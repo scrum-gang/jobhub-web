@@ -11,7 +11,6 @@ import {
 
 import * as Yup from 'yup';
 
-import FormValues from './FormValues';
 
 import Wrapper from './Wrapper';
 
@@ -34,7 +33,7 @@ const styles = (theme: Theme) => ({
   formControl: {
     backgroundColor: 'blue',
     margin: theme.spacing.unit,
-    minWidth: 420
+    minWidth: 120
   },
 });
 

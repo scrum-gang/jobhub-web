@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 
 import {
   createStyles,
+  Grid,
   Paper,
   Theme,
   Typography,
@@ -31,12 +32,20 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 const Wrapper = ({ title, children }: IProps) => (
-  <Paper elevation={4} style={{ padding: 100 }}>
-    <Typography variant="headline" component="h3">
-      {title}
-    </Typography>
-    {children}
-  </Paper>
+  <Grid
+    container
+    spacing={0}
+    direction="column"
+    alignItems="center"
+    justify="center"
+  >
+    <Paper elevation={4} style={{ padding: 150, marginTop: "5%" }}>
+      <Typography variant="headline" component="h3">
+        {title}
+      </Typography>
+      {children}
+    </Paper>
+  </Grid>
 );
 
 export default withStyles(styles)(Wrapper);
