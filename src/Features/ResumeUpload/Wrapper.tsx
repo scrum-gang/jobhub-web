@@ -39,7 +39,7 @@ const Wrapper = ({ title, children }: IProps) => (
     alignItems="center"
     justify="center"
   >
-    <Paper elevation={4} style={{ padding: 150, marginTop: "5%" }}>
+    <Paper elevation={4} style={{ padding: 150, marginTop: "10%" }}>
       <Typography variant="headline" component="h3">
         {title}
       </Typography>

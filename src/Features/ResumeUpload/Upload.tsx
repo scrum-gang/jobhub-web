@@ -11,7 +11,6 @@ import {
 
 import * as Yup from 'yup';
 
-
 import Wrapper from './Wrapper';
 
 import { SimpleFileUpload } from 'formik-material-ui';
@@ -42,7 +41,7 @@ interface IValues {
 }
 
 export default withStyles(styles)(() => (
-  <Wrapper title="File Upload">
+  <Wrapper title="Resume Upload">
   <Grid justify="center">
     <Formik<IValues>
       validationSchema={schema}

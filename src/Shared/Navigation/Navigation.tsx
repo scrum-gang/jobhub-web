@@ -109,7 +109,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
     },
     {
       icon: <AttachmentIcon />,
-      route: "/",
+      route: "/resume-upload",
       text: "Resumé"
     },
     {
