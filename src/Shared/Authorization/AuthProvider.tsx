@@ -30,7 +30,7 @@ const Provider: React.FunctionComponent = ({ children }) => {
   // helper function to update the provider from a consumer
   const updateProvider = (response: ILoginResponse) => {
     localStorage.setItem("token", response.token);
-    api.setJWT(response.token);
+    userAPI.setJWT(response.token);
     return fetchInfo();
   };
 
@@ -38,13 +38,13 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const loadFromCache = () => {
     const jwt = localStorage.getItem("token");
     if (jwt) {
-      api.setJWT(jwt);
+      userAPI.setJWT(jwt);
     }
   };
 
   const clearStateAndCache = () => {
     setUserInfo(undefined);
-    api.clearJWT();
+    userAPI.clearJWT();
     localStorage.clear();
   };
 
