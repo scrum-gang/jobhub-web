@@ -15,6 +15,7 @@ const styles = createStyles({
     height: "100vh",
     justifyContent: "center",
     position: "fixed",
+    top: 0,
     width: "100vw",
     zIndex: 1000
   }
