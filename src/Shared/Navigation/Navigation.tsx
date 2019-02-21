@@ -36,8 +36,6 @@ const drawerWidth = 240;
 const styles = (theme: Theme) =>
   createStyles({
     appBar: {
-      background: "transparent",
-      boxShadow: "none",
       marginLeft: drawerWidth,
       [theme.breakpoints.up("sm")]: {
         width: `calc(100% - ${drawerWidth}px)`
@@ -99,7 +97,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
     },
     {
       icon: <WorkIcon />,
-      route: "/",
+      route: "/applications",
       text: "My Applications"
     },
     {
@@ -130,7 +128,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       <List>
         {drawerItems.map(({ icon, route, text, href }) => {
           const listItem = (
-            <ListItem button>
+            <ListItem button key={text}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText
                 primary={text}
@@ -176,7 +174,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       <AppBar className={classes.appBar}>
         <Toolbar className={classes.toolbar2}>
           <IconButton
-            color="primary"
+            color="inherit"
             aria-label="Open drawer"
             onClick={handleDrawerToggle}
             className={classes.menuButton}
@@ -188,7 +186,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               aria-owns={!!menuAnchor ? "menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={handleMenuOpen}
-              color="primary"
+              color="inherit"
             >
               <AccountCircle />
             </IconButton>
