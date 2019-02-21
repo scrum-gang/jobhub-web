@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
+    "@storybook/addon-actions": "^4.1.12",
     "@types/axios": "^0.14.0",
     "@types/classnames": "^2.2.7",
     "@types/jest": "23.3.13",
@@ -12,6 +13,7 @@
     "@types/react": "16.7.22",
     "@types/react-dom": "16.0.11",
     "@types/react-toastify": "^4.0.2",
+    "@types/storybook__addon-actions": "^3.4.2",
     "@types/yup": "^0.26.9",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
