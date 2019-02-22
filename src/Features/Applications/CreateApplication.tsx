@@ -15,7 +15,7 @@ const CreateApplication: React.FunctionComponent<IProps> = ({
 }) => {
   return (
     <Dialog open={modalOpen} onClose={handleClose}>
-      <ApplicationForm mode={Modes.CREATE} />
+      <ApplicationForm mode={Modes.CREATE} handleClose={handleClose} />
     </Dialog>
   );
 };
