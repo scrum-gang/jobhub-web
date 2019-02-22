@@ -1,4 +1,5 @@
 import * as React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import {
   createStyles,
@@ -12,6 +13,7 @@ import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import CreateApplication from "./CreateApplication";
 
 const mockData = [
   {
@@ -152,7 +154,19 @@ const styles = (theme: Theme) =>
     }
   });
 
-const Applications: React.FunctionComponent<WithStyles> = ({ classes }) => {
+const Applications: React.FunctionComponent<
+  WithStyles & RouteComponentProps
+> = ({ classes, history }) => {
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -162,17 +176,19 @@ const Applications: React.FunctionComponent<WithStyles> = ({ classes }) => {
           data={mockData}
           columns={columns}
           options={{
-            onRowClick: () => console.log("row"),
+            onRowClick: (_, rowMeta) =>
+              history.push(`/applications/${rowMeta.dataIndex}`),
             responsive: "scroll",
             selectableRows: false
           }}
         />
       </Grid>
-      <Fab color="secondary" className={classes.fab}>
+      <Fab color="secondary" className={classes.fab} onClick={handleOpen}>
         <PlusIcon />
       </Fab>
+      <CreateApplication handleClose={handleClose} modalOpen={openModal} />
     </React.Fragment>
   );
 };
 
-export default withStyles(styles)(Applications);
+export default withStyles(styles)(withRouter(Applications));

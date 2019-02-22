@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CssBaseline } from "@material-ui/core";
 
 import Applications from "./Features/Applications/Applications";
+import EditApplication from "./Features/Applications/EditApplication";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
@@ -21,6 +22,7 @@ class App extends Component {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/applications" component={Applications} exact/>
+      <Route path="/applications/:appid" component={EditApplication} />
     </Switch>
   );
 
