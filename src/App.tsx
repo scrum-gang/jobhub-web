@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { CssBaseline } from "@material-ui/core";
 
+import Applications from "./Features/Applications/Applications";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
@@ -19,7 +20,7 @@ class App extends Component {
       <Route path="/" component={Dashboard} exact />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route />
+      <Route path="/applications" component={Applications} exact/>
     </Switch>
   );
 

@@ -114,7 +114,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       href: "https://github.com/scrum-gang/jobhub-chrome",
       icon: <ExtensionIcon />,
       text: "Chrome Extension"
-    },
+    }
   ];
 
   const drawer = (
@@ -128,7 +128,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       <List>
         {drawerItems.map(({ icon, route, text, href }) => {
           const listItem = (
-            <ListItem button key={text}>
+            <ListItem button>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText
                 primary={text}
@@ -144,7 +144,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
             );
           } else if (!!href) {
             return (
-              <Link href={href} target="_blank" rel="noopener">
+              <Link href={href} key={text} target="_blank" rel="noopener">
                 {listItem}
               </Link>
             );
@@ -204,8 +204,20 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               open={!!menuAnchor}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => {/**/}}>My account</MenuItem>
-              <MenuItem onClick={() => {/**/}}>Log Out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  /**/
+                }}
+              >
+                My account
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  /**/
+                }}
+              >
+                Log Out
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
