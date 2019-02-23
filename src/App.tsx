@@ -11,7 +11,10 @@ import Applications from "./Features/Applications/Applications";
 import EditApplication from "./Features/Applications/EditApplication";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
+
 import Dashboard from "./Features/Dashboard/Dashboard";
+import ResumeUpload from "./Features/ResumeUpload/Upload";
+
 import { AuthConsumer, AuthProvider } from "./Shared/Authorization";
 import Navigation from "./Shared/Navigation/Navigation";
 
@@ -21,8 +24,10 @@ class App extends Component {
       <Route path="/" component={Dashboard} exact />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
+      <Route path="/resume" component={ResumeUpload} />
       <Route path="/applications" component={Applications} exact/>
       <Route path="/applications/:appid" component={EditApplication} />
+      <Route />
     </Switch>
   );
 
