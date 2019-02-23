@@ -2,7 +2,14 @@ import * as React from "react";
 
 import { Field, Form, Formik } from "formik";
 
-import { Button, Grid, Theme, withStyles } from "@material-ui/core";
+import {
+  Button,
+  createStyles,
+  Grid,
+  Theme,
+  withStyles,
+  WithStyles
+} from "@material-ui/core";
 
 import * as Yup from "yup";
 
@@ -23,20 +30,28 @@ const schema = Yup.object().shape({
     )
 });
 
-const styles = (theme: Theme) => ({
-  formControl: {
-    backgroundColor: "blue",
-    margin: theme.spacing.unit,
-    minWidth: 120
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    formControl: {
+      backgroundColor: "blue",
+      margin: theme.spacing.unit,
+      minWidth: 120
+    },
+    pad: {
+      marginBottom: 15,
+      marginTop: 15
+    }
+  });
 
 interface IValues {
   file: "" | File;
 }
 
-export default withStyles(styles)(() => (
-  <Wrapper title="Resume Upload">
+interface IProps extends WithStyles<typeof styles> {}
+
+const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
+  return (
+    <Wrapper title="Resume Upload">
     <Grid justify="center">
       <Formik<IValues>
         validationSchema={schema}
@@ -49,15 +64,21 @@ export default withStyles(styles)(() => (
         }}
         render={({ submitForm }) => (
           <Form>
-            <Field component={SimpleFileUpload} name="file" />
-            <br />
-            <Button variant="contained" color="primary" onClick={submitForm}>
+            <Field component={SimpleFileUpload} name="file" className={classes.pad}/>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={submitForm}
+              className={classes.pad}
+            >
               Submit
             </Button>
-            <br />
           </Form>
         )}
       />
     </Grid>
   </Wrapper>
-));
+  )
+}
+
+export default withStyles(styles)(Upload);
