@@ -22,7 +22,9 @@ class App extends Component {
       <Route path="/" component={Dashboard} exact />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/resume-upload" component={ResumeUpload} />
+      <Route path="/resume" component={ResumeUpload} />
+      <Route path="/applications" component={Applications} exact/>
+      <Route path="/applications/:appid" component={EditApplication} />
       <Route />
     </Switch>
   );
