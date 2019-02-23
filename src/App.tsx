@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { CssBaseline } from "@material-ui/core";
 
+import Applications from "./Features/Applications/Applications";
+import EditApplication from "./Features/Applications/EditApplication";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 

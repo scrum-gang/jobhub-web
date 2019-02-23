@@ -36,8 +36,6 @@ const drawerWidth = 240;
 const styles = (theme: Theme) =>
   createStyles({
     appBar: {
-      background: "transparent",
-      boxShadow: "none",
       marginLeft: drawerWidth,
       [theme.breakpoints.up("sm")]: {
         width: `calc(100% - ${drawerWidth}px)`
@@ -99,7 +97,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
     },
     {
       icon: <WorkIcon />,
-      route: "/",
+      route: "/applications",
       text: "My Applications"
     },
     {
@@ -116,7 +114,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       href: "https://github.com/scrum-gang/jobhub-chrome",
       icon: <ExtensionIcon />,
       text: "Chrome Extension"
-    },
+    }
   ];
 
   const drawer = (
@@ -146,7 +144,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
             );
           } else if (!!href) {
             return (
-              <Link href={href} target="_blank" rel="noopener">
+              <Link href={href} key={text} target="_blank" rel="noopener">
                 {listItem}
               </Link>
             );
@@ -176,7 +174,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
       <AppBar className={classes.appBar}>
         <Toolbar className={classes.toolbar2}>
           <IconButton
-            color="primary"
+            color="inherit"
             aria-label="Open drawer"
             onClick={handleDrawerToggle}
             className={classes.menuButton}
@@ -188,7 +186,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               aria-owns={!!menuAnchor ? "menu-appbar" : undefined}
               aria-haspopup="true"
               onClick={handleMenuOpen}
-              color="primary"
+              color="inherit"
             >
               <AccountCircle />
             </IconButton>
@@ -206,8 +204,20 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               open={!!menuAnchor}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => {/**/}}>My account</MenuItem>
-              <MenuItem onClick={() => {/**/}}>Log Out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  /**/
+                }}
+              >
+                My account
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  /**/
+                }}
+              >
+                Log Out
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>

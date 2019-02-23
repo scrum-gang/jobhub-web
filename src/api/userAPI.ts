@@ -1,10 +1,9 @@
 import { AxiosPromise } from "axios";
 
-import api from "./api";
-
 import UserType from "../config/types/accountTypes";
 import ILoginResponse from "../config/types/loginResponse";
 import IUser from "../config/types/user";
+import API from "./api";
 
 enum UserEndpoints {
   USERS = "/users",
@@ -15,19 +14,25 @@ enum UserEndpoints {
 }
 
 class UserAPI {
+  private api: API;
   constructor() {
-    api.createEntity(UserEndpoints.USERS);
-    api.createEntity(UserEndpoints.SELF);
-    api.createEntity(UserEndpoints.LOGIN);
-    api.createEntity(UserEndpoints.REGISTER);
-    api.createEntity(UserEndpoints.RESEND_EMAIL);
+    this.api = new API("https://jobhub-authentication-staging.herokuapp.com");
+    this.api.createEntities(Object.values(UserEndpoints));
+  }
+
+  public setJWT = (token: string) => {
+    this.api.setJWT(token);
+  }
+
+  public clearJWT = () => {
+    this.api.clearJWT();
   }
 
   public login = (payload: { email: string; password: string }) => {
-    return api.endpoints[UserEndpoints.LOGIN]
+    return this.api.endpoints[UserEndpoints.LOGIN]
       .create(payload)
       .then(({ data }) => {
-        api.setJWT(data.token);
+        this.api.setJWT(data.token);
         return data as ILoginResponse;
       });
   };
@@ -37,15 +42,15 @@ class UserAPI {
     password: string;
     type: UserType;
   }) => {
-    return api.endpoints[UserEndpoints.REGISTER].create(payload);
+    return this.api.endpoints[UserEndpoints.REGISTER].create(payload);
   };
 
   public getSelf = () => {
-    return api.endpoints[UserEndpoints.SELF].getAll() as AxiosPromise<IUser>;
+    return this.api.endpoints[UserEndpoints.SELF].getAll() as AxiosPromise<IUser>;
   };
 
   public resendVerification = (payload: { email: string }) => {
-    return api.endpoints[UserEndpoints.RESEND_EMAIL].create(payload);
+    return this.api.endpoints[UserEndpoints.RESEND_EMAIL].create(payload);
   };
 }
 

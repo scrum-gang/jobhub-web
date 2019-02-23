@@ -21,12 +21,16 @@ class API {
   public endpoints: { [endpoint: string]: IEndpoints };
   private instance: AxiosInstance;
 
-  constructor() {
+  constructor(baseURL: string) {
     this.endpoints = {};
     this.instance = axios.create({
-      baseURL: "https://jobhub-authentication-staging.herokuapp.com",
-      timeout: 5000
+      baseURL,
+      timeout: 10000
     });
+  }
+
+  public createEntities = (entities: string[]) => {
+    entities.forEach((entity) => this.createEntity(entity));
   }
 
   public createEntity = (entityUrl: string) => {
@@ -65,6 +69,4 @@ class API {
   };
 }
 
-const myAPI = new API();
-
-export default myAPI;
+export default API;
