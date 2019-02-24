@@ -1,11 +1,14 @@
 import * as React from "react";
-import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import {
   Button,
   createStyles,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
   Paper,
   Theme,
   Typography,
@@ -13,13 +16,13 @@ import {
   WithStyles
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikActions } from "formik";
-import { TextField } from "formik-material-ui";
+import { Select, TextField } from "formik-material-ui";
 
 import userAPI from "../../api/userAPI";
 import UserType from "../../config/types/accountTypes";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
-import registrationSchema from "./registrationSchema";
 import ConfirmMessage from "./ConfirmMessageModal";
+import registrationSchema from "./registrationSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -48,6 +51,7 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
     values: {
       email: string;
       password: string;
+      type: UserType;
       confirm: string;
     },
     actions: FormikActions<any>
@@ -57,7 +61,7 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
       .register({
         email: values.email,
         password: values.password,
-        type: UserType.APPLICANT
+        type: values.type
       })
       .then(response => {
         setRegistered(true);
@@ -82,7 +86,12 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
       >
         <Paper className={classes.registerContainer}>
           <Formik
-            initialValues={{ email: "", password: "", confirm: "" }}
+            initialValues={{
+              email: "",
+              password: "",
+              confirm: "",
+              type: UserType.APPLICANT
+            }}
             validationSchema={registrationSchema}
             onSubmit={handleSubmit}
           >
@@ -121,6 +130,24 @@ const Register: React.FunctionComponent<IProps> = ({ classes }) => {
                   type="password"
                   margin="dense"
                 />
+                <FormControl variant="outlined" margin="dense">
+                  <InputLabel htmlFor="type-simple">type</InputLabel>
+                  <Field
+                    name="type"
+                    margin="dense"
+                    component={Select}
+                    input={
+                      <OutlinedInput
+                        labelWidth={30}
+                        name="type"
+                        id="type-simple"
+                      />
+                    }
+                  >
+                    <MenuItem value={UserType.APPLICANT}>Applicant</MenuItem>
+                    <MenuItem value={UserType.RECRUITER}>Recruiter</MenuItem>
+                  </Field>
+                </FormControl>
                 <Button
                   type="submit"
                   size="large"
