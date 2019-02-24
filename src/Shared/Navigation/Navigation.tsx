@@ -102,7 +102,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
     },
     {
       icon: <SearchIcon />,
-      route: "/",
+      route: "/postings",
       text: "JobHub Postings"
     },
     {
