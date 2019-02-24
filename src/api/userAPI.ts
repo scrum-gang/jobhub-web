@@ -9,6 +9,7 @@ enum UserEndpoints {
   USERS = "/users",
   SELF = "/users/self",
   LOGIN = "/login",
+  LOGOUT = "/logout",
   REGISTER = "/signup",
   RESEND_EMAIL = "/resend"
 }
@@ -22,11 +23,11 @@ class UserAPI {
 
   public setJWT = (token: string) => {
     this.api.setJWT(token);
-  }
+  };
 
   public clearJWT = () => {
     this.api.clearJWT();
-  }
+  };
 
   public login = (payload: { email: string; password: string }) => {
     return this.api.endpoints[UserEndpoints.LOGIN]
@@ -35,6 +36,10 @@ class UserAPI {
         this.api.setJWT(data.token);
         return data as ILoginResponse;
       });
+  };
+
+  public logout = () => {
+    return this.api.endpoints[UserEndpoints.LOGOUT].create({});
   };
 
   public register = (payload: {
@@ -46,7 +51,9 @@ class UserAPI {
   };
 
   public getSelf = () => {
-    return this.api.endpoints[UserEndpoints.SELF].getAll() as AxiosPromise<IUser>;
+    return this.api.endpoints[UserEndpoints.SELF].getAll() as AxiosPromise<
+      IUser
+    >;
   };
 
   public resendVerification = (payload: { email: string }) => {

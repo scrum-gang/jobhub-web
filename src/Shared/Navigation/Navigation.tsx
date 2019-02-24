@@ -29,7 +29,14 @@ import {
   Search as SearchIcon,
   Work as WorkIcon
 } from "@material-ui/icons";
-import { Link as RouterLink } from "react-router-dom";
+import {
+  Link as RouterLink,
+  RouteComponentProps,
+  withRouter
+} from "react-router-dom";
+
+import userAPI from "../../api/userAPI";
+import { AuthConsumer } from "../../Shared/Authorization/";
 
 const drawerWidth = 240;
 
@@ -86,9 +93,11 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IProps extends WithStyles<typeof styles> {}
-
-const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
+const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
+  classes,
+  children,
+  history
+}) => {
   const drawerItems = [
     {
       icon: <HomeIcon />,
@@ -102,7 +111,7 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
     },
     {
       icon: <SearchIcon />,
-      route: "/",
+      route: "/postings",
       text: "JobHub Postings"
     },
     {
@@ -211,13 +220,18 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
               >
                 My account
               </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  /**/
-                }}
-              >
-                Log Out
-              </MenuItem>
+              <AuthConsumer>
+                {({ clearStateAndCache }) => (
+                  <MenuItem
+                    onClick={() => {
+                      clearStateAndCache();
+                      userAPI.logout().then(() => history.push("/login"));
+                    }}
+                  >
+                    Log Out
+                  </MenuItem>
+                )}
+              </AuthConsumer>
             </Menu>
           </div>
         </Toolbar>
@@ -254,4 +268,4 @@ const Navigation: React.FunctionComponent<IProps> = ({ classes, children }) => {
   );
 };
 
-export default withStyles(styles)(Navigation);
+export default withStyles(styles)(withRouter(Navigation));
