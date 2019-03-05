@@ -36,12 +36,16 @@ const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
     <div>
       <Button
         onClick={handleStatusClick}
+        fullWidth={true}
         // I realize that this is sketch, but the whole suggested way of doing it according to the documentation
         // is so convoluted and doesn't account for dynamically changing props like this one, so I just do it this way
         // also, width was set to largest value the string can take
         // again, sketch, but saves up time and avoids ugly resizing of column once a menu item is selected
         // suggestions for refactoring this welcome
-        style={{ width: "105px", color: APPLICATION_STATUSES[props.status] }}
+        style={{
+          width: "105px",
+          color: APPLICATION_STATUSES[props.status]
+        }}
       >
         {props.status}
       </Button>

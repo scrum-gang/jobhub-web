@@ -1,5 +1,7 @@
 import * as React from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+
+import APPLICATION_STATUSES from "../../config/constants/statusOptions";
 
 import {
   Button,
@@ -57,7 +59,7 @@ const ApplicationForm: React.FunctionComponent<
           company: "JobHub",
           deadline: "2019-06-06",
           position: "Developer",
-          status: "applied"
+          status: "Applied"
         }
       : {};
   return (
@@ -117,11 +119,11 @@ const ApplicationForm: React.FunctionComponent<
                   />
                 }
               >
-                <MenuItem value="todo">To Do</MenuItem>
-                <MenuItem value="applied">Applied</MenuItem>
-                <MenuItem value="interviewing">Interviewing</MenuItem>
-                <MenuItem value="rejected">Rejected</MenuItem>
-                <MenuItem value="offer">Offer</MenuItem>
+                {Object.keys(APPLICATION_STATUSES).map(statusOption => (
+                  <MenuItem key={statusOption} value={statusOption}>
+                    {statusOption}
+                  </MenuItem>
+                ))}
               </Field>
             </FormControl>
             <Grid container spacing={16} className={classes.buttonsGrid}>
