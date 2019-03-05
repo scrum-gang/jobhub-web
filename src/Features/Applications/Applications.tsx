@@ -15,11 +15,12 @@ import MUIDataTable from "mui-datatables";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import CreateApplication from "./CreateApplication";
 import StatusLabel from "./StatusLabel";
-import UrlApplicationTable from "./UrlApplicationTable";
+import TextLimitColumn from "./TextLimitColumn";
+import UrlColumn from "./UrlColumn";
 
 const mockData = [
   {
-    company: "JobHub",
+    company: null,
     deadline: new Date(),
     position: "Developer",
     posted: new Date(),
@@ -30,7 +31,7 @@ const mockData = [
   {
     company: "JobHub",
     deadline: new Date(),
-    position: "Developer",
+    position: "Associate Marketing Lead of Engineering",
     posted: new Date(),
     status: "Applied",
     url:
@@ -133,6 +134,9 @@ const columns = [
     label: "Position",
     name: "position",
     options: {
+      customBodyRender: (value: string, _: any) => (
+        <TextLimitColumn value={value} limit={25} />
+      ),
       filter: true,
       sort: true
     }
@@ -141,6 +145,9 @@ const columns = [
     label: "Company",
     name: "company",
     options: {
+      customBodyRender: (value: string, _: any) => (
+        <TextLimitColumn value={value} limit={15} />
+      ),
       filter: true,
       sort: false
     }
@@ -168,9 +175,7 @@ const columns = [
     label: "URL",
     name: "url",
     options: {
-      customBodyRender: (value: string, _: any) => (
-        <UrlApplicationTable url={value} />
-      ),
+      customBodyRender: (value: string, _: any) => <UrlColumn url={value} />,
       filter: true,
       sort: false
     }
