@@ -14,6 +14,7 @@ import MUIDataTable from "mui-datatables";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import CreateApplication from "./CreateApplication";
+import ApplicationTableUrl from "./ApplicationTableUrl";
 
 const mockData = [
   {
@@ -157,16 +158,8 @@ const columns = [
     options: {
       filter: true,
       sort: false,
-      customBodyRender: (value: string, tableMeta: any, updateValue: any) => (
-        <a
-          href={value}
-          onClick={e => {
-            // prevent specific application view from loading on url click
-            e.stopPropagation();
-          }}
-        >
-          {value.length > 40 ? `${value.substring(0, 40)}...` : value}
-        </a>
+      customBodyRender: (value: string, _: any) => (
+        <ApplicationTableUrl url={value} />
       )
     }
   }
