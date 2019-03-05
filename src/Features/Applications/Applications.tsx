@@ -14,7 +14,8 @@ import MUIDataTable from "mui-datatables";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import CreateApplication from "./CreateApplication";
-import ApplicationTableUrl from "./ApplicationTableUrl";
+import UrlApplicationTable from "./UrlApplicationTable";
+import StatusLabel from "./StatusLabel";
 
 const mockData = [
   {
@@ -149,7 +150,18 @@ const columns = [
     name: "status",
     options: {
       filter: true,
-      sort: false
+      sort: false,
+      customBodyRender: (
+        value: string,
+        tableMeta: any,
+        updateValue: Function
+      ) => (
+        <StatusLabel
+          status={value}
+          index={tableMeta.rowIndex}
+          updateValue={updateValue}
+        />
+      )
     }
   },
   {
@@ -159,7 +171,7 @@ const columns = [
       filter: true,
       sort: false,
       customBodyRender: (value: string, _: any) => (
-        <ApplicationTableUrl url={value} />
+        <UrlApplicationTable url={value} />
       )
     }
   }

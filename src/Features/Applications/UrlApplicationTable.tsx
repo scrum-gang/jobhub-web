@@ -4,7 +4,7 @@ interface UrlProps {
   url: string;
 }
 
-const ApplicationTableUrl: React.SFC<UrlProps> = props => {
+const UrlApplicationTable: React.SFC<UrlProps> = props => {
   return (
     <a
       href={props.url}
@@ -18,4 +18,4 @@ const ApplicationTableUrl: React.SFC<UrlProps> = props => {
   );
 };
 
-export default ApplicationTableUrl;
+export default UrlApplicationTable;
