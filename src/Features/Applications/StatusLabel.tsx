@@ -1,17 +1,15 @@
+import { Button, Menu, MenuItem } from "@material-ui/core";
 import * as React from "react";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Button from "@material-ui/core/Button";
 
 import APPLICATION_STATUSES from "../../config/constants/statusOptions";
 
-interface StatusProps {
+interface IStatusProps {
   status: string;
   index: number;
-  updateValue: Function;
+  updateValue: (_: any) => void;
 }
 
-const StatusLabel: React.FunctionComponent<StatusProps> = props => {
+const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
   const [open, setOpen] = React.useState(null);
   // TODO: Add rest call to update status for given job application when user id issue is fixed
 

@@ -1,10 +1,10 @@
 import * as React from "react";
 
-interface UrlProps {
+interface IUrlProps {
   url: string;
 }
 
-const UrlApplicationTable: React.SFC<UrlProps> = props => {
+const UrlApplicationTable: React.SFC<IUrlProps> = props => {
   return (
     <a
       href={props.url}

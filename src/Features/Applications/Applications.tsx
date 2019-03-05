@@ -14,8 +14,8 @@ import MUIDataTable from "mui-datatables";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import CreateApplication from "./CreateApplication";
-import UrlApplicationTable from "./UrlApplicationTable";
 import StatusLabel from "./StatusLabel";
+import UrlApplicationTable from "./UrlApplicationTable";
 
 const mockData = [
   {
@@ -149,30 +149,30 @@ const columns = [
     label: "Status",
     name: "status",
     options: {
-      filter: true,
-      sort: false,
       customBodyRender: (
         value: string,
         tableMeta: any,
-        updateValue: Function
+        updateValue: (_: any) => void
       ) => (
         <StatusLabel
           status={value}
           index={tableMeta.rowIndex}
           updateValue={updateValue}
         />
-      )
+      ),
+      filter: true,
+      sort: false
     }
   },
   {
     label: "URL",
     name: "url",
     options: {
-      filter: true,
-      sort: false,
       customBodyRender: (value: string, _: any) => (
         <UrlApplicationTable url={value} />
-      )
+      ),
+      filter: true,
+      sort: false
     }
   }
 ];
@@ -210,7 +210,7 @@ const Applications: React.FunctionComponent<
         <MUIDataTable
           title={"My Applications"}
           data={mockData}
-          columns={columns}
+          columns={columns as any}
           options={{
             onRowClick: (_, rowMeta) =>
               history.push(`/applications/${rowMeta.dataIndex}`),
