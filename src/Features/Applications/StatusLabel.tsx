@@ -43,8 +43,8 @@ const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
         // again, sketch, but saves up time and avoids ugly resizing of column once a menu item is selected
         // suggestions for refactoring this welcome
         style={{
-          width: "105px",
-          color: APPLICATION_STATUSES[props.status]
+          color: APPLICATION_STATUSES[props.status],
+          width: "105px"
         }}
       >
         {props.status}
