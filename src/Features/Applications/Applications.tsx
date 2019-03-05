@@ -19,6 +19,7 @@ import DeadlineColumn from "./DeadlineColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
+import StatusType from "../../config/types/statusTypes";
 
 const mockData = [
   {
@@ -35,7 +36,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Associate Marketing Lead of Engineering",
-    status: "Applied",
+    status: "To apply",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
@@ -155,26 +156,6 @@ const columns = [
     }
   },
   {
-    label: "Added On",
-    name: "date",
-    options: {
-      customBodyRender: (value: Date, _: any) => <DateColumn date={value} />,
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "Deadline",
-    name: "deadline",
-    options: {
-      customBodyRender: (value: Date, _: any) => (
-        <DeadlineColumn date={value} />
-      ),
-      filter: true,
-      sort: false
-    }
-  },
-  {
     label: "Status",
     name: "status",
     options: {
@@ -188,6 +169,26 @@ const columns = [
           index={tableMeta.rowIndex}
           updateValue={updateValue}
         />
+      ),
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "Added On",
+    name: "date",
+    options: {
+      customBodyRender: (value: Date, _: any) => <DateColumn date={value} />,
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "Deadline",
+    name: "deadline",
+    options: {
+      customBodyRender: (value: Date, tableMeta: any, _: any) => (
+        <DeadlineColumn date={value} rowData={tableMeta.rowData} />
       ),
       filter: true,
       sort: false
