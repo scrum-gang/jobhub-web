@@ -13,9 +13,7 @@ interface StatusProps {
 
 const StatusLabel: React.FunctionComponent<StatusProps> = props => {
   const [open, setOpen] = React.useState(null);
-  const colour: string = APPLICATION_STATUSES[props.status];
-
-  // TODO: Add rest call to update status for given job application
+  // TODO: Add rest call to update status for given job application when user id issue is fixed
 
   const handleStatusChange = (status: string) => {
     props.updateValue(status);
