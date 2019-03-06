@@ -17,6 +17,7 @@ import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
 import DateColumn from "./DateColumn";
 import DeadlineColumn from "./DeadlineColumn";
+import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
@@ -29,6 +30,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -40,6 +42,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Associate Marketing Lead of Engineering",
+    resume: "",
     status: "To apply",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -50,6 +53,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date("2018-03-05T19:22:56.412Z"),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -61,6 +65,7 @@ const mockData = [
     date: new Date("2020-03-05T19:22:56.412Z"),
     deadline: new Date("2020-03-05T19:22:56.412Z"),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -72,6 +77,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -83,6 +89,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -94,6 +101,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -105,6 +113,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -116,6 +125,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -127,6 +137,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -138,6 +149,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -149,6 +161,7 @@ const mockData = [
     date: new Date(),
     deadline: new Date(),
     position: "Developer",
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
     url:
       "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
@@ -224,6 +237,15 @@ const columns = [
       customBodyRender: (value: string, tableMeta: any, _: any) => (
         <CommentColumn comment={value} />
       ),
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "CV",
+    name: "resume",
+    options: {
+      customBodyRender: (value: string, _: any) => <ResumeColumn url={value} />,
       filter: true,
       sort: false
     }
