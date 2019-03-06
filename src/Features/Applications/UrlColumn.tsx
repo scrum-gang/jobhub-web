@@ -5,16 +5,16 @@ interface IUrlProps {
 }
 
 const UrlColumn: React.SFC<IUrlProps> = props => {
+  const handleUrlClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+  };
+
   return (
     <div>
       {!!props.url && (
-        <a
-          href={props.url}
-          onClick={e => {
-            // prevent specific application view from loading on url click
-            e.stopPropagation();
-          }}
-        >
+        <a href={props.url} onClick={handleUrlClick}>
           {`${props.url.substring(0, 40)}`}
           {props.url.length > 40 && "..."}
         </a>
