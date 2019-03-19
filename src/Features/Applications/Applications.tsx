@@ -12,11 +12,13 @@ import {
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
+import applicationsAPI from "../../api/applicationsAPI";
 import {
+  AuthConsumer,
   AuthRedirect,
   Protection,
-  AuthConsumer
 } from "../../Shared/Authorization";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
 import DateColumn from "./DateColumn";
@@ -25,9 +27,7 @@ import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
-import AuthorizationContext from "../../Shared/Authorization/Context";
-import Axios from "axios";
-import applicationsAPI from "../../api/applicationsAPI";
+
 
 const mockData = [
   {
