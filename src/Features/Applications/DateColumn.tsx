@@ -4,7 +4,7 @@ interface IDateColumnProps {
   date: Date;
 }
 
-const DateColumn: React.SFC<IDateColumnProps> = props => {
+const DateColumn: React.FunctionComponent<IDateColumnProps> = props => {
   return <div>{!!props.date && props.date.toLocaleDateString()}</div>;
 };
 

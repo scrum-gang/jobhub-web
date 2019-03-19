@@ -4,7 +4,7 @@ interface IUrlProps {
   url: string;
 }
 
-const UrlColumn: React.SFC<IUrlProps> = props => {
+const UrlColumn: React.FunctionComponent<IUrlProps> = props => {
   const handleUrlClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {

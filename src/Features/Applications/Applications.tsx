@@ -173,7 +173,7 @@ const columns = [
     label: "Position",
     name: "position",
     options: {
-      customBodyRender: (value: string, _: any) => (
+      customBodyRender: (value: string) => (
         <TextLimitColumn value={value} limit={25} />
       ),
       filter: true,
@@ -184,7 +184,7 @@ const columns = [
     label: "Company",
     name: "company",
     options: {
-      customBodyRender: (value: string, _: any) => (
+      customBodyRender: (value: string) => (
         <TextLimitColumn value={value} limit={15} />
       ),
       filter: true,
@@ -214,7 +214,7 @@ const columns = [
     label: "Added On",
     name: "date",
     options: {
-      customBodyRender: (value: Date, _: any) => <DateColumn date={value} />,
+      customBodyRender: (value: Date) => <DateColumn date={value} />,
       filter: true,
       sort: false
     }
@@ -223,7 +223,7 @@ const columns = [
     label: "Deadline",
     name: "deadline",
     options: {
-      customBodyRender: (value: Date, tableMeta: any, _: any) => (
+      customBodyRender: (value: Date, tableMeta: any) => (
         <DeadlineColumn date={value} rowData={tableMeta.rowData} />
       ),
       filter: true,
@@ -234,9 +234,7 @@ const columns = [
     label: "Comment",
     name: "comment",
     options: {
-      customBodyRender: (value: string, tableMeta: any, _: any) => (
-        <CommentColumn comment={value} />
-      ),
+      customBodyRender: (value: string) => <CommentColumn comment={value} />,
       filter: true,
       sort: false
     }
@@ -245,7 +243,7 @@ const columns = [
     label: "CV",
     name: "resume",
     options: {
-      customBodyRender: (value: string, _: any) => <ResumeColumn url={value} />,
+      customBodyRender: (value: string) => <ResumeColumn url={value} />,
       filter: true,
       sort: false
     }
@@ -254,7 +252,7 @@ const columns = [
     label: "URL",
     name: "url",
     options: {
-      customBodyRender: (value: string, _: any) => <UrlColumn url={value} />,
+      customBodyRender: (value: string) => <UrlColumn url={value} />,
       filter: true,
       sort: false
     }

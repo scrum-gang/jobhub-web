@@ -5,7 +5,7 @@ interface ITextLimitProps {
   limit: number;
 }
 
-const TextLimitColumn: React.SFC<ITextLimitProps> = props => {
+const TextLimitColumn: React.FunctionComponent<ITextLimitProps> = props => {
   return (
     <div>
       {!!props.value && (

@@ -6,7 +6,7 @@ interface IResumeColumnProps {
   url: string;
 }
 
-const ResumeColumn: React.SFC<IResumeColumnProps> = props => {
+const ResumeColumn: React.FunctionComponent<IResumeColumnProps> = props => {
   // TODO: on hover, show resume name + revision
 
   const handleIconClick = (e: any) => {

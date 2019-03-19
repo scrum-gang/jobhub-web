@@ -17,7 +17,7 @@ const styles = (theme: Theme) =>
     }
   });
 
-const Deadline: React.SFC<IDeadlineProps> = props => {
+const Deadline: React.FunctionComponent<IDeadlineProps> = props => {
   const isWithinTwoDayRangeFromToday = () => {
     const currentDate = new Date();
     const inTwoDaysDate = new Date().setDate(currentDate.getDate() + 2);
