@@ -2,6 +2,7 @@ import * as React from "react";
 import { defaultState, Provider as ContextProvider } from "./Context";
 
 import api from "../../api/api";
+import applicationsAPI from "../../api/applicationsAPI";
 import userAPI from "../../api/userAPI";
 import ILoginResponse from "../../config/types/loginResponse";
 
@@ -30,7 +31,8 @@ const Provider: React.FunctionComponent = ({ children }) => {
   // helper function to update the provider from a consumer
   const updateProvider = (response: ILoginResponse) => {
     localStorage.setItem("token", response.token);
-    userAPI.setJWT(response.token);
+
+    loadTokensForApis(response.token);
     return fetchInfo();
   };
 
@@ -38,14 +40,24 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const loadFromCache = () => {
     const jwt = localStorage.getItem("token");
     if (jwt) {
-      userAPI.setJWT(jwt);
+      loadTokensForApis(jwt);
     }
   };
 
   const clearStateAndCache = () => {
     setUserInfo(undefined);
-    userAPI.clearJWT();
+    clearTokensForApis();
     localStorage.clear();
+  };
+
+  const loadTokensForApis = (token: string) => {
+    userAPI.setJWT(token);
+    applicationsAPI.setJWT(token);
+  };
+
+  const clearTokensForApis = () => {
+    userAPI.clearJWT();
+    applicationsAPI.clearJWT();
   };
 
   return (
