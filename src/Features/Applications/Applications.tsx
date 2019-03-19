@@ -13,104 +13,158 @@ import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
+import DateColumn from "./DateColumn";
+import DeadlineColumn from "./DeadlineColumn";
+import ResumeColumn from "./ResumeColumn";
+import StatusLabel from "./StatusLabel";
+import TextLimitColumn from "./TextLimitColumn";
+import UrlColumn from "./UrlColumn";
 
 const mockData = [
   {
-    company: "JobHub",
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+    company: null,
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
-    position: "Developer",
-    posted: new Date(),
-    status: "Applied",
-    url: "http"
+    position: "Associate Marketing Lead of Engineering",
+    resume: "",
+    status: "To apply",
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment: "",
     company: "JobHub",
-    deadline: new Date(),
+    date: new Date(),
+    deadline: new Date("2018-03-05T19:22:56.412Z"),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
-    deadline: new Date(),
+    date: new Date("2020-03-05T19:22:56.412Z"),
+    deadline: new Date("2020-03-05T19:22:56.412Z"),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   },
   {
+    comment:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
     company: "JobHub",
+    date: new Date(),
     deadline: new Date(),
     position: "Developer",
-    posted: new Date(),
+    resume: "https://www.cs.mcgill.ca/~prakash/cv.pdf",
     status: "Applied",
-    url: "http"
+    url:
+      "https://careers.google.com/jobs/results/5784153781993472-technical-curriculum-developer-infrastructure-google-cloud/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&company=Google&company=YouTube"
   }
 ];
 
@@ -119,6 +173,9 @@ const columns = [
     label: "Position",
     name: "position",
     options: {
+      customBodyRender: (value: string) => (
+        <TextLimitColumn value={value} limit={25} />
+      ),
       filter: true,
       sort: true
     }
@@ -127,6 +184,9 @@ const columns = [
     label: "Company",
     name: "company",
     options: {
+      customBodyRender: (value: string) => (
+        <TextLimitColumn value={value} limit={15} />
+      ),
       filter: true,
       sort: false
     }
@@ -135,6 +195,64 @@ const columns = [
     label: "Status",
     name: "status",
     options: {
+      customBodyRender: (
+        value: string,
+        tableMeta: any,
+        updateValue: (_: any) => void
+      ) => (
+        <StatusLabel
+          status={value}
+          index={tableMeta.rowIndex}
+          updateValue={updateValue}
+        />
+      ),
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "Added On",
+    name: "date",
+    options: {
+      customBodyRender: (value: Date) => <DateColumn date={value} />,
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "Deadline",
+    name: "deadline",
+    options: {
+      customBodyRender: (value: Date, tableMeta: any) => (
+        <DeadlineColumn date={value} rowData={tableMeta.rowData} />
+      ),
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "Comment",
+    name: "comment",
+    options: {
+      customBodyRender: (value: string) => <CommentColumn comment={value} />,
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "CV",
+    name: "resume",
+    options: {
+      customBodyRender: (value: string) => <ResumeColumn url={value} />,
+      filter: true,
+      sort: false
+    }
+  },
+  {
+    label: "URL",
+    name: "url",
+    options: {
+      customBodyRender: (value: string) => <UrlColumn url={value} />,
       filter: true,
       sort: false
     }
@@ -174,7 +292,7 @@ const Applications: React.FunctionComponent<
         <MUIDataTable
           title={"My Applications"}
           data={mockData}
-          columns={columns}
+          columns={columns as any}
           options={{
             onRowClick: (_, rowMeta) =>
               history.push(`/applications/${rowMeta.dataIndex}`),
