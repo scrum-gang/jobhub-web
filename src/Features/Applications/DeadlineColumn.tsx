@@ -18,13 +18,15 @@ const styles = (theme: Theme) =>
   });
 
 const Deadline: React.FunctionComponent<IDeadlineProps> = props => {
+  const date = new Date(props.date);
+
   const isWithinTwoDayRangeFromToday = () => {
     const currentDate = new Date();
     const inTwoDaysDate = new Date().setDate(currentDate.getDate() + 2);
 
     return (
-      (props.date >= currentDate && props.date.getTime() <= inTwoDaysDate) ||
-      props.date < currentDate
+      (date >= currentDate && date.getTime() <= inTwoDaysDate) ||
+      date < currentDate
     );
   };
 
@@ -36,7 +38,7 @@ const Deadline: React.FunctionComponent<IDeadlineProps> = props => {
 
   return (
     <div>
-      {!!props.date && (
+      {!!date && (
         <span
           className={
             isWithinTwoDayRangeFromToday() && isPendingApplication()
@@ -44,7 +46,7 @@ const Deadline: React.FunctionComponent<IDeadlineProps> = props => {
               : props.classes.blackText
           }
         >
-          {props.date.toLocaleDateString()}
+          {date.toLocaleDateString()}
         </span>
       )}
     </div>

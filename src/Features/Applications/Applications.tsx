@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import {
@@ -12,7 +12,11 @@ import {
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
-import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import {
+  AuthRedirect,
+  Protection,
+  AuthConsumer
+} from "../../Shared/Authorization";
 import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
 import DateColumn from "./DateColumn";
@@ -21,6 +25,9 @@ import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
+import AuthorizationContext from "../../Shared/Authorization/Context";
+import Axios from "axios";
+import applicationsAPI from "../../api/applicationsAPI";
 
 const mockData = [
   {
@@ -214,7 +221,7 @@ const columns = [
     label: "Added On",
     name: "date",
     options: {
-      customBodyRender: (value: Date) => <DateColumn date={value} />,
+      customBodyRender: (value: any) => <DateColumn date={value} />,
       filter: true,
       sort: false
     }
@@ -223,7 +230,7 @@ const columns = [
     label: "Deadline",
     name: "deadline",
     options: {
-      customBodyRender: (value: Date, tableMeta: any) => (
+      customBodyRender: (value: any, tableMeta: any) => (
         <DeadlineColumn date={value} rowData={tableMeta.rowData} />
       ),
       filter: true,
@@ -276,6 +283,27 @@ const Applications: React.FunctionComponent<
   WithStyles & RouteComponentProps
 > = ({ classes, history }) => {
   const [openModal, setOpenModal] = React.useState(false);
+  const [applications, setApplications] = React.useState([]);
+  const { userInfo } = React.useContext(AuthorizationContext);
+
+  useEffect(() => {
+    fetchApplicationData();
+  }, []);
+
+  const fetchApplicationData = async () => {
+    if (userInfo) {
+      const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
+        .data;
+
+      // temporary, so that it's able to render
+      const appendedComments = result.map((el: any) => ({
+        ...el,
+        comment: "Comes from API"
+      }));
+
+      setApplications(appendedComments);
+    }
+  };
 
   const handleOpen = () => {
     setOpenModal(true);
@@ -291,7 +319,7 @@ const Applications: React.FunctionComponent<
       <Grid container direction="column" className={classes.container}>
         <MUIDataTable
           title={"My Applications"}
-          data={mockData}
+          data={applications}
           columns={columns as any}
           options={{
             onRowClick: (_, rowMeta) =>

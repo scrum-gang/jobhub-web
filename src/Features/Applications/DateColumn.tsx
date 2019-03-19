@@ -5,7 +5,9 @@ interface IDateColumnProps {
 }
 
 const DateColumn: React.FunctionComponent<IDateColumnProps> = props => {
-  return <div>{!!props.date && props.date.toLocaleDateString()}</div>;
+  const date = new Date(props.date);
+
+  return <div>{!!date && date.toLocaleDateString()}</div>;
 };
 
 export default DateColumn;
