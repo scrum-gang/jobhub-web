@@ -31,6 +31,23 @@ class App extends Component {
       <Route path="/applications/:appid" component={EditApplication} />
       <Route path="/postings" component={Postings} exact />
       <Route path="/postings/:postingid" component={ViewPosting} />
+      <Route path="/recruiter/" component={Dashboard} exact />
+      <Route path="/recruiter/postings" component={Dashboard} exact />
+      <Route
+        path="/recruiter/postings/:postingid"
+        component={Dashboard}
+        exact
+      />
+      <Route
+        path="/recruiter/postings/:postingid/applications"
+        component={Dashboard}
+        exact
+      />
+      <Route
+        path="/recruiter/postings/:postingid/applications/:appid"
+        component={Dashboard}
+        exact
+      />
     </Switch>
   );
 
