@@ -315,7 +315,7 @@ const Applications: React.FunctionComponent<
 
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid container direction="column" className={classes.container}>
         <MUIDataTable
           title={"My Applications"}

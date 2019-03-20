@@ -35,7 +35,7 @@ const EditApplication: React.FunctionComponent<
 > = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid
         container
         justify="center"
