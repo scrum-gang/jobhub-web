@@ -19,7 +19,7 @@ interface IEndpoints {
 
 class API {
   public endpoints: { [endpoint: string]: IEndpoints };
-  private instance: AxiosInstance;
+  public instance: AxiosInstance;
 
   constructor(baseURL: string) {
     this.endpoints = {};
@@ -30,8 +30,8 @@ class API {
   }
 
   public createEntities = (entities: string[]) => {
-    entities.forEach((entity) => this.createEntity(entity));
-  }
+    entities.forEach(entity => this.createEntity(entity));
+  };
 
   public createEntity = (entityUrl: string) => {
     this.endpoints[entityUrl] = this.createCRUDEndpoints(entityUrl);

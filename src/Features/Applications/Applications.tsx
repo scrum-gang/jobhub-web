@@ -16,7 +16,7 @@ import applicationsAPI from "../../api/applicationsAPI";
 import {
   AuthConsumer,
   AuthRedirect,
-  Protection,
+  Protection
 } from "../../Shared/Authorization";
 import AuthorizationContext from "../../Shared/Authorization/Context";
 import CommentColumn from "./CommentColumn";
@@ -27,7 +27,6 @@ import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
-
 
 const mockData = [
   {
@@ -311,6 +310,7 @@ const Applications: React.FunctionComponent<
 
   const handleClose = () => {
     setOpenModal(false);
+    fetchApplicationData();
   };
 
   return (

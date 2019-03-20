@@ -5,6 +5,7 @@ import api from "../../api/api";
 import applicationsAPI from "../../api/applicationsAPI";
 import userAPI from "../../api/userAPI";
 import ILoginResponse from "../../config/types/loginResponse";
+import resumesAPI from "../../api/resumesAPI";
 
 const Provider: React.FunctionComponent = ({ children }) => {
   const [isLoading, setLoading] = React.useState(defaultState.isLoading);
@@ -53,11 +54,14 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const loadTokensForApis = (token: string) => {
     userAPI.setJWT(token);
     applicationsAPI.setJWT(token);
+    resumesAPI.setJWT(token);
+    console.log(token);
   };
 
   const clearTokensForApis = () => {
     userAPI.clearJWT();
     applicationsAPI.clearJWT();
+    resumesAPI.clearJWT();
   };
 
   return (

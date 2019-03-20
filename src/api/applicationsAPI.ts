@@ -4,11 +4,7 @@ import API from "./api";
 
 enum ApplicationEndpoints {
   APPLICATIONS = "/applications/user",
-  SELF = "/users/self",
-  LOGIN = "/login",
-  LOGOUT = "/logout",
-  REGISTER = "/signup",
-  RESEND_EMAIL = "/resend"
+  APPLY_EXTERNAL = "/apply/external"
 }
 
 class ApplicationsAPI {
@@ -30,6 +26,15 @@ class ApplicationsAPI {
 
   public getApplicationsUser = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getOne({ id });
+
+  public createExternalApplication = (payload: {
+    company: string;
+    deadline: string;
+    position: string;
+    status: string;
+    url: string;
+    user_id: string;
+  }) => this.api.endpoints[ApplicationEndpoints.APPLY_EXTERNAL].create(payload);
 }
 
 export default new ApplicationsAPI();

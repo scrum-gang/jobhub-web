@@ -19,6 +19,9 @@ import {
 } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-material-ui";
+import applicationsAPI from "../../api/applicationsAPI";
+import AuthorizationContext from "../../Shared/Authorization/Context";
+import resumesAPI from "../../api/resumesAPI";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -47,11 +50,40 @@ interface IProps extends WithStyles {
 const ApplicationForm: React.FunctionComponent<
   IProps & RouteComponentProps
 > = ({ classes, mode, handleClose, history }) => {
+  const { userInfo } = React.useContext(AuthorizationContext);
+  const [userResumes, setUserResumes] = React.useState([]);
+
   if (!handleClose) {
     handleClose = () => {
       history.push("/applications");
     };
   }
+
+  React.useEffect(() => {
+    if (userInfo) {
+      console.log(userInfo._id);
+    }
+    fetchResumes();
+  }, []);
+
+  const fetchResumes = async () => {
+    if (userInfo) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+
+      setUserResumes(result);
+    }
+  };
+
+  const createPosting = async (values: any) => {
+    if (userInfo) {
+      values.user_id = userInfo._id;
+      const result = await applicationsAPI.createExternalApplication(values);
+
+      if (handleClose) {
+        handleClose();
+      }
+    }
+  };
 
   const initialValues =
     mode === Modes.EDIT
@@ -59,14 +91,15 @@ const ApplicationForm: React.FunctionComponent<
           company: "JobHub",
           deadline: "2019-06-06",
           position: "Developer",
-          status: "Applied"
+          status: "Applied",
+          url: "http://localhost:3000/applications"
         }
       : {};
   return (
     <Paper className={classes.formContainer}>
       <Formik
         initialValues={initialValues}
-        onSubmit={values => console.log(values)}
+        onSubmit={values => createPosting(values)}
       >
         <Form>
           <Grid container justify="center" direction="column">
@@ -78,6 +111,14 @@ const ApplicationForm: React.FunctionComponent<
             >
               {mode === Modes.EDIT ? "Edit" : "Create"} Application
             </Typography>
+            <Field
+              name="url"
+              type="url"
+              label="url"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
             <Field
               name="position"
               type="text"
@@ -105,6 +146,27 @@ const ApplicationForm: React.FunctionComponent<
                 shrink: true
               }}
             />
+            <FormControl variant="outlined" margin="dense">
+              <InputLabel htmlFor="resume-simple">resume</InputLabel>
+              <Field
+                name="resume"
+                margin="dense"
+                component={Select}
+                input={
+                  <OutlinedInput
+                    labelWidth={45}
+                    name="resume"
+                    id="resume-simple"
+                  />
+                }
+              >
+                {Object.keys(APPLICATION_STATUSES).map(statusOption => (
+                  <MenuItem key={statusOption} value={statusOption}>
+                    {statusOption}
+                  </MenuItem>
+                ))}
+              </Field>
+            </FormControl>
             <FormControl variant="outlined" margin="dense">
               <InputLabel htmlFor="status-simple">status</InputLabel>
               <Field
