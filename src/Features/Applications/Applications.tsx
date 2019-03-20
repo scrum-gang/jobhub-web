@@ -323,7 +323,9 @@ const Applications: React.FunctionComponent<
           columns={columns as any}
           options={{
             onRowClick: (_, rowMeta) =>
-              history.push(`/applications/${rowMeta.dataIndex}`),
+              history.push(`/applications/${rowMeta.dataIndex}`, {
+                values: applications[rowMeta.dataIndex]
+              }),
             responsive: "scroll",
             selectableRows: false
           }}

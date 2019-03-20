@@ -45,11 +45,12 @@ export enum Modes {
 interface IProps extends WithStyles {
   mode: Modes;
   handleClose?: () => void;
+  editValues?: any;
 }
 
 const ApplicationForm: React.FunctionComponent<
   IProps & RouteComponentProps
-> = ({ classes, mode, handleClose, history }) => {
+> = ({ classes, mode, handleClose, history, editValues }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
   const [userResumes, setUserResumes] = React.useState([]);
 
@@ -85,16 +86,7 @@ const ApplicationForm: React.FunctionComponent<
     }
   };
 
-  const initialValues =
-    mode === Modes.EDIT
-      ? {
-          company: "JobHub",
-          deadline: "2019-06-06",
-          position: "Developer",
-          status: "Applied",
-          url: "http://localhost:3000/applications"
-        }
-      : {};
+  const initialValues = mode === Modes.EDIT ? editValues : {};
   return (
     <Paper className={classes.formContainer}>
       <Formik

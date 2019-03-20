@@ -19,9 +19,9 @@ interface IEndpoints {
 
 class API {
   public endpoints: { [endpoint: string]: IEndpoints };
-  public instance: AxiosInstance;
+  private instance: AxiosInstance;
 
-  constructor(baseURL: string) {
+  constructor(baseURL: string, headers?: AxiosCfg["headers"]) {
     this.endpoints = {};
     this.instance = axios.create({
       baseURL,
