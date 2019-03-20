@@ -1,8 +1,8 @@
 import * as React from "react";
 import { defaultState, Provider as ContextProvider } from "./Context";
 
-import api from "../../api/api";
 import applicationsAPI from "../../api/applicationsAPI";
+import postingsAPI from "../../api/postingsAPI";
 import userAPI from "../../api/userAPI";
 import ILoginResponse from "../../config/types/loginResponse";
 
@@ -58,6 +58,7 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const clearTokensForApis = () => {
     userAPI.clearJWT();
     applicationsAPI.clearJWT();
+    postingsAPI.clearJWT();
   };
 
   return (
