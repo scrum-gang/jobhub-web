@@ -50,15 +50,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
     };
   }
 
-  const initialValues =
-    mode === Modes.EDIT
-      ? {
-          company: "JobHub",
-          deadline: "2019-06-06",
-          position: "Developer",
-          status: "Applied"
-        }
-      : {};
+  const initialValues = {};
   return (
     <Paper className={classes.formContainer}>
       <Formik
