@@ -1,12 +1,24 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+
+// tslint:disable-next-line
+import "filepond/dist/filepond.min.css";
 
 import { Field, Form, Formik } from "formik";
+import { FilePond } from "react-filepond";
 
 import {
   Button,
   createStyles,
   Grid,
+  Modal,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Theme,
+  Typography,
   withStyles,
   WithStyles
 } from "@material-ui/core";
@@ -14,6 +26,7 @@ import {
 import * as Yup from "yup";
 
 import Wrapper from "./Wrapper";
+// import UploadModal from "./UploadModal"
 
 import { SimpleFileUpload } from "formik-material-ui";
 
@@ -37,9 +50,18 @@ const styles = (theme: Theme) =>
       margin: theme.spacing.unit,
       minWidth: 120
     },
+
     pad: {
       marginBottom: 15,
       marginTop: 15
+    },
+    root: {
+      marginTop: theme.spacing.unit * 3,
+      overflowX: "auto",
+      width: "100%"
+    },
+    table: {
+      minWidth: 700
     }
   });
 
@@ -50,35 +72,53 @@ interface IValues {
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
+  const [modal, setModal] = useState(false);
+  const [resume, setResume] = useState("");
+
+  const handleOpen = () => {
+    setModal(true);
+  };
+
+  const handleClose = () => {
+    setModal(false);
+  };
+
+  const handleResumeAdd = () => {
+    setResume("abc");
+  };
+
   return (
     <Wrapper title="Resume Upload">
-    <Grid justify="center">
-      <Formik<IValues>
-        validationSchema={schema}
-        initialValues={{ file: "" }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-            // action('submit')(values);
-          }, 2000);
-        }}
-        render={({ submitForm }) => (
-          <Form>
-            <Field component={SimpleFileUpload} name="file" className={classes.pad}/>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={submitForm}
-              className={classes.pad}
-            >
-              Submit
-            </Button>
-          </Form>
-        )}
-      />
-    </Grid>
-  </Wrapper>
-  )
-}
+      <Grid container justify="center" spacing={16}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Uploaded Resumes</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            <TableRow>
+              <TableCell>{resume}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <Grid
+          justify="flex-start"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "5% "
+          }}
+        >
+          <div style={{ width: "300px", top: "25%" }}>
+            <FilePond allowMultiple={true} />
+          </div>
+        </Grid>
+      </Grid>
+    </Wrapper>
+  );
+};
 
 export default withStyles(styles)(Upload);

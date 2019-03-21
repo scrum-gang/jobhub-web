@@ -116,7 +116,7 @@ const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
     },
     {
       icon: <AttachmentIcon />,
-      route: "/",
+      route: "/resume",
       text: "Resumé"
     },
     {

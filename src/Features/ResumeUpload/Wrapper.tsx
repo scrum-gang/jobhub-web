@@ -35,11 +35,11 @@ const Wrapper = ({ title, children }: IProps) => (
   <Grid
     container
     spacing={0}
-    direction="column"
+    direction="row"
     alignItems="center"
     justify="center"
   >
-    <Paper elevation={4} style={{ padding: 150, marginTop: "10%" }}>
+    <Paper elevation={4} style={{ padding: 100, marginTop: "10%", marginLeft: "15%", marginRight: "15%" }}>
       <Typography variant="headline" component="h3">
         {title}
       </Typography>
