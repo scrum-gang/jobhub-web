@@ -5,6 +5,7 @@ import {
   Button,
   Grid,
   Icon,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -17,13 +18,10 @@ import {
   createStyles,
   withStyles
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import { FilePond } from "react-filepond";
-import IconButton from "@material-ui/core/IconButton";
-import ResumeList from "./ResumeList";
 import Wrapper from "./Wrapper";
 
 const styles = (theme: Theme) =>
@@ -64,26 +62,19 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [resumes, setResumes] = useState<IFile[]>([]);
   const [filter, setFilter] = useState("");
 
-
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
     newResumes.splice(index, 1);
     setResumes(newResumes);
   };
 
-  const filterResumesHandler = (index: any) => {
-    const result = resumes.filter((r)=>r.filename.length>4)
-  }
-  // .filter((r) => r.filename matches filter)
-
-  const filteredResumes = resumes.filter(resume => resume.filename.includes(filter));
-  console.log(filteredResumes, filter);
+  const filteredResumes = resumes.filter(resume =>
+    resume.filename.includes(filter)
+  );
 
   return (
     <Wrapper title="Resume Upload">
       <Grid container direction="column" spacing={24}>
-        {/* <ResumeList/> */}
-
         <TextField
           id="standard-textarea"
           label="Search resumes"
@@ -92,8 +83,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           className={classes.textField}
           margin="normal"
           onChange={event => {
-            const searchResults = event.target.value
-            setFilter(searchResults)
+            const searchResults = event.target.value;
+            setFilter(searchResults);
           }}
         />
 
