@@ -20,7 +20,7 @@ const styles = (theme: Theme) =>
       marginTop: theme.spacing.unit
     },
     formContainer: {
-      maxWidth: 400,
+      maxWidth: 600,
       padding: 6 * theme.spacing.unit
     },
     fullHeight: {
@@ -73,12 +73,12 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               color="primary"
               gutterBottom
             >
-              {mode === Modes.EDIT ? "Edit" : "Create"} Application
+              {mode === Modes.EDIT ? "Edit" : "Create"} Posting
             </Typography>
             <Field
-              name="position"
+              name="title"
               type="text"
-              label="position"
+              label="title"
               variant="outlined"
               margin="dense"
               component={TextField}
@@ -92,9 +92,55 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               component={TextField}
             />
             <Field
+              name="description"
+              type="text"
+              label="description"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
+            <Field
+              name="requirements"
+              type="text"
+              label="requirements"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
+            <Field
+              name="salary"
+              type="text"
+              label="salary"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
+            <Field
               name="deadline"
               type="date"
               label="deadline"
+              margin="dense"
+              variant="outlined"
+              component={TextField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+            <Field
+              name="start"
+              type="date"
+              label="start"
+              margin="dense"
+              variant="outlined"
+              component={TextField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+            <Field
+              name="end"
+              type="date"
+              label="end"
               margin="dense"
               variant="outlined"
               component={TextField}
