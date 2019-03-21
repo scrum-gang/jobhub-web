@@ -10,8 +10,7 @@ import {
   Button,
   createStyles,
   Grid,
-  Modal,
-  Paper,
+  Icon,
   Table,
   TableBody,
   TableCell,
@@ -22,6 +21,9 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
+
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
 
 import * as Yup from "yup";
 
@@ -78,6 +80,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     }
   ]);
 
+  const deleteResumeHandler = (index: any) => {
+    const newResumes = [...resumes];
+    newResumes.splice(index, 1);
+    setResumes(newResumes);
+  };
+
   return (
     <Wrapper title="Resume Upload">
       <Grid container justify="center" spacing={16}>
@@ -89,15 +97,24 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableHead>
 
           <TableBody>
-            
-              {resumes.map((resume, index) => (
-                <TableRow>
-                <TableCell key={index}>{resumes[index].filename}</TableCell>
-                </TableRow>
-              ))}
-            
+            {resumes.map((resume, index) => (
+              <TableRow>
+                <TableCell key={index}>
+                  <div style={{ float: "left", paddingTop:"20px" }}>
+                    {resumes[index].filename}{" "}
+                  </div>
+                  <IconButton
+                    key={index}
+                    aria-label="Delete"
+                    style={{ margin: "theme.spacing.unit", float: "right" }}
+                    onClick={deleteResumeHandler}
+                  >
+                    <DeleteIcon fontSize="large" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
-
         </Table>
 
         <Grid
@@ -113,9 +130,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
             <FilePond
               allowMultiple={true}
               onupdatefiles={items => {
-                const newResumes = [...resumes]
-                newResumes.push({filename: items[0].filename})
-                setResumes(newResumes)
+                const newResumes = [...resumes];
+                newResumes.push({ filename: items[0].filename });
+                setResumes(newResumes);
                 // console.log(items[0].filename);
               }}
             />
