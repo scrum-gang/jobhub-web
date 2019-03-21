@@ -72,20 +72,11 @@ interface IValues {
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
-  const [modal, setModal] = useState(false);
-  const [resume, setResume] = useState("");
-
-  const handleOpen = () => {
-    setModal(true);
-  };
-
-  const handleClose = () => {
-    setModal(false);
-  };
-
-  const handleResumeAdd = () => {
-    setResume("abc");
-  };
+  const [resumes, setResumes] = useState([
+    {
+      filename: ""
+    }
+  ]);
 
   return (
     <Wrapper title="Resume Upload">
@@ -98,13 +89,19 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableHead>
 
           <TableBody>
-            <TableRow>
-              <TableCell>{resume}</TableCell>
-            </TableRow>
+            
+              {resumes.map((resume, index) => (
+                <TableRow>
+                <TableCell key={index}>{resumes[index].filename}</TableCell>
+                </TableRow>
+              ))}
+            
           </TableBody>
+
         </Table>
 
         <Grid
+          container
           justify="flex-start"
           style={{
             display: "flex",
@@ -113,7 +110,15 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           }}
         >
           <div style={{ width: "300px", top: "25%" }}>
-            <FilePond allowMultiple={true} />
+            <FilePond
+              allowMultiple={true}
+              onupdatefiles={items => {
+                const newResumes = [...resumes]
+                newResumes.push({filename: items[0].filename})
+                setResumes(newResumes)
+                // console.log(items[0].filename);
+              }}
+            />
           </div>
         </Grid>
       </Grid>
