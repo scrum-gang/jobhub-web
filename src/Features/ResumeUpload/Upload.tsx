@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from "react";
-
 // tslint:disable-next-line
 import "filepond/dist/filepond.min.css";
 
-import { Field, Form, Formik } from "formik";
-import { FilePond } from "react-filepond";
-
 import {
   Button,
-  createStyles,
   Grid,
   Icon,
   Table,
@@ -18,32 +12,18 @@ import {
   TableRow,
   Theme,
   Typography,
-  withStyles,
-  WithStyles
+  WithStyles,
+  createStyles,
+  withStyles
 } from "@material-ui/core";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 
 import DeleteIcon from "@material-ui/icons/Delete";
+import { FilePond } from "react-filepond";
 import IconButton from "@material-ui/core/IconButton";
-
-import * as Yup from "yup";
-
+import ResumeList from "./ResumeList";
 import Wrapper from "./Wrapper";
-// import UploadModal from "./UploadModal"
-
-import { SimpleFileUpload } from "formik-material-ui";
-
-// 10 Megs
-const MAX_FILE_SIZE = 10485760;
-
-const schema = Yup.object().shape({
-  file: Yup.mixed()
-    .required("Required")
-    .test(
-      "file",
-      "File must be less than 10MB",
-      value => value == null || value.size < MAX_FILE_SIZE
-    )
-});
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -67,18 +47,15 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IValues {
-  file: "" | File;
+
+interface IFile {
+  filename: string;
 }
 
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
-  const [resumes, setResumes] = useState([
-    {
-      filename: ""
-    }
-  ]);
+  const [resumes, setResumes] = useState<IFile[]>([]);
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
@@ -89,21 +66,41 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   return (
     <Wrapper title="Resume Upload">
       <Grid container justify="center" spacing={16}>
+        {/* <ResumeList/> */}
+
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>Uploaded Resumes</TableCell>
+              <TableCell>Resume Name</TableCell>
+              <TableCell>Revision Number</TableCell>
+              <TableCell>Uploaded At</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {resumes.map((resume, index) => (
-              <TableRow>
+              <TableRow key={resume.filename}>
+              
                 <TableCell key={index}>
-                  <div style={{ float: "left", paddingTop:"20px" }}>
-                    {resumes[index].filename}{" "}
+                  <div style={{ float: "left"}}>
+                    {resumes[index].filename}
                   </div>
-                  <IconButton
+                 
+                </TableCell>
+
+                <TableCell>
+                  <div style={{alignContent: "center"}}>
+                    69
+                  </div>
+                  </TableCell>
+
+                <TableCell>
+
+                  <div style={{ float: "left", paddingTop: "20px" }}>
+                    {new Date().toLocaleString()}
+                  </div>
+
+                   <IconButton
                     key={index}
                     aria-label="Delete"
                     style={{ margin: "theme.spacing.unit", float: "right" }}
@@ -112,8 +109,13 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     <DeleteIcon fontSize="large" />
                   </IconButton>
                 </TableCell>
+                
               </TableRow>
+
+
             ))}
+
+
           </TableBody>
         </Table>
 
@@ -130,10 +132,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
             <FilePond
               allowMultiple={true}
               onupdatefiles={items => {
-                const newResumes = [...resumes];
-                newResumes.push({ filename: items[0].filename });
-                setResumes(newResumes);
-                // console.log(items[0].filename);
+                setResumes(items);
               }}
             />
           </div>
