@@ -17,7 +17,7 @@ const Consumer: React.FunctionComponent<IProps> = ({ protection }) => (
       {({ userInfo, isLoading }) => {
         if (isLoading) {
           return <LoadingSpinner />;
-        } else if (protection !== Protection.LOGGED_IN && !userInfo) {
+        } else if (protection !== Protection.LOGGED_OUT && !userInfo) {
           return <Redirect to="/login" />;
         } else if (protection === Protection.LOGGED_OUT && userInfo) {
           return <Redirect to="/" />;
