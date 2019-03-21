@@ -1,14 +1,13 @@
-import React, { ReactNode } from "react";
-
 import {
-  createStyles,
   Grid,
   Paper,
   Theme,
   Typography,
-  withStyles,
-  WithStyles
+  WithStyles,
+  createStyles,
+  withStyles
 } from "@material-ui/core";
+import React, { ReactNode } from "react";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -39,7 +38,7 @@ const Wrapper = ({ title, children }: IProps) => (
     alignItems="center"
     justify="center"
   >
-    <Paper elevation={4} style={{ padding: 100, marginTop: "10%", marginLeft: "15%", marginRight: "15%" }}>
+    <Paper elevation={4} style={{ padding: 100, marginTop: "10%", marginLeft: "10%", marginRight: "15%" }}>
       <Typography variant="headline" component="h3">
         {title}
       </Typography>

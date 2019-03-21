@@ -10,6 +10,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Theme,
   Typography,
   WithStyles,
@@ -44,9 +45,14 @@ const styles = (theme: Theme) =>
     },
     table: {
       minWidth: 700
+    },
+    textField: {
+      alignSelf: "flex-start",
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 200
     }
   });
-
 
 interface IFile {
   filename: string;
@@ -56,6 +62,8 @@ interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [resumes, setResumes] = useState<IFile[]>([]);
+  const [filter, setFilter] = useState("");
+
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
@@ -63,10 +71,31 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     setResumes(newResumes);
   };
 
+  const filterResumesHandler = (index: any) => {
+    const result = resumes.filter((r)=>r.filename.length>4)
+  }
+  // .filter((r) => r.filename matches filter)
+
+  const filteredResumes = resumes.filter(resume => resume.filename.includes(filter));
+  console.log(filteredResumes, filter);
+
   return (
     <Wrapper title="Resume Upload">
-      <Grid container justify="center" spacing={16}>
+      <Grid container direction="column" spacing={24}>
         {/* <ResumeList/> */}
+
+        <TextField
+          id="standard-textarea"
+          label="Search resumes"
+          placeholder=""
+          multiline
+          className={classes.textField}
+          margin="normal"
+          onChange={event => {
+            const searchResults = event.target.value
+            setFilter(searchResults)
+          }}
+        />
 
         <Table className={classes.table}>
           <TableHead>
@@ -78,29 +107,22 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableHead>
 
           <TableBody>
-            {resumes.map((resume, index) => (
+            {filteredResumes.map((resume, index) => (
               <TableRow key={resume.filename}>
-              
                 <TableCell key={index}>
-                  <div style={{ float: "left"}}>
-                    {resumes[index].filename}
-                  </div>
-                 
+                  <Typography>{filteredResumes[index].filename}</Typography>
                 </TableCell>
 
                 <TableCell>
-                  <div style={{alignContent: "center"}}>
-                    69
-                  </div>
-                  </TableCell>
+                  <div style={{ alignContent: "center" }}>69</div>
+                </TableCell>
 
                 <TableCell>
-
                   <div style={{ float: "left", paddingTop: "20px" }}>
-                    {new Date().toLocaleString()}
+                    <Typography>{new Date().toLocaleString()}</Typography>
                   </div>
 
-                   <IconButton
+                  <IconButton
                     key={index}
                     aria-label="Delete"
                     style={{ margin: "theme.spacing.unit", float: "right" }}
@@ -109,34 +131,18 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     <DeleteIcon fontSize="large" />
                   </IconButton>
                 </TableCell>
-                
               </TableRow>
-
-
             ))}
-
-
           </TableBody>
         </Table>
-
-        <Grid
-          container
-          justify="flex-start"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "5% "
-          }}
-        >
-          <div style={{ width: "300px", top: "25%" }}>
-            <FilePond
-              allowMultiple={true}
-              onupdatefiles={items => {
-                setResumes(items);
-              }}
-            />
-          </div>
-        </Grid>
+        <div style={{ paddingTop: "40px" }}>
+          <FilePond
+            allowMultiple={true}
+            onupdatefiles={items => {
+              setResumes(items);
+            }}
+          />
+        </div>
       </Grid>
     </Wrapper>
   );
