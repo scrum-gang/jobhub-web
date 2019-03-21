@@ -4,7 +4,8 @@ import API from "./api";
 
 enum ApplicationEndpoints {
   APPLICATIONS = "/applications/user",
-  APPLY_EXTERNAL = "/apply/external"
+  APPLY_EXTERNAL = "/apply/external",
+  UPDATE_STATUS_EXTERNAL = "/update-status/external"
 }
 
 class ApplicationsAPI {
@@ -35,6 +36,14 @@ class ApplicationsAPI {
     url: string;
     user_id: string;
   }) => this.api.endpoints[ApplicationEndpoints.APPLY_EXTERNAL].create(payload);
+
+  public updateStatusExternalApplication = (payload: {
+    id: number;
+    new_status: string;
+  }) =>
+    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS_EXTERNAL].create(
+      payload
+    );
 }
 
 export default new ApplicationsAPI();

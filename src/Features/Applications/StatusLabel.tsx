@@ -2,10 +2,11 @@ import { Button, Menu, MenuItem } from "@material-ui/core";
 import * as React from "react";
 
 import APPLICATION_STATUSES from "../../config/constants/statusOptions";
+import applicationsAPI from "../../api/applicationsAPI";
 
 interface IStatusProps {
   status: string;
-  index: number;
+  application: any;
   updateValue: (_: any) => void;
 }
 
@@ -13,7 +14,11 @@ const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
   const [open, setOpen] = React.useState(null);
   // TODO: Add rest call to update status for given job application when user id issue is fixed
 
-  const handleStatusChange = (status: string) => {
+  const handleStatusChange = async (status: string) => {
+    const result = await applicationsAPI.updateStatusExternalApplication({
+      id: props.application.application_id,
+      new_status: status
+    });
     props.updateValue(status);
   };
 
