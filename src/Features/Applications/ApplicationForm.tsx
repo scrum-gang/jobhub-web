@@ -151,10 +151,7 @@ const ApplicationForm: React.FunctionComponent<
               >
                 {!!userResumes &&
                   userResumes.map((resume: any) => (
-                    <MenuItem
-                      key={resume.id}
-                      value={resume.download_resume_url}
-                    >
+                    <MenuItem value={resume.download_resume_url}>
                       {`${resume.title} (${resume.revision})`}
                     </MenuItem>
                   ))}

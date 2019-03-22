@@ -11,9 +11,7 @@ class ResumesAPI {
 
   /** Probably too late for this, but this.api probably should've been passed as a dependency injection */
   constructor() {
-    this.api = new API(
-      "https://cors-anywhere.herokuapp.com/https://resume-revision.herokuapp.com"
-    );
+    this.api = new API("https://resume-revision.herokuapp.com");
     this.api.createEntities(Object.values(ApplicationEndpoints));
   }
 
