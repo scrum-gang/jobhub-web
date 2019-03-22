@@ -66,7 +66,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [filter, setFilter] = useState("");
   const [JWT, setJWT] = useState("");
 
-  const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyMzU1NTcsImV4cCI6MTU1MzIzNjQ1N30.BBCylss5-LVJuer-fMF_5QiHbVwVFkRw3wzWKZ3nEek"
+  const jwt =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyNzA1MjgsImV4cCI6MTU1MzI3MTQyOH0.LToqHCZ8WoMUswZ4opaGfe-AjlkZwhlPwdHb8Ednu-I";
 
   // authentication
   // useEffect(() => {
@@ -103,22 +104,16 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
       .then(
         response => {
           const res = response.data;
-          const newResumes = [];
 
-          newResumes.push({
-            filename: res[0].title,
-            filenameWithoutExtension: res[0].revision,
-            id: res[0].id
+          const mapRes = res.map((r: any, i: any) => {
+            return {
+              filename: r.title,
+              filenameWithoutExtension: r.revision,
+              id: r.id
+            };
           });
 
-          // console.log("new resumes", newResumes);
-
-          setResumes(newResumes);
-
-          // console.log("resumes ", resumes);
-
-           console.log("response ", res);
-          return res;
+          setResumes(mapRes);
         },
         error => {
           const status = error.response.status;
@@ -170,9 +165,17 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
                 <TableCell>
                   <div style={{ alignContent: "center" }}>
-                    {resumes[0].filenameWithoutExtension}
+                    {resumes.map((r: any) => r.filenameWithoutExtension)}
                   </div>
                 </TableCell>
+
+                {/* {resumes.map((r:any) =>
+                  <TableCell>
+                    <div>
+                      {r.filenameWithoutExtension}
+                    </div>
+                  </TableCell>
+                )} */}
 
                 <TableCell>
                   <div style={{ float: "left", paddingTop: "20px" }}>
@@ -196,14 +199,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           <FilePond
             allowMultiple={true}
             onupdatefiles={items => {
-              // const newResumes = [...resumes]
-              // newResumes.push({
-              //   filename: res.title,
-              //   id: res.id,
-              //   revision: res.revision
-              // })
               setResumes(items);
-              // console.log(items);
             }}
           />
         </div>
