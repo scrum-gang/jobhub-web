@@ -61,6 +61,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
     location: "",
     requirements: "",
     company: "",
+    deadline: new Date(),
     start_date: new Date(),
     end_date: new Date()
   };

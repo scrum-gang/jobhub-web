@@ -16,6 +16,7 @@ export interface IPosting {
   salary: string;
   company: string;
   requirements: string;
+  deadline: Date;
   start_date: Date;
   end_date: Date;
 }
