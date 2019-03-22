@@ -11,8 +11,11 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
+
+import postingsAPI, { IPosting } from "../../../api/postingsAPI";
+import { toast } from "react-toastify";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -46,17 +49,39 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
 }) => {
   if (!handleClose) {
     handleClose = () => {
-      history.push("/recruiter/postings");
+      history.push("/recruiter");
     };
   }
 
-  const initialValues = {};
+  const initialValues: IPosting = {
+    title: "",
+    description: "",
+    recruiter: "tester123",
+    salary: "",
+    location: "",
+    requirements: "",
+    company: "",
+    start_date: new Date(),
+    end_date: new Date()
+  };
+
+  const handleSubmit = async (
+    values: IPosting,
+    actions: FormikActions<any>
+  ) => {
+    try {
+      await postingsAPI.createPosting(values);
+    } catch (e) {
+      toast.error(e);
+      console.error(e);
+    } finally {
+      actions.setSubmitting(false);
+    }
+  };
+
   return (
     <Paper className={classes.formContainer}>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={values => console.log(values)}
-      >
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         <Form>
           <Grid container justify="center" direction="column">
             <Typography

@@ -15,6 +15,7 @@ import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
 import Postings from "./Features/Postings/Postings";
 import ViewPosting from "./Features/Postings/ViewPosting";
+import EditPosting from "./Features/Recruiter/Postings/EditPosting";
 import RecruiterPostings from "./Features/Recruiter/Postings/RecruiterPostings";
 import ResumeUpload from "./Features/ResumeUpload/Upload";
 
@@ -35,7 +36,7 @@ class App extends Component {
       <Route path="/recruiter/" component={RecruiterPostings} exact />
       <Route
         path="/recruiter/postings/:postingid"
-        component={Dashboard}
+        component={EditPosting}
         exact
       />
       <Route
