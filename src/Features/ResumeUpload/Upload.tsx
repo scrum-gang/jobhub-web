@@ -20,10 +20,13 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
+import AuthorizationContext from "../../Shared/Authorization/Context";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { FilePond } from "react-filepond";
 import Wrapper from "./Wrapper";
 import axios from "axios";
+
+// import resumesAPI from "../../api/resumesAPI";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -62,43 +65,59 @@ interface IFile {
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
+  const { userInfo } = React.useContext(AuthorizationContext);
   const [resumes, setResumes] = useState<IFile[]>([]);
+  const [userResumes, setUserResumes] = React.useState([]);
   const [filter, setFilter] = useState("");
-  const [JWT, setJWT] = useState("");
+
+  // React.useEffect(() => {
+  //   fetchResumes();
+  //   console.log("user resumes: ", userResumes)
+  //   console.log("user info: ", userInfo)
+  // }, []);
+  
+  // const fetchResumes = async () => {
+  //   if (userInfo) {
+  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+  //     setUserResumes(result);
+  //   }
+  // };
+
+  
 
   const jwt =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyNzE2NzIsImV4cCI6MTU1MzI3MjU3Mn0.R_vBpSYbUf9Le4Hkeh40UZS67ubK9Wo8OStjw3OJ7cE";
 
   // get resumes currently stored in resume-revisions db
-  useEffect(() => {
-    axios
-      .get(
-        "https://resume-revision.herokuapp.com/resumes/5c9466f39758a1001703484e",
-        {
-          headers: {
-            Authorization: "Bearer " + jwt
-          }
-        }
-      )
-      .then(
-        response => {
-          const res = response.data;
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       "https://resume-revision.herokuapp.com/resumes/5c9466f39758a1001703484e",
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + jwt
+  //         }
+  //       }
+  //     )
+  //     .then(
+  //       response => {
+  //         const res = response.data;
 
-          const mapRes = res.map((r: any, i: any) => {
-            return {
-              filename: r.title,
-              filenameWithoutExtension: r.revision,
-              id: r.id
-            };
-          });
+  //         const mapRes = res.map((r: any, i: any) => {
+  //           return {
+  //             filename: r.title,
+  //             filenameWithoutExtension: r.revision,
+  //             id: r.id
+  //           };
+  //         });
 
-          setResumes(mapRes);
-        },
-        error => {
-          const status = error.response.status;
-        }
-      );
-  }, []);
+  //         setResumes(mapRes);
+  //       },
+  //       error => {
+  //         const status = error.response.status;
+  //       }
+  //     );
+  // }, []);
 
   // delete
   
