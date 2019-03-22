@@ -1,7 +1,10 @@
 import * as React from "react";
+import { Field, Form, Formik, FormikActions } from "formik";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import { RouteComponentProps } from "react-router-dom";
+import { TextField } from "formik-material-ui";
 import { toast } from "react-toastify";
-
 import applicationsAPI from "../../api/applicationsAPI";
 
 import {
@@ -34,7 +37,7 @@ export enum Posting {
 }
 
 const data = {
-  _id: "123123",
+  _id: "123123123",
   company: "JobHub",
   deadline: new Date(),
   description:
@@ -46,24 +49,28 @@ const data = {
 };
 
 const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = ({ classes }) => {
-  const applyToPosting = (values: {_id: string}) => {
-    // TODO [aungur]: Collect `resume` and `comment` from user
+  const applyToPosting = (
+    values: { _id: string; comment: string; resume: string },
+    actions: FormikActions<any>
+  ) => {
     return applicationsAPI
-      .createInternalApplication({job_id: values._id, resume: "123", comment: ""})
+      .createInternalApplication({job_id: values._id, resume: values.resume, comment: values.comment})
       .then(response => {
         // TODO
         if ('status' in response.data){
           toast.error(response.data['status']);
         }
-        else{
-          toast.success("Response!");
+        else if ('status' in response.data[0]){
+          toast.error(response.data[0]['status']);
+        } else{
+          toast.success("Applied!");
         }
       })
       .catch(error => {
         toast.error("Error!");
       })
       .finally(() => {
-        toast.info("Finally!");
+        // TODO: Anything needed here ... ?
       });
   };
 
@@ -90,11 +97,36 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
             Deadline {format(data.deadline)}
           </Typography>
         </Grid>
-        <Grid container justify="center">
-          <Button onClick={() => applyToPosting(data)} color="primary" variant="contained">
-            Apply
-          </Button>
-        </Grid>
+        <Formik
+              initialValues={{ _id: data._id, resume: "", comment: "" }}
+              validationSchema={""}
+              onSubmit={applyToPosting}
+            >
+        <Form>
+          <Grid container justify="center">
+            <Field
+              name="comment"
+              type="text"
+              label="Comment"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
+            <Field
+              name="resume"
+              type="dropdown"
+              label="resume"
+              value=""
+              component={Select}
+            >
+              {["a", "b", "c", "d"].map((v, i) => <MenuItem key={i} value={v}> {v} </MenuItem>)}
+            </Field>
+            <Button color="primary" variant="contained">
+              Apply
+            </Button>
+          </Grid>
+        </Form>
+        </Formik>
       </Paper>
     </React.Fragment>
   );
