@@ -11,7 +11,6 @@ interface IStatusProps {
 
 const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
   const [open, setOpen] = React.useState(null);
-  // TODO: Add rest call to update status for given job application when user id issue is fixed
 
   const handleStatusChange = async (status: string) => {
     const result = await applicationsAPI.updateStatusExternalApplication({
