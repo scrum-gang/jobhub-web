@@ -55,7 +55,6 @@ const Provider: React.FunctionComponent = ({ children }) => {
     userAPI.setJWT(token);
     applicationsAPI.setJWT(token);
     resumesAPI.setJWT(token);
-    console.log(token);
   };
 
   const clearTokensForApis = () => {

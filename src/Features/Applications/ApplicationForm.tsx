@@ -61,9 +61,6 @@ const ApplicationForm: React.FunctionComponent<
   }
 
   React.useEffect(() => {
-    if (userInfo) {
-      console.log(userInfo._id);
-    }
     fetchResumes();
   }, []);
 
@@ -71,7 +68,7 @@ const ApplicationForm: React.FunctionComponent<
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
 
-      setUserResumes(result);
+      setUserResumes(result || []);
     }
   };
 
@@ -152,11 +149,15 @@ const ApplicationForm: React.FunctionComponent<
                   />
                 }
               >
-                {Object.keys(APPLICATION_STATUSES).map(statusOption => (
-                  <MenuItem key={statusOption} value={statusOption}>
-                    {statusOption}
-                  </MenuItem>
-                ))}
+                {!!userResumes &&
+                  userResumes.map((resume: any) => (
+                    <MenuItem
+                      key={resume.id}
+                      value={resume.download_resume_url}
+                    >
+                      {`${resume.title} (${resume.revision})`}
+                    </MenuItem>
+                  ))}
               </Field>
             </FormControl>
             <FormControl variant="outlined" margin="dense">

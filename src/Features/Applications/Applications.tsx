@@ -196,6 +196,8 @@ const Applications: React.FunctionComponent<
     isLoadingApplicationsData,
     setIsLoadingApplicationsData
   ] = React.useState(true);
+
+  // TODO: Maybe use useMemo?
   const [applications, setApplications] = React.useState([]);
   const { userInfo } = React.useContext(AuthorizationContext);
 
@@ -310,7 +312,6 @@ const Applications: React.FunctionComponent<
         ...el,
         comment: "Comes from API"
       }));
-
       setApplications(appendedComments);
     }
 

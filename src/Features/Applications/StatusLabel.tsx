@@ -1,8 +1,7 @@
 import { Button, Menu, MenuItem } from "@material-ui/core";
 import * as React from "react";
-
-import APPLICATION_STATUSES from "../../config/constants/statusOptions";
 import applicationsAPI from "../../api/applicationsAPI";
+import APPLICATION_STATUSES from "../../config/constants/statusOptions";
 
 interface IStatusProps {
   status: string;
