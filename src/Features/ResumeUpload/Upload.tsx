@@ -23,6 +23,7 @@ import React, { useEffect, useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { FilePond } from "react-filepond";
 import Wrapper from "./Wrapper";
+import axios from "axios";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -54,6 +55,8 @@ const styles = (theme: Theme) =>
 
 interface IFile {
   filename: string;
+  id: string;
+  filenameWithoutExtension: string;
 }
 
 interface IProps extends WithStyles<typeof styles> {}
@@ -61,6 +64,67 @@ interface IProps extends WithStyles<typeof styles> {}
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [resumes, setResumes] = useState<IFile[]>([]);
   const [filter, setFilter] = useState("");
+  const [JWT, setJWT] = useState("");
+
+  const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyMzU1NTcsImV4cCI6MTU1MzIzNjQ1N30.BBCylss5-LVJuer-fMF_5QiHbVwVFkRw3wzWKZ3nEek"
+
+  // authentication
+  // useEffect(() => {
+  //   axios
+  //     .post("https://jobhub-authentication-staging.herokuapp.com/login", {
+  //       data: {
+  //         email: "sulemanmalik180@gmail.com",
+  //         password: "123456"
+  //       }
+  //     })
+  //     .then(
+  //       response => {
+  //         const res = response.data;
+  //         console.log(res);
+  //         // setJWT(res[0].token)
+  //       },
+  //       error => {
+  //         const status = error.response.status;
+  //       }
+  //     );
+  // }, []);
+
+  // get resumes currently stored in resume-revisions db
+  useEffect(() => {
+    axios
+      .get(
+        "https://resume-revision.herokuapp.com/resumes/5c9466f39758a1001703484e",
+        {
+          headers: {
+            Authorization: "Bearer " + jwt
+          }
+        }
+      )
+      .then(
+        response => {
+          const res = response.data;
+          const newResumes = [];
+
+          newResumes.push({
+            filename: res[0].title,
+            filenameWithoutExtension: res[0].revision,
+            id: res[0].id
+          });
+
+          // console.log("new resumes", newResumes);
+
+          setResumes(newResumes);
+
+          // console.log("resumes ", resumes);
+
+           console.log("response ", res);
+          return res;
+        },
+        error => {
+          const status = error.response.status;
+        }
+      );
+  }, []);
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
@@ -105,7 +169,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                 </TableCell>
 
                 <TableCell>
-                  <div style={{ alignContent: "center" }}>69</div>
+                  <div style={{ alignContent: "center" }}>
+                    {resumes[0].filenameWithoutExtension}
+                  </div>
                 </TableCell>
 
                 <TableCell>
@@ -130,7 +196,14 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           <FilePond
             allowMultiple={true}
             onupdatefiles={items => {
+              // const newResumes = [...resumes]
+              // newResumes.push({
+              //   filename: res.title,
+              //   id: res.id,
+              //   revision: res.revision
+              // })
               setResumes(items);
+              // console.log(items);
             }}
           />
         </div>
