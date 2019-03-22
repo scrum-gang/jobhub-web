@@ -5,7 +5,7 @@ import API from "./api";
 enum ApplicationEndpoints {
   APPLICATIONS = "/applications/user/",
   APPLY_EXTERNAL = "/apply/external",
-  UPDATE_STATUS_EXTERNAL = "/update-status/external"
+  UPDATE_STATUS_EXTERNAL = "/update/status"
 }
 
 class ApplicationsAPI {
