@@ -72,7 +72,7 @@ const ApplicationForm: React.FunctionComponent<
     }
   };
 
-  const createPosting = async (values: any) => {
+  const createApplication = async (values: any) => {
     if (userInfo) {
       values.user_id = userInfo._id;
       const result = await applicationsAPI.createExternalApplication(values);
@@ -88,7 +88,7 @@ const ApplicationForm: React.FunctionComponent<
     <Paper className={classes.formContainer}>
       <Formik
         initialValues={initialValues}
-        onSubmit={values => createPosting(values)}
+        onSubmit={values => createApplication(values)}
       >
         <Form>
           <Grid container justify="center" direction="column">
