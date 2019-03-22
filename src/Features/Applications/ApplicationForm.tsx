@@ -20,8 +20,8 @@ import {
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-material-ui";
 import applicationsAPI from "../../api/applicationsAPI";
-import AuthorizationContext from "../../Shared/Authorization/Context";
 import resumesAPI from "../../api/resumesAPI";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const styles = (theme: Theme) =>
   createStyles({

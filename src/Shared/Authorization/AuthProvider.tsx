@@ -3,9 +3,9 @@ import { defaultState, Provider as ContextProvider } from "./Context";
 
 import api from "../../api/api";
 import applicationsAPI from "../../api/applicationsAPI";
+import resumesAPI from "../../api/resumesAPI";
 import userAPI from "../../api/userAPI";
 import ILoginResponse from "../../config/types/loginResponse";
-import resumesAPI from "../../api/resumesAPI";
 
 const Provider: React.FunctionComponent = ({ children }) => {
   const [isLoading, setLoading] = React.useState(defaultState.isLoading);
