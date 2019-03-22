@@ -9,6 +9,7 @@ import resumesAPI from "../../api/resumesAPI";
 
 import {
   Button,
+  CircularProgress,
   createStyles,
   Divider,
   FormControl,
@@ -56,31 +57,41 @@ const data = {
 const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = ({ classes }) => {
   const [userResumes, setUserResumes] = React.useState([]);
   const { userInfo } = React.useContext(AuthorizationContext);
+  const [ isLoading, setIsLoading ] = React.useState(false);
 
-  const applyToPosting = (
+  const applyToPosting = async (
     values: { _id: string; comment: string; resume: string },
     actions: FormikActions<any>
   ) => {
+
+    setIsLoading(true);
     return applicationsAPI
       .createInternalApplication({job_id: values._id, resume: values.resume, comment: values.comment})
       .then(response => {
-        // TODO
         if ('status' in response.data){
+          setIsLoading(false);
           toast.error(response.data['status']);
         }
         else if ('status' in response.data[0]){
+          setIsLoading(false);
           toast.error(response.data[0]['status']);
         } else{
+          setIsLoading(false);
           toast.success("Applied!");
         }
       })
       .catch(error => {
+        setIsLoading(false);
         toast.error("Error!");
       })
       .finally(() => {
-        // TODO: Anything needed here ... ?
+        // Nothing to see here...
       });
   };
+
+  React.useEffect(() => {
+    fetchResumes();
+  }, []);
 
   const fetchResumes = async () => {
     if (userInfo) {
@@ -89,6 +100,15 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
       setUserResumes(result || []);
     }
   };
+
+  const getSubmitButton = () => {
+    if (! isLoading) {
+      console.log("we out here");
+      return <Button type="submit" color="primary" variant="contained" > Apply </Button>;
+    } else {
+      return <CircularProgress />;
+    }
+  }
 
   return (
     <React.Fragment>
@@ -153,9 +173,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
             </FormControl>
           </Grid>
           <Grid container justify="center">
-            <Button type="submit" color="primary" variant="contained" >
-              Apply
-            </Button>
+            {getSubmitButton()}
           </Grid>
         </Form>
         </Formik>
