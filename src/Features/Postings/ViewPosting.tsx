@@ -1,17 +1,21 @@
 import * as React from "react";
 import { Field, Form, Formik, FormikActions } from "formik";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import { RouteComponentProps } from "react-router-dom";
-import { TextField } from "formik-material-ui";
+import { Select, TextField } from "formik-material-ui";
 import { toast } from "react-toastify";
+
 import applicationsAPI from "../../api/applicationsAPI";
+import resumesAPI from "../../api/resumesAPI";
 
 import {
   Button,
   createStyles,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
   Paper,
   Theme,
   Typography,
@@ -21,6 +25,7 @@ import {
 import { format } from "timeago.js";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -49,6 +54,9 @@ const data = {
 };
 
 const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = ({ classes }) => {
+  const [userResumes, setUserResumes] = React.useState([]);
+  const { userInfo } = React.useContext(AuthorizationContext);
+
   const applyToPosting = (
     values: { _id: string; comment: string; resume: string },
     actions: FormikActions<any>
@@ -74,6 +82,14 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
       });
   };
 
+  const fetchResumes = async () => {
+    if (userInfo) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+
+      setUserResumes(result || []);
+    }
+  };
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -97,6 +113,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
             Deadline {format(data.deadline)}
           </Typography>
         </Grid>
+        <br></br>
         <Formik
               initialValues={{ _id: data._id, resume: "", comment: "" }}
               validationSchema={""}
@@ -112,16 +129,31 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
               margin="dense"
               component={TextField}
             />
-            <Field
-              name="resume"
-              type="dropdown"
-              label="resume"
-              value=""
-              component={Select}
-            >
-              {["a", "b", "c", "d"].map((v, i) => <MenuItem key={i} value={v}> {v} </MenuItem>)}
-            </Field>
-            <Button color="primary" variant="contained">
+            <FormControl variant="outlined" margin="dense">
+              <InputLabel htmlFor="resume-simple">resume</InputLabel>
+              <Field
+                name="resume"
+                margin="dense"
+                component={Select}
+                input={
+                  <OutlinedInput
+                    labelWidth={45}
+                    name="resume"
+                    id="resume-simple"
+                  />
+                }
+              >
+                {!!userResumes &&
+                  userResumes.map((resume: any) => (
+                    <MenuItem value={resume.download_resume_url}>
+                      {`${resume.title} (${resume.revision})`}
+                    </MenuItem>
+                  ))}
+              </Field>
+            </FormControl>
+          </Grid>
+          <Grid container justify="center">
+            <Button type="submit" color="primary" variant="contained" >
               Apply
             </Button>
           </Grid>
