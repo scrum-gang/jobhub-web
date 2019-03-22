@@ -1,5 +1,8 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import applicationsAPI from "../../api/applicationsAPI";
 
 import {
   Button,
@@ -26,7 +29,12 @@ const styles = (theme: Theme) =>
     }
   });
 
+export enum Posting {
+  
+}
+
 const data = {
+  _id: "123123",
   company: "JobHub",
   deadline: new Date(),
   description:
@@ -37,9 +45,28 @@ const data = {
   salary: 60000
 };
 
-const ViewPosting: React.FunctionComponent<
-  WithStyles & RouteComponentProps
-> = ({ classes }) => {
+const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = ({ classes }) => {
+  const applyToPosting = (values: {_id: string}) => {
+    // TODO [aungur]: Collect `resume` and `comment` from user
+    return applicationsAPI
+      .createInternalApplication({job_id: values._id, resume: "123", comment: ""})
+      .then(response => {
+        // TODO
+        if ('status' in response.data){
+          toast.error(response.data['status']);
+        }
+        else{
+          toast.success("Response!");
+        }
+      })
+      .catch(error => {
+        toast.error("Error!");
+      })
+      .finally(() => {
+        toast.info("Finally!");
+      });
+  };
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -64,7 +91,7 @@ const ViewPosting: React.FunctionComponent<
           </Typography>
         </Grid>
         <Grid container justify="center">
-          <Button color="primary" variant="contained">
+          <Button onClick={() => applyToPosting(data)} color="primary" variant="contained">
             Apply
           </Button>
         </Grid>
