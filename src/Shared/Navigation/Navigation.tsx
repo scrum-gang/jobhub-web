@@ -97,13 +97,8 @@ const styles = (theme: Theme) =>
 
 const recruiterDrawerItems = [
   {
-    icon: <HomeIcon />,
-    route: "/recruiter",
-    text: "Home"
-  },
-  {
     icon: <WorkIcon />,
-    route: "/recruiter/postings",
+    route: "/recruiter",
     text: "My Postings"
   }
 ];
