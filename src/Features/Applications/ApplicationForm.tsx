@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-material-ui";
+import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
 import resumesAPI from "../../api/resumesAPI";
 import AuthorizationContext from "../../Shared/Authorization/Context";
@@ -75,7 +76,12 @@ const ApplicationForm: React.FunctionComponent<
   const createApplication = async (values: any) => {
     if (userInfo) {
       values.user_id = userInfo._id;
-      const result = await applicationsAPI.createExternalApplication(values);
+
+      try {
+        const result = await applicationsAPI.createExternalApplication(values);
+      } catch (e) {
+        toast.error(`Failed to create application`);
+      }
 
       if (handleClose) {
         handleClose();

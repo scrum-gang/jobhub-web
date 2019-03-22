@@ -13,6 +13,7 @@ import {
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
+import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
 import {
   AuthConsumer,
@@ -304,15 +305,19 @@ const Applications: React.FunctionComponent<
     setIsLoadingApplicationsData(true);
 
     if (userInfo) {
-      const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
-        .data;
+      try {
+        const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
+          .data;
 
-      // temporary, so that it's able to render
-      const appendedComments = result.map((el: any) => ({
-        ...el,
-        comment: "Comes from API"
-      }));
-      setApplications(appendedComments);
+        // temporary, so that it's able to render
+        const appendedComments = result.map((el: any) => ({
+          ...el,
+          comment: "Comes from API"
+        }));
+        setApplications(appendedComments);
+      } catch (e) {
+        toast.error(`Failed to fetch applications`);
+      }
     }
 
     setIsLoadingApplicationsData(false);
