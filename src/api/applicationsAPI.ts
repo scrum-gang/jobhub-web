@@ -48,7 +48,7 @@ class ApplicationsAPI {
     id: number;
     new_status: string;
   }) =>
-    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS_EXTERNAL].updateNoId(
+    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS].updateNoId(
       payload
     );
 }
