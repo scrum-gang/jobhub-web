@@ -3,6 +3,7 @@ import { defaultState, Provider as ContextProvider } from "./Context";
 
 import api from "../../api/api";
 import applicationsAPI from "../../api/applicationsAPI";
+import resumesAPI from "../../api/resumesAPI";
 import userAPI from "../../api/userAPI";
 import ILoginResponse from "../../config/types/loginResponse";
 
@@ -53,11 +54,13 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const loadTokensForApis = (token: string) => {
     userAPI.setJWT(token);
     applicationsAPI.setJWT(token);
+    resumesAPI.setJWT(token);
   };
 
   const clearTokensForApis = () => {
     userAPI.clearJWT();
     applicationsAPI.clearJWT();
+    resumesAPI.clearJWT();
   };
 
   return (
