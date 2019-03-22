@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -16,6 +16,8 @@ import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 
 import postingsAPI, { IPosting } from "../../../api/postingsAPI";
+import AuthorizationContext from "../../../Shared/Authorization/Context";
+import postingSchema from "./postingSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -53,17 +55,19 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
     };
   }
 
+  const { userInfo } = useContext(AuthorizationContext);
+
   const initialValues: IPosting = {
     company: "",
-    deadline: new Date().toISOString().split('T')[0],
+    deadline: new Date().toISOString().split("T")[0],
     description: "",
-    end_date: new Date().toISOString().split('T')[0],
+    end_date: new Date().toISOString().split("T")[0],
     location: "",
-    recruiter: "tester123",
+    recruiter: (userInfo && userInfo._id) || "unknown",
     requirements: "",
     salary: "",
-    start_date: new Date().toISOString().split('T')[0],
-    title: "",
+    start_date: new Date().toISOString().split("T")[0],
+    title: ""
   };
 
   const handleSubmit = async (
@@ -72,6 +76,9 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
   ) => {
     try {
       await postingsAPI.createPosting(values);
+      if (handleClose) {
+        handleClose();
+      }
     } catch (e) {
       toast.error(e.message);
     } finally {
@@ -81,7 +88,11 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
 
   return (
     <Paper className={classes.formContainer}>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={postingSchema}
+      >
         <Form>
           <Grid container justify="center" direction="column">
             <Typography
@@ -112,6 +123,14 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               name="description"
               type="text"
               label="description"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+            />
+            <Field
+              name="location"
+              type="text"
+              label="location"
               variant="outlined"
               margin="dense"
               component={TextField}
