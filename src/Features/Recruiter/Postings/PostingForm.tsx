@@ -1,5 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   Button,
@@ -15,7 +16,6 @@ import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 
 import postingsAPI, { IPosting } from "../../../api/postingsAPI";
-import { toast } from "react-toastify";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -54,16 +54,16 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
   }
 
   const initialValues: IPosting = {
-    title: "",
-    description: "",
-    recruiter: "tester123",
-    salary: "",
-    location: "",
-    requirements: "",
     company: "",
-    deadline: new Date(),
-    start_date: new Date(),
-    end_date: new Date()
+    deadline: new Date().toISOString().split('T')[0],
+    description: "",
+    end_date: new Date().toISOString().split('T')[0],
+    location: "",
+    recruiter: "tester123",
+    requirements: "",
+    salary: "",
+    start_date: new Date().toISOString().split('T')[0],
+    title: "",
   };
 
   const handleSubmit = async (
@@ -145,7 +145,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               }}
             />
             <Field
-              name="start"
+              name="start_date"
               type="date"
               label="start"
               margin="dense"
@@ -156,7 +156,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               }}
             />
             <Field
-              name="end"
+              name="end_date"
               type="date"
               label="end"
               margin="dense"

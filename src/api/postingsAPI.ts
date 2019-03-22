@@ -16,9 +16,9 @@ export interface IPosting {
   salary: string;
   company: string;
   requirements: string;
-  deadline: Date;
-  start_date: Date;
-  end_date: Date;
+  deadline: string;
+  start_date: string;
+  end_date: string;
 }
 
 class PostingAPI {
