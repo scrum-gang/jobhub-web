@@ -73,8 +73,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
     try {
       await postingsAPI.createPosting(values);
     } catch (e) {
-      toast.error(e);
-      console.error(e);
+      toast.error(e.message);
     } finally {
       actions.setSubmitting(false);
     }
