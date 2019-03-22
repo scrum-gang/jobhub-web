@@ -101,6 +101,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   }, []);
 
   // delete
+  
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
