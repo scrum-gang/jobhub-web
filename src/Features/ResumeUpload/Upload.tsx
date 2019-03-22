@@ -67,28 +67,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [JWT, setJWT] = useState("");
 
   const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyNzA1MjgsImV4cCI6MTU1MzI3MTQyOH0.LToqHCZ8WoMUswZ4opaGfe-AjlkZwhlPwdHb8Ednu-I";
-
-  // authentication
-  // useEffect(() => {
-  //   axios
-  //     .post("https://jobhub-authentication-staging.herokuapp.com/login", {
-  //       data: {
-  //         email: "sulemanmalik180@gmail.com",
-  //         password: "123456"
-  //       }
-  //     })
-  //     .then(
-  //       response => {
-  //         const res = response.data;
-  //         console.log(res);
-  //         // setJWT(res[0].token)
-  //       },
-  //       error => {
-  //         const status = error.response.status;
-  //       }
-  //     );
-  // }, []);
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyNzE2NzIsImV4cCI6MTU1MzI3MjU3Mn0.R_vBpSYbUf9Le4Hkeh40UZS67ubK9Wo8OStjw3OJ7cE";
 
   // get resumes currently stored in resume-revisions db
   useEffect(() => {
@@ -120,6 +99,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         }
       );
   }, []);
+
+  // delete
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
@@ -164,8 +145,13 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                 </TableCell>
 
                 <TableCell>
+                  {/* {resumes.map((r:any, i:any)=>
+                    <div key={r.filename + i}>
+                      {r.filenameWithoutExtension}
+                    </div>
+                    )} */}
                   <div style={{ alignContent: "center" }}>
-                    {resumes.map((r: any) => r.filenameWithoutExtension)}
+                    {resumes.map((r: any, i:any) => r.filenameWithoutExtension)}
                   </div>
                 </TableCell>
 
