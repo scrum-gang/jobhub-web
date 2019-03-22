@@ -25,8 +25,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { FilePond } from "react-filepond";
 import Wrapper from "./Wrapper";
 import axios from "axios";
-
-// import resumesAPI from "../../api/resumesAPI";
+import resumesAPI from "../../api/resumesAPI";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -70,23 +69,26 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [userResumes, setUserResumes] = React.useState([]);
   const [filter, setFilter] = useState("");
 
-  // React.useEffect(() => {
-  //   fetchResumes();
-  //   console.log("user resumes: ", userResumes)
-  //   console.log("user info: ", userInfo)
-  // }, []);
-  
-  // const fetchResumes = async () => {
-  //   if (userInfo) {
-  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-  //     setUserResumes(result);
-  //   }
-  // };
+  React.useEffect(() => {
+    if (userInfo) {
+      fetchResumes();
+      console.log(userInfo);
+    }
+    console.log(userResumes);
+  }, [userInfo]);
 
-  
+  const fetchResumes = async () => {
+    if (userInfo) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+      setUserResumes(result);
+      console.log(userResumes);
+    } else {
+      console.log("gg");
+    }
+  };
 
   const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTQ2NmYzOTc1OGExMDAxNzAzNDg0ZSIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyNzE2NzIsImV4cCI6MTU1MzI3MjU3Mn0.R_vBpSYbUf9Le4Hkeh40UZS67ubK9Wo8OStjw3OJ7cE";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTUzY2FlYjgyMDhhMDAxN2JiYWY1NCIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyODQzMTIsImV4cCI6MTU1MzI4NTIxMn0.jvk1rJIn3hPShRHHSc_e5TlCbxxtvFGqYwcB4fo0wN4";
 
   // get resumes currently stored in resume-revisions db
   // useEffect(() => {
@@ -120,7 +122,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   // }, []);
 
   // delete
-  
 
   const deleteResumeHandler = (index: any) => {
     const newResumes = [...resumes];
@@ -171,7 +172,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     </div>
                     )} */}
                   <div style={{ alignContent: "center" }}>
-                    {resumes.map((r: any, i:any) => r.filenameWithoutExtension)}
+                    {resumes.map(
+                      (r: any, i: any) => r.filenameWithoutExtension
+                    )}
                   </div>
                 </TableCell>
 
