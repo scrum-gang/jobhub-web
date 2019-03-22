@@ -3,12 +3,9 @@ import { AxiosPromise } from "axios";
 import API from "./api";
 
 enum ApplicationEndpoints {
-  APPLICATIONS = "/applications/user",
-  SELF = "/users/self",
-  LOGIN = "/login",
-  LOGOUT = "/logout",
-  REGISTER = "/signup",
-  RESEND_EMAIL = "/resend"
+  APPLICATIONS = "/applications/user/",
+  APPLY_EXTERNAL = "/apply/external",
+  UPDATE_STATUS_EXTERNAL = "/update/status"
 }
 
 class ApplicationsAPI {
@@ -29,7 +26,24 @@ class ApplicationsAPI {
   };
 
   public getApplicationsUser = (id: string) =>
-    this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getOne({ id });
+    this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getAll();
+
+  public createExternalApplication = (payload: {
+    company: string;
+    deadline: string;
+    position: string;
+    status: string;
+    url: string;
+    user_id: string;
+  }) => this.api.endpoints[ApplicationEndpoints.APPLY_EXTERNAL].create(payload);
+
+  public updateStatusExternalApplication = (payload: {
+    id: number;
+    new_status: string;
+  }) =>
+    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS_EXTERNAL].updateNoId(
+      payload
+    );
 }
 
 export default new ApplicationsAPI();

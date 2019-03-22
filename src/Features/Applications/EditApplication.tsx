@@ -32,7 +32,9 @@ const styles = (theme: Theme) =>
 
 const EditApplication: React.FunctionComponent<
   IProps & RouteComponentProps
-> = ({ classes }) => {
+> = ({ classes, location }) => {
+  const values = location.state.values;
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -42,7 +44,7 @@ const EditApplication: React.FunctionComponent<
         alignItems="center"
         className={classes.fullHeight}
       >
-        <ApplicationForm mode={Modes.EDIT} />
+        <ApplicationForm mode={Modes.EDIT} editValues={values} />
       </Grid>
     </React.Fragment>
   );
