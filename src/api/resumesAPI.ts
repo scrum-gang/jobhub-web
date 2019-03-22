@@ -1,9 +1,9 @@
+import API from "./api";
 import { AxiosPromise } from "axios";
 
-import API from "./api";
-
 enum ApplicationEndpoints {
-  GET_RESUMES = "/resumes"
+  GET_RESUMES = "/resumes",
+  DELETE_RESUME = "/resumes"
 }
 
 class ResumesAPI {
@@ -25,6 +25,9 @@ class ResumesAPI {
 
   public getResumesUser = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_RESUMES].getOne({ id });
+
+  public deleteResumeUser = (id: string) =>
+    this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].delete({ id });
 }
 
 export default new ResumesAPI();

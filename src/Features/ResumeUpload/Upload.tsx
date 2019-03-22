@@ -66,70 +66,49 @@ interface IProps extends WithStyles<typeof styles> {}
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
   const [resumes, setResumes] = useState<IFile[]>([]);
-  const [userResumes, setUserResumes] = React.useState([]);
+  const [userResumes, setUserResumes] = useState<IFile[]>([]);
   const [filter, setFilter] = useState("");
 
   React.useEffect(() => {
     if (userInfo) {
       fetchResumes();
-      console.log(userInfo);
     }
-    console.log(userResumes);
-  }, [userInfo]);
+  }, []);
 
   const fetchResumes = async () => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+      const resultFile = {
+        filename: result.title,
+        filenameWithoutExtension: result.revision,
+        id: result.id
+      }
       setUserResumes(result);
-      console.log(userResumes);
-    } else {
-      console.log("gg");
     }
   };
+  
 
-  const jwt =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOTUzY2FlYjgyMDhhMDAxN2JiYWY1NCIsImVtYWlsIjoic3VsZW1hbm1hbGlrMTgwQGdtYWlsLmNvbSIsInR5cGUiOiJBcHBsaWNhbnQiLCJpYXQiOjE1NTMyODQzMTIsImV4cCI6MTU1MzI4NTIxMn0.jvk1rJIn3hPShRHHSc_e5TlCbxxtvFGqYwcB4fo0wN4";
+  
 
-  // get resumes currently stored in resume-revisions db
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       "https://resume-revision.herokuapp.com/resumes/5c9466f39758a1001703484e",
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + jwt
-  //         }
-  //       }
-  //     )
-  //     .then(
-  //       response => {
-  //         const res = response.data;
+  const mappedResumes = userResumes.map((r: any, i: any) => {
+    return {
+      filename: r.title,
+      filenameWithoutExtension: r.revision,
+      id: r.id
+    };
+  });
 
-  //         const mapRes = res.map((r: any, i: any) => {
-  //           return {
-  //             filename: r.title,
-  //             filenameWithoutExtension: r.revision,
-  //             id: r.id
-  //           };
-  //         });
-
-  //         setResumes(mapRes);
-  //       },
-  //       error => {
-  //         const status = error.response.status;
-  //       }
-  //     );
-  // }, []);
-
-  // delete
+  console.log(userResumes);
+  console.log(mappedResumes);
 
   const deleteResumeHandler = (index: any) => {
-    const newResumes = [...resumes];
+    const newResumes = [...userResumes];
     newResumes.splice(index, 1);
-    setResumes(newResumes);
+    setUserResumes(newResumes);
+    console.log(newResumes);
   };
 
-  const filteredResumes = resumes.filter(resume =>
+  const filteredResumes = mappedResumes.filter((resume: any) =>
     resume.filename.includes(filter)
   );
 
@@ -165,26 +144,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                   <Typography>{filteredResumes[index].filename}</Typography>
                 </TableCell>
 
-                <TableCell>
-                  {/* {resumes.map((r:any, i:any)=>
-                    <div key={r.filename + i}>
-                      {r.filenameWithoutExtension}
-                    </div>
-                    )} */}
-                  <div style={{ alignContent: "center" }}>
-                    {resumes.map(
-                      (r: any, i: any) => r.filenameWithoutExtension
-                    )}
-                  </div>
-                </TableCell>
-
-                {/* {resumes.map((r:any) =>
-                  <TableCell>
-                    <div>
-                      {r.filenameWithoutExtension}
-                    </div>
-                  </TableCell>
-                )} */}
+                <TableCell>ll</TableCell>
 
                 <TableCell>
                   <div style={{ float: "left", paddingTop: "20px" }}>
