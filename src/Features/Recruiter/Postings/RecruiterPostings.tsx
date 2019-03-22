@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 import {
@@ -7,12 +7,14 @@ import {
   Grid,
   Theme,
   withStyles,
-  WithStyles,
+  WithStyles
 } from "@material-ui/core";
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
+import postingsAPI from "../../../api/postingsAPI";
 import { AuthRedirect, Protection } from "../../../Shared/Authorization";
+import AuthorizationContext from "../../../Shared/Authorization/Context";
 import CreatePosting from "./CreatePosting";
 
 const styles = (theme: Theme) =>
@@ -31,7 +33,20 @@ const styles = (theme: Theme) =>
 const RecruiterPostings: React.FunctionComponent<
   WithStyles & RouteComponentProps
 > = ({ classes }) => {
-  const [openModal, setOpenModal] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [postings, setPostings] = useState([]);
+  const { userInfo } = useContext(AuthorizationContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userInfo) {
+        const { data } = await postingsAPI.getPostingByRecruiter(userInfo._id);
+        setPostings(data);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleOpen = () => {
     setOpenModal(true);
   };
@@ -47,13 +62,32 @@ const RecruiterPostings: React.FunctionComponent<
         <MUIDataTable
           title={"My Job Postings"}
           columns={[
-            "Title",
-            "Location",
-            "Start Date",
-            "End Date",
-            "Posting Date"
+            {
+              label: "Title",
+              name: "title",
+            },
+            {
+              label: "Company",
+              name: "company",
+            },
+            {
+              label: "Location",
+              name: "location",
+            },
+            {
+              label: "Start Date",
+              name: "start_date",
+            },
+            {
+              label: "End Date",
+              name: "end_date",
+            },
+            {
+              label: "Deadline",
+              name: "deadline",
+            }
           ]}
-          data={[]}
+          data={postings}
         />
       </Grid>
       <Fab color="secondary" className={classes.fab} onClick={handleOpen}>
