@@ -10,7 +10,7 @@ enum ApplicationEndpoints {
   CREATE_INTERVIEW_QUESTION = "/interview/question",
   GET_INTERVIEW_QUESTIONS = "/interview/question",
   GET_SINGLE_APPLICATION = "/applications",
-  DELETE_APPLICATION = "/withdraw/external"
+  DELETE_APPLICATION = "/withdraw"
 }
 
 class ApplicationsAPI {
@@ -73,9 +73,9 @@ class ApplicationsAPI {
     this.api.endpoints[ApplicationEndpoints.UPDATE_COMMENT].updateNoId(payload);
 
   public deleteApplication = (payload: { id: number }) =>
-    this.api.endpoints[ApplicationEndpoints.DELETE_APPLICATION].deleteNoIdOnlyPayload(
-      payload
-    );
+    this.api.endpoints[
+      ApplicationEndpoints.DELETE_APPLICATION
+    ].deleteNoIdOnlyPayload(payload);
 }
 
 export default new ApplicationsAPI();
