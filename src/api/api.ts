@@ -22,7 +22,7 @@ class API {
   public endpoints: { [endpoint: string]: IEndpoints };
   private instance: AxiosInstance;
 
-  constructor(baseURL: string, headers?: AxiosCfg["headers"]) {
+  constructor(baseURL: string) {
     this.endpoints = {};
     this.instance = axios.create({
       baseURL,

@@ -39,9 +39,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-export enum Posting {
-  
-}
 
 const data = {
   _id: "123123123",
@@ -86,7 +83,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
         toast.error("Error!");
       })
       .finally(() => {
-        // Nothing to see here...
+        actions.setSubmitting(false);
       });
   };
 
@@ -103,7 +100,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
   };
 
   const getSubmitButton = () => {
-    if (! isLoading) {
+    if (!isLoading) {
       return <Button type="submit" color="primary" variant="contained" > Apply </Button>;
     } else {
       return <CircularProgress />;
@@ -136,7 +133,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
         <br></br>
         <Formik
               initialValues={{ _id: data._id, resume: "", comment: "" }}
-              validationSchema={""}
+              validationSchema={null}
               onSubmit={applyToPosting}
             >
         <Form>
