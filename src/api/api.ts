@@ -70,7 +70,7 @@ class API {
         this.instance.delete(`${entityUrl}/${id}`, config),
 
       deleteNoId: (payload: any, config = {}) =>
-        this.instance.delete(`${entityUrl}`, config)
+        this.instance.delete(`${entityUrl}`, { data: payload })
     };
 
     return endpoints;
