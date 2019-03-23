@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { CssBaseline } from "@material-ui/core";
 
 import Applications from "./Features/Applications/Applications";
-import EditApplication from "./Features/Applications/EditApplication";
+import OpenApplication from "./Features/Applications/OpenApplication";
 import Login from "./Features/Authentication/Login";
 import Register from "./Features/Authentication/Register";
 
@@ -30,7 +30,7 @@ class App extends Component {
       <Route path="/register" component={Register} />
       <Route path="/resume" component={ResumeUpload} />
       <Route path="/applications" component={Applications} exact />
-      <Route path="/applications/:appid" component={EditApplication} />
+      <Route path="/applications/:appid" component={OpenApplication} />
       <Route path="/postings" component={Postings} exact />
       <Route path="/postings/:postingid" component={ViewPosting} />
       <Route path="/recruiter/" component={RecruiterPostings} exact />

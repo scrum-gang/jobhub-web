@@ -13,8 +13,10 @@ interface IEndpoints {
   getOne: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
   create: (payload: any, config?: AxiosCfg) => AxiosPromise;
   update: (payload: any, config?: AxiosCfg) => AxiosPromise;
+  updateNoId: (payload: any, config?: AxiosCfg) => AxiosPromise;
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
   delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
+  deleteNoIdOnlyPayload: (payload: any, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -30,8 +32,8 @@ class API {
   }
 
   public createEntities = (entities: string[]) => {
-    entities.forEach((entity) => this.createEntity(entity));
-  }
+    entities.forEach(entity => this.createEntity(entity));
+  };
 
   public createEntity = (entityUrl: string) => {
     this.endpoints[entityUrl] = this.createCRUDEndpoints(entityUrl);
@@ -58,11 +60,17 @@ class API {
       update: (payload: any, config = {}) =>
         this.instance.put(`${entityUrl}/${payload.id}`, payload, config),
 
+      updateNoId: (payload: any, config = {}) =>
+        this.instance.put(entityUrl, payload, config),
+
       patch: ({ id }: IOneParam, payload: any, config = {}) =>
         this.instance.patch(`${entityUrl}/${id}`, payload, config),
 
       delete: ({ id }: IOneParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}`, config)
+        this.instance.delete(`${entityUrl}/${id}`, config),
+
+      deleteNoIdOnlyPayload: (payload: any) =>
+        this.instance.delete(`${entityUrl}`, { data: payload })
     };
 
     return endpoints;

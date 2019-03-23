@@ -3,12 +3,14 @@ import { AxiosPromise } from "axios";
 import API from "./api";
 
 enum ApplicationEndpoints {
-  APPLICATIONS = "/applications/user",
-  SELF = "/users/self",
-  LOGIN = "/login",
-  LOGOUT = "/logout",
-  REGISTER = "/signup",
-  RESEND_EMAIL = "/resend"
+  APPLICATIONS = "/applications/user/",
+  APPLY_EXTERNAL = "/apply/external",
+  UPDATE_STATUS_EXTERNAL = "/update/status",
+  UPDATE_COMMENT = "/update/comment",
+  CREATE_INTERVIEW_QUESTION = "/interview/question",
+  GET_INTERVIEW_QUESTIONS = "/interview/question",
+  GET_SINGLE_APPLICATION = "/applications",
+  DELETE_APPLICATION = "/withdraw"
 }
 
 class ApplicationsAPI {
@@ -29,7 +31,51 @@ class ApplicationsAPI {
   };
 
   public getApplicationsUser = (id: string) =>
-    this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getOne({ id });
+    this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getAll();
+
+  public getInterviewQuestionsForApplication = (id: string) =>
+    this.api.endpoints[ApplicationEndpoints.GET_INTERVIEW_QUESTIONS].getOne({
+      id
+    });
+
+  public getSingleApplication = (id: string) =>
+    this.api.endpoints[ApplicationEndpoints.GET_SINGLE_APPLICATION].getOne({
+      id
+    });
+
+  public createExternalApplication = (payload: {
+    company: string;
+    deadline: string;
+    position: string;
+    status: string;
+    url: string;
+    user_id: string;
+  }) => this.api.endpoints[ApplicationEndpoints.APPLY_EXTERNAL].create(payload);
+
+  public createInterviewQuestion = (payload: {
+    application_id: number;
+    question: string;
+    title: string;
+  }) =>
+    this.api.endpoints[ApplicationEndpoints.CREATE_INTERVIEW_QUESTION].create(
+      payload
+    );
+
+  public updateStatusExternalApplication = (payload: {
+    id: number;
+    new_status: string;
+  }) =>
+    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS_EXTERNAL].updateNoId(
+      payload
+    );
+
+  public updateComment = (payload: { id: number; new_comment: string }) =>
+    this.api.endpoints[ApplicationEndpoints.UPDATE_COMMENT].updateNoId(payload);
+
+  public deleteApplication = (payload: { id: number }) =>
+    this.api.endpoints[
+      ApplicationEndpoints.DELETE_APPLICATION
+    ].deleteNoIdOnlyPayload(payload);
 }
 
 export default new ApplicationsAPI();

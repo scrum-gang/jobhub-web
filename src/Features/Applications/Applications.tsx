@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import {
+  CircularProgress,
   createStyles,
   Fab,
   Grid,
@@ -12,11 +13,13 @@ import {
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
+import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import IApplication from "../../config/types/applicationType";
 import {
   AuthConsumer,
   AuthRedirect,
-  Protection,
+  Protection
 } from "../../Shared/Authorization";
 import AuthorizationContext from "../../Shared/Authorization/Context";
 import CommentColumn from "./CommentColumn";
@@ -27,7 +30,6 @@ import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
-
 
 const mockData = [
   {
@@ -175,97 +177,6 @@ const mockData = [
   }
 ];
 
-const columns = [
-  {
-    label: "Position",
-    name: "position",
-    options: {
-      customBodyRender: (value: string) => (
-        <TextLimitColumn value={value} limit={25} />
-      ),
-      filter: true,
-      sort: true
-    }
-  },
-  {
-    label: "Company",
-    name: "company",
-    options: {
-      customBodyRender: (value: string) => (
-        <TextLimitColumn value={value} limit={15} />
-      ),
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "Status",
-    name: "status",
-    options: {
-      customBodyRender: (
-        value: string,
-        tableMeta: any,
-        updateValue: (_: any) => void
-      ) => (
-        <StatusLabel
-          status={value}
-          index={tableMeta.rowIndex}
-          updateValue={updateValue}
-        />
-      ),
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "Added On",
-    name: "date",
-    options: {
-      customBodyRender: (value: any) => <DateColumn date={value} />,
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "Deadline",
-    name: "deadline",
-    options: {
-      customBodyRender: (value: any, tableMeta: any) => (
-        <DeadlineColumn date={value} rowData={tableMeta.rowData} />
-      ),
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "Comment",
-    name: "comment",
-    options: {
-      customBodyRender: (value: string) => <CommentColumn comment={value} />,
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "CV",
-    name: "resume",
-    options: {
-      customBodyRender: (value: string) => <ResumeColumn url={value} />,
-      filter: true,
-      sort: false
-    }
-  },
-  {
-    label: "URL",
-    name: "url",
-    options: {
-      customBodyRender: (value: string) => <UrlColumn url={value} />,
-      filter: true,
-      sort: false
-    }
-  }
-];
-
 const styles = (theme: Theme) =>
   createStyles({
     container: {
@@ -283,26 +194,129 @@ const Applications: React.FunctionComponent<
   WithStyles & RouteComponentProps
 > = ({ classes, history }) => {
   const [openModal, setOpenModal] = React.useState(false);
-  const [applications, setApplications] = React.useState([]);
+  const [
+    isLoadingApplicationsData,
+    setIsLoadingApplicationsData
+  ] = React.useState(true);
+
+  // TODO: Maybe use useMemo?
+  const [applications, setApplications] = React.useState<IApplication[]>([]);
   const { userInfo } = React.useContext(AuthorizationContext);
+
+  const getColumns = () => {
+    return [
+      {
+        label: "Position",
+        name: "position",
+        options: {
+          customBodyRender: (value: string) => (
+            <TextLimitColumn value={value} limit={25} />
+          ),
+          filter: true,
+          sort: true
+        }
+      },
+      {
+        label: "Company",
+        name: "company",
+        options: {
+          customBodyRender: (value: string) => (
+            <TextLimitColumn value={value} limit={15} />
+          ),
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "Status",
+        name: "status",
+        options: {
+          customBodyRender: (
+            value: string,
+            tableMeta: any,
+            updateValue: (_: any) => void
+          ) => (
+            <StatusLabel
+              status={value}
+              application={applications[tableMeta.rowIndex]}
+              updateValue={updateValue}
+            />
+          ),
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "Added On",
+        name: "date",
+        options: {
+          customBodyRender: (value: any) => <DateColumn date={value} />,
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "Deadline",
+        name: "deadline",
+        options: {
+          customBodyRender: (value: any, tableMeta: any) => (
+            <DeadlineColumn date={value} rowData={tableMeta.rowData} />
+          ),
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "Comment",
+        name: "comment",
+        options: {
+          customBodyRender: (value: string) => (
+            <CommentColumn comment={value} />
+          ),
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "CV",
+        name: "resume",
+        options: {
+          customBodyRender: (value: string) => <ResumeColumn url={value} />,
+          filter: true,
+          sort: false
+        }
+      },
+      {
+        label: "URL",
+        name: "url",
+        options: {
+          customBodyRender: (value: string) => <UrlColumn url={value} />,
+          filter: true,
+          sort: false
+        }
+      }
+    ];
+  };
 
   useEffect(() => {
     fetchApplicationData();
   }, []);
 
   const fetchApplicationData = async () => {
+    setIsLoadingApplicationsData(true);
+
     if (userInfo) {
-      const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
-        .data;
+      try {
+        const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
+          .data;
 
-      // temporary, so that it's able to render
-      const appendedComments = result.map((el: any) => ({
-        ...el,
-        comment: "Comes from API"
-      }));
-
-      setApplications(appendedComments);
+        setApplications(result);
+      } catch (e) {
+        toast.error(`Failed to fetch applications`);
+      }
     }
+
+    setIsLoadingApplicationsData(false);
   };
 
   const handleOpen = () => {
@@ -311,23 +325,38 @@ const Applications: React.FunctionComponent<
 
   const handleClose = () => {
     setOpenModal(false);
+    fetchApplicationData();
+  };
+
+  const renderApplicationData = () => {
+    if (isLoadingApplicationsData) {
+      return <CircularProgress />;
+    } else {
+      return (
+        <MUIDataTable
+          title={"My Applications"}
+          data={applications}
+          columns={getColumns() as any}
+          options={{
+            onRowClick: (_, rowMeta) =>
+              history.push(
+                `/applications/${
+                  applications[rowMeta.dataIndex].application_id
+                }`
+              ),
+            responsive: "scroll",
+            selectableRows: false
+          }}
+        />
+      );
+    }
   };
 
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid container direction="column" className={classes.container}>
-        <MUIDataTable
-          title={"My Applications"}
-          data={applications}
-          columns={columns as any}
-          options={{
-            onRowClick: (_, rowMeta) =>
-              history.push(`/applications/${rowMeta.dataIndex}`),
-            responsive: "scroll",
-            selectableRows: false
-          }}
-        />
+        {renderApplicationData()}
       </Grid>
       <Fab color="secondary" className={classes.fab} onClick={handleOpen}>
         <PlusIcon />

@@ -19,6 +19,10 @@ import {
 } from "@material-ui/core";
 import { Field, Form, Formik } from "formik";
 import { Select, TextField } from "formik-material-ui";
+import { toast } from "react-toastify";
+import applicationsAPI from "../../api/applicationsAPI";
+import resumesAPI from "../../api/resumesAPI";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -42,31 +46,55 @@ export enum Modes {
 interface IProps extends WithStyles {
   mode: Modes;
   handleClose?: () => void;
+  editValues?: any;
 }
 
 const ApplicationForm: React.FunctionComponent<
   IProps & RouteComponentProps
-> = ({ classes, mode, handleClose, history }) => {
+> = ({ classes, mode, handleClose, history, editValues }) => {
+  const { userInfo } = React.useContext(AuthorizationContext);
+  const [userResumes, setUserResumes] = React.useState([]);
+
   if (!handleClose) {
     handleClose = () => {
       history.push("/applications");
     };
   }
 
-  const initialValues =
-    mode === Modes.EDIT
-      ? {
-          company: "JobHub",
-          deadline: "2019-06-06",
-          position: "Developer",
-          status: "Applied"
-        }
-      : {};
+  React.useEffect(() => {
+    fetchResumes();
+  }, []);
+
+  const fetchResumes = async () => {
+    if (userInfo) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+
+      setUserResumes(result || []);
+    }
+  };
+
+  const createApplication = async (values: any) => {
+    if (userInfo) {
+      values.user_id = userInfo._id;
+
+      try {
+        const result = await applicationsAPI.createExternalApplication(values);
+      } catch (e) {
+        toast.error(`Failed to create application`);
+      }
+
+      if (handleClose) {
+        handleClose();
+      }
+    }
+  };
+
+  const initialValues = mode === Modes.EDIT ? editValues : {};
   return (
     <Paper className={classes.formContainer}>
       <Formik
         initialValues={initialValues}
-        onSubmit={values => console.log(values)}
+        onSubmit={values => createApplication(values)}
       >
         <Form>
           <Grid container justify="center" direction="column">
@@ -79,12 +107,22 @@ const ApplicationForm: React.FunctionComponent<
               {mode === Modes.EDIT ? "Edit" : "Create"} Application
             </Typography>
             <Field
+              name="url"
+              type="url"
+              label="url"
+              variant="outlined"
+              margin="dense"
+              component={TextField}
+              required
+            />
+            <Field
               name="position"
               type="text"
               label="position"
               variant="outlined"
               margin="dense"
               component={TextField}
+              required
             />
             <Field
               name="company"
@@ -93,6 +131,7 @@ const ApplicationForm: React.FunctionComponent<
               variant="outlined"
               margin="dense"
               component={TextField}
+              required
             />
             <Field
               name="deadline"
@@ -104,7 +143,33 @@ const ApplicationForm: React.FunctionComponent<
               InputLabelProps={{
                 shrink: true
               }}
+              required
             />
+            <FormControl variant="outlined" margin="dense">
+              <InputLabel htmlFor="resume-simple">resume</InputLabel>
+              <Field
+                name="resume"
+                margin="dense"
+                component={Select}
+                input={
+                  <OutlinedInput
+                    labelWidth={45}
+                    name="resume"
+                    id="resume-simple"
+                  />
+                }
+                InputLabelProps={{
+                  shrink: true
+                }}
+              >
+                {!!userResumes &&
+                  userResumes.map((resume: any) => (
+                    <MenuItem value={resume.download_resume_url}>
+                      {`${resume.title} (${resume.revision})`}
+                    </MenuItem>
+                  ))}
+              </Field>
+            </FormControl>
             <FormControl variant="outlined" margin="dense">
               <InputLabel htmlFor="status-simple">status</InputLabel>
               <Field
@@ -118,6 +183,10 @@ const ApplicationForm: React.FunctionComponent<
                     id="status-simple"
                   />
                 }
+                InputLabelProps={{
+                  shrink: true
+                }}
+                required
               >
                 {Object.keys(APPLICATION_STATUSES).map(statusOption => (
                   <MenuItem key={statusOption} value={statusOption}>
