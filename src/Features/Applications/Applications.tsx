@@ -15,6 +15,7 @@ import MUIDataTable from "mui-datatables";
 
 import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import IApplication from "../../config/types/applicationType";
 import {
   AuthConsumer,
   AuthRedirect,
@@ -199,7 +200,7 @@ const Applications: React.FunctionComponent<
   ] = React.useState(true);
 
   // TODO: Maybe use useMemo?
-  const [applications, setApplications] = React.useState([]);
+  const [applications, setApplications] = React.useState<IApplication[]>([]);
   const { userInfo } = React.useContext(AuthorizationContext);
 
   const getColumns = () => {
@@ -309,12 +310,7 @@ const Applications: React.FunctionComponent<
         const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
           .data;
 
-        // temporary, so that it's able to render
-        const appendedComments = result.map((el: any) => ({
-          ...el,
-          comment: "Comes from API"
-        }));
-        setApplications(appendedComments);
+        setApplications(result);
       } catch (e) {
         toast.error(`Failed to fetch applications`);
       }
@@ -343,9 +339,11 @@ const Applications: React.FunctionComponent<
           columns={getColumns() as any}
           options={{
             onRowClick: (_, rowMeta) =>
-              history.push(`/applications/${rowMeta.dataIndex}`, {
-                values: applications[rowMeta.dataIndex]
-              }),
+              history.push(
+                `/applications/${
+                  applications[rowMeta.dataIndex].application_id
+                }`
+              ),
             responsive: "scroll",
             selectableRows: false
           }}
