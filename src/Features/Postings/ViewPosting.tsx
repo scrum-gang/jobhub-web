@@ -75,7 +75,7 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
         }
         else if ('status' in response.data[0]){
           setIsLoading(false);
-          toast.error(response.data[0].status);
+          toast.error(response.data.status);
         } else{
           setIsLoading(false);
           toast.success("Applied!");
