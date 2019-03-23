@@ -15,6 +15,7 @@ import MUIDataTable from "mui-datatables";
 
 import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import postingsAPI from "../../api/postingsAPI";
 import IApplication from "../../config/types/applicationType";
 import {
   AuthConsumer,
@@ -26,7 +27,6 @@ import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
 import DateColumn from "./DateColumn";
 import DeadlineColumn from "./DeadlineColumn";
-import postingsAPI from "../../api/postingsAPI";
 import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
