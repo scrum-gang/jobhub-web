@@ -5,7 +5,8 @@ import API from "./api";
 enum ApplicationEndpoints {
   APPLICATIONS = "/applications/user/",
   APPLY_EXTERNAL = "/apply/external",
-  UPDATE_STATUS_EXTERNAL = "/update/status"
+  UPDATE_STATUS_EXTERNAL = "/update/status",
+  UPDATE_COMMENT = "/update/comment"
 }
 
 class ApplicationsAPI {
@@ -44,6 +45,9 @@ class ApplicationsAPI {
     this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS_EXTERNAL].updateNoId(
       payload
     );
+
+  public updateComment = (payload: { id: number; new_comment: string }) =>
+    this.api.endpoints[ApplicationEndpoints.UPDATE_COMMENT].updateNoId(payload);
 }
 
 export default new ApplicationsAPI();
