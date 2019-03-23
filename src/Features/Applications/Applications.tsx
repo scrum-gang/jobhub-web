@@ -26,11 +26,11 @@ import CommentColumn from "./CommentColumn";
 import CreateApplication from "./CreateApplication";
 import DateColumn from "./DateColumn";
 import DeadlineColumn from "./DeadlineColumn";
+import postingsAPI from "../../api/postingsAPI";
 import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
-import postingsAPI from "../../api/postingsAPI";
 
 const mockData = [
   {
@@ -307,8 +307,6 @@ const Applications: React.FunctionComponent<
     setIsLoadingApplicationsData(true);
 
     if (userInfo) {
-      console.log(userInfo);
-
       try {
         const result = await getProcessedApplications(
           (await applicationsAPI.getApplicationsUser()).data
