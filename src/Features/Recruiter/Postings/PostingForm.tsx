@@ -126,6 +126,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               label="description"
               variant="outlined"
               margin="dense"
+              multiline={true}
               component={TextField}
             />
             <Field
@@ -141,6 +142,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               type="text"
               label="requirements"
               variant="outlined"
+              multiline={true}
               margin="dense"
               component={TextField}
             />
