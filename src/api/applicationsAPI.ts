@@ -11,6 +11,7 @@ enum ApplicationEndpoints {
   CREATE_INTERVIEW_QUESTION = "/interview/question",
   GET_INTERVIEW_QUESTIONS = "/interview/question",
   GET_SINGLE_APPLICATION = "/applications",
+  GET_SINGLE_JOB_APPLICATION = "/applications/job",
   DELETE_APPLICATION = "/withdraw"
 }
 
@@ -31,7 +32,7 @@ class ApplicationsAPI {
     this.api.clearJWT();
   };
 
-  public getApplicationsUser = (id: string) =>
+  public getApplicationsUser = () =>
     this.api.endpoints[ApplicationEndpoints.APPLICATIONS].getAll();
 
   public getInterviewQuestionsForApplication = (id: string) =>
@@ -41,6 +42,11 @@ class ApplicationsAPI {
 
   public getSingleApplication = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_SINGLE_APPLICATION].getOne({
+      id
+    });
+
+  public getSinglePostingApplication = (id: string) =>
+    this.api.endpoints[ApplicationEndpoints.GET_SINGLE_JOB_APPLICATION].getOne({
       id
     });
 
@@ -72,9 +78,7 @@ class ApplicationsAPI {
     id: number;
     new_status: string;
   }) =>
-    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS].updateNoId(
-      payload
-    );
+    this.api.endpoints[ApplicationEndpoints.UPDATE_STATUS].updateNoId(payload);
 
   public updateComment = (payload: { id: number; new_comment: string }) =>
     this.api.endpoints[ApplicationEndpoints.UPDATE_COMMENT].updateNoId(payload);

@@ -311,7 +311,7 @@ const Applications: React.FunctionComponent<
 
       try {
         const result = await getProcessedApplications(
-          (await applicationsAPI.getApplicationsUser(userInfo._id)).data
+          (await applicationsAPI.getApplicationsUser()).data
         );
 
         setApplications(result);

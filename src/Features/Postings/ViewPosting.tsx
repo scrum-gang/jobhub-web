@@ -57,6 +57,7 @@ const ViewPosting: React.FunctionComponent<
   const [userResumes, setUserResumes] = React.useState([]);
   const { userInfo } = React.useContext(AuthorizationContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [hasAlreadyApplied, setHasAlreadyApplied] = React.useState(false);
 
   const applyToPosting = async (
     values: { _id: string; comment: string; resume: string },
@@ -67,15 +68,17 @@ const ViewPosting: React.FunctionComponent<
       .createInternalApplication({
         comment: values.comment,
         job_id: values._id,
-        resume: values.resume,
+        resume: values.resume
       })
       .then(response => {
         if ("status" in response.data) {
           toast.error(response.data.status);
         } else if ("status" in response.data[0]) {
           toast.error(response.data.status);
+          setHasAlreadyApplied(true);
         } else {
           toast.success("Applied!");
+          setHasAlreadyApplied(true);
         }
 
         setIsLoading(false);
@@ -91,6 +94,8 @@ const ViewPosting: React.FunctionComponent<
 
   React.useEffect(() => {
     fetchResumes();
+    setIsLoading(true);
+    fetchApplication();
   }, []);
 
   const fetchResumes = async () => {
@@ -101,12 +106,34 @@ const ViewPosting: React.FunctionComponent<
     }
   };
 
+  const fetchApplication = async () => {
+    if (userInfo) {
+      // if single application is implemented
+      // const result = (await applicationsAPI.getSinglePostingApplication(
+      //   data._id
+      // )).data;
+
+      // setHasAlreadyApplied(result.job_id);
+
+      // if this job is already part of our applications
+      // TODO: MAKE SURE TO REPLACE `data._id` WITH ACTUAL DATA PROPS FOR WHEN FECTHING
+      // JOB POSTING DATA
+      const result = (await applicationsAPI.getApplicationsUser()).data.filter(
+        (el: any) => el.job_id && el.job_id === data._id
+      );
+
+      setHasAlreadyApplied(result.length !== 0);
+      setIsLoading(false);
+    }
+  };
+
   const getSubmitButton = () => {
-    if (!isLoading) {
+    if (!isLoading && hasAlreadyApplied) {
+      return <Typography>You've already applied to this posting!</Typography>;
+    } else if (!isLoading) {
       return (
         <Button type="submit" color="primary" variant="contained">
-          {" "}
-          Apply{" "}
+          Apply
         </Button>
       );
     } else {
