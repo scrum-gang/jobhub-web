@@ -39,7 +39,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-
 const data = {
   _id: "123123123",
   company: "JobHub",
@@ -52,31 +51,34 @@ const data = {
   salary: 60000
 };
 
-const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = ({ classes }) => {
+const ViewPosting: React.FunctionComponent<
+  WithStyles & RouteComponentProps
+> = ({ classes }) => {
   const [userResumes, setUserResumes] = React.useState([]);
   const { userInfo } = React.useContext(AuthorizationContext);
-  const [ isLoading, setIsLoading ] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const applyToPosting = async (
     values: { _id: string; comment: string; resume: string },
     actions: FormikActions<any>
   ) => {
-
     setIsLoading(true);
     return applicationsAPI
-      .createInternalApplication({job_id: values._id, resume: values.resume, comment: values.comment})
+      .createInternalApplication({
+        comment: values.comment,
+        job_id: values._id,
+        resume: values.resume,
+      })
       .then(response => {
-        if ('status' in response.data){
-          setIsLoading(false);
+        if ("status" in response.data) {
           toast.error(response.data.status);
-        }
-        else if ('status' in response.data[0]){
-          setIsLoading(false);
+        } else if ("status" in response.data[0]) {
           toast.error(response.data.status);
-        } else{
-          setIsLoading(false);
+        } else {
           toast.success("Applied!");
         }
+
+        setIsLoading(false);
       })
       .catch(error => {
         setIsLoading(false);
@@ -101,11 +103,16 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
 
   const getSubmitButton = () => {
     if (!isLoading) {
-      return <Button type="submit" color="primary" variant="contained" > Apply </Button>;
+      return (
+        <Button type="submit" color="primary" variant="contained">
+          {" "}
+          Apply{" "}
+        </Button>
+      );
     } else {
       return <CircularProgress />;
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -130,49 +137,49 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
             Deadline {format(data.deadline)}
           </Typography>
         </Grid>
-        <br></br>
+        <br />
         <Formik
-              initialValues={{ _id: data._id, resume: "", comment: "" }}
-              validationSchema={null}
-              onSubmit={applyToPosting}
-            >
-        <Form>
-          <Grid container justify="center">
-            <Field
-              name="comment"
-              type="text"
-              label="Comment"
-              variant="outlined"
-              margin="dense"
-              component={TextField}
-            />
-            <FormControl variant="outlined" margin="dense">
-              <InputLabel htmlFor="resume-simple">resume</InputLabel>
+          initialValues={{ _id: data._id, resume: "", comment: "" }}
+          validationSchema={null}
+          onSubmit={applyToPosting}
+        >
+          <Form>
+            <Grid container justify="center">
               <Field
-                name="resume"
+                name="comment"
+                type="text"
+                label="Comment"
+                variant="outlined"
                 margin="dense"
-                component={Select}
-                input={
-                  <OutlinedInput
-                    labelWidth={45}
-                    name="resume"
-                    id="resume-simple"
-                  />
-                }
-              >
-                {!!userResumes &&
-                  userResumes.map((resume: any) => (
-                    <MenuItem value={resume.download_resume_url}>
-                      {`${resume.title} (${resume.revision})`}
-                    </MenuItem>
-                  ))}
-              </Field>
-            </FormControl>
-          </Grid>
-          <Grid container justify="center">
-            {getSubmitButton()}
-          </Grid>
-        </Form>
+                component={TextField}
+              />
+              <FormControl variant="outlined" margin="dense">
+                <InputLabel htmlFor="resume-simple">resume</InputLabel>
+                <Field
+                  name="resume"
+                  margin="dense"
+                  component={Select}
+                  input={
+                    <OutlinedInput
+                      labelWidth={45}
+                      name="resume"
+                      id="resume-simple"
+                    />
+                  }
+                >
+                  {!!userResumes &&
+                    userResumes.map((resume: any) => (
+                      <MenuItem value={resume.download_resume_url}>
+                        {`${resume.title} (${resume.revision})`}
+                      </MenuItem>
+                    ))}
+                </Field>
+              </FormControl>
+            </Grid>
+            <Grid container justify="center">
+              {getSubmitButton()}
+            </Grid>
+          </Form>
         </Formik>
       </Paper>
     </React.Fragment>
