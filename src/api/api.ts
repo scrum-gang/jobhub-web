@@ -1,11 +1,17 @@
 import axios, {
+  AxiosRequestConfig as AxiosCfg,
   AxiosInstance,
-  AxiosPromise,
-  AxiosRequestConfig as AxiosCfg
+  AxiosPromise
 } from "axios";
 
 interface IOneParam {
   id: string;
+}
+
+interface IThreeParam {
+  id: string;
+  title: string;
+  revision: string;
 }
 
 interface IEndpoints {
@@ -15,7 +21,7 @@ interface IEndpoints {
   update: (payload: any, config?: AxiosCfg) => AxiosPromise;
   updateNoId: (payload: any, config?: AxiosCfg) => AxiosPromise;
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
-  delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
+  delete: (params: IThreeParam, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -65,8 +71,8 @@ class API {
       patch: ({ id }: IOneParam, payload: any, config = {}) =>
         this.instance.patch(`${entityUrl}/${id}`, payload, config),
 
-      delete: ({ id }: IOneParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}`, config)
+      delete: ({ id, title, revision }: IThreeParam, config = {}) =>
+        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config)
     };
 
     return endpoints;

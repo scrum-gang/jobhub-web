@@ -87,6 +87,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     }
   };
   
+  // const deleteResume = async () => {
+  //   if (userInfo) {
+  //     const result = (await resumesAPI.deleteResumeUser(userInfo._id)).data;
+  //     setUserResumes(result)
+  //   }
+  // }
 
   
 
@@ -101,11 +107,29 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   console.log(userResumes);
   console.log(mappedResumes);
 
-  const deleteResumeHandler = (index: any) => {
-    const newResumes = [...userResumes];
-    newResumes.splice(index, 1);
-    setUserResumes(newResumes);
-    console.log(newResumes);
+  const deleteResumeHandler =  async (index: any) => {
+    const newResumes = [...mappedResumes];
+    const toDelete = newResumes[index]
+    // const fileDelete = {
+    //   filename: toDelete.title,
+    //   filenameWithoutExtension: toDelete.filenameWithoutExtension,
+    //   id: toDelete.id
+    // }
+
+    // console.log('file del: ', fileDelete)
+    newResumes.splice(index, 1)
+    
+    console.log("resumes before delete:", mappedResumes)
+    console.log("index clicked: ", index)
+    // const temp = newResumes.splice(index, 1)[0];
+    console.log("toDelete: ", toDelete)
+    console.log("typeof delete ", typeof(toDelete))
+    
+    if(userInfo){
+      const response = await resumesAPI.deleteResumeUser(userInfo._id, toDelete.filename, toDelete.filenameWithoutExtension)    
+    }
+     setUserResumes(newResumes);
+
   };
 
   const filteredResumes = mappedResumes.filter((resume: any) =>
@@ -114,6 +138,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
   return (
     <Wrapper title="Resume Upload">
+    <p>{JSON.stringify(filteredResumes)}</p>
       <Grid container direction="column" spacing={24}>
         <TextField
           id="standard-textarea"
@@ -155,7 +180,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     key={index}
                     aria-label="Delete"
                     style={{ margin: "theme.spacing.unit", float: "right" }}
-                    onClick={deleteResumeHandler}
+                    onClick={() => deleteResumeHandler(index)}
                   >
                     <DeleteIcon fontSize="large" />
                   </IconButton>

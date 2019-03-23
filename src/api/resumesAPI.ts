@@ -26,8 +26,8 @@ class ResumesAPI {
   public getResumesUser = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_RESUMES].getOne({ id });
 
-  public deleteResumeUser = (id: string) =>
-    this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].delete({ id });
+  public deleteResumeUser = (id: string, title: string, revision: string) =>
+    this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].delete({ id, title, revision });
 }
 
 export default new ResumesAPI();
