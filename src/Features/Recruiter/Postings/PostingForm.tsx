@@ -78,6 +78,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
       await postingsAPI.createPosting(values);
       if (handleClose) {
         handleClose();
+        window.location.reload();
       }
     } catch (e) {
       toast.error(e.message);
