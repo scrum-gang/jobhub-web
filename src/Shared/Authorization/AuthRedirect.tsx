@@ -4,8 +4,8 @@ import { Redirect } from "react-router-dom";
 import { Consumer as ContextConsumer } from "./Context";
 import Protection from "./protections";
 
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import UserType from "../../config/types/accountTypes";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 interface IProps {
   protection: Protection;
