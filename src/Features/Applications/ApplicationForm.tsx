@@ -158,9 +158,6 @@ const ApplicationForm: React.FunctionComponent<
                     id="resume-simple"
                   />
                 }
-                InputLabelProps={{
-                  shrink: true
-                }}
               >
                 {!!userResumes &&
                   userResumes.map((resume: any) => (
@@ -183,9 +180,6 @@ const ApplicationForm: React.FunctionComponent<
                     id="status-simple"
                   />
                 }
-                InputLabelProps={{
-                  shrink: true
-                }}
                 required
               >
                 {Object.keys(APPLICATION_STATUSES).map(statusOption => (
