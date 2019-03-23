@@ -16,6 +16,7 @@ interface IEndpoints {
   updateNoId: (payload: any, config?: AxiosCfg) => AxiosPromise;
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
   delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
+  deleteNoIdOnlyPayload: (payload: any, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -66,7 +67,10 @@ class API {
         this.instance.patch(`${entityUrl}/${id}`, payload, config),
 
       delete: ({ id }: IOneParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}`, config)
+        this.instance.delete(`${entityUrl}/${id}`, config),
+
+      deleteNoIdOnlyPayload: (payload: any) =>
+        this.instance.delete(`${entityUrl}`, { data: payload })
     };
 
     return endpoints;

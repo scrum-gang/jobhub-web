@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import ApplicationCommentInterview from "./ApplicationCommentInterview";
 import ApplicationForm from "./ApplicationForm";
 
 export enum Modes {
@@ -30,11 +31,10 @@ const styles = (theme: Theme) =>
     }
   });
 
-const EditApplication: React.FunctionComponent<
+const OpenApplication: React.FunctionComponent<
   IProps & RouteComponentProps
 > = ({ classes, location }) => {
-  const values = location.state.values;
-
+  const pathname = location.pathname.split("/");
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -44,10 +44,16 @@ const EditApplication: React.FunctionComponent<
         alignItems="center"
         className={classes.fullHeight}
       >
-        <ApplicationForm mode={Modes.EDIT} editValues={values} />
+        {/* Hacky, I know, but should work as long as
+        the structure isn't changed.  If there's a cleaner way 
+        to do this with react router let me know  */}
+
+        <ApplicationCommentInterview
+          id={parseInt(pathname[pathname.length - 1], 10)}
+        />
       </Grid>
     </React.Fragment>
   );
 };
 
-export default withStyles(styles)(EditApplication);
+export default withStyles(styles)(OpenApplication);
