@@ -52,10 +52,31 @@ const ApplicationCommentInterview: React.FunctionComponent<
   IProps & RouteComponentProps
 > = ({ id, classes, history }) => {
   const [interviewCount, setInterviewCount] = React.useState(0);
+  const [isLoadingData, setIsLoadingData] = React.useState(true);
 
   useEffect(() => {
     console.log(id);
+
+    fetchInterviewQuestions();
   }, []);
+
+  const fetchInterviewQuestions = async () => {
+    setIsLoadingData(true);
+
+    if (id) {
+      try {
+        const result = (await applicationsAPI.getInterviewQuestionsForApplication(
+          `${id}`
+        )).data;
+
+        console.log(result);
+      } catch (e) {
+        toast.error(`Failed to fetch interview questions`);
+      }
+    }
+
+    setIsLoadingData(false);
+  };
 
   const setInitialValues = () => {
     return false;
@@ -83,6 +104,24 @@ const ApplicationCommentInterview: React.FunctionComponent<
         toast.error(`Failed to add a comment`);
       }
 
+      Promise.all(
+        [...Array(interviewCount)].map(async (_, i) => {
+          const interviewPayload = {
+            application_id: id,
+            question: values[`question-${i}`] || "",
+            title: values[`title-${i}`] || ""
+          };
+
+          try {
+            const result = await applicationsAPI.createInterviewQuestion(
+              interviewPayload
+            );
+          } catch (e) {
+            toast.error(`Failed to add ${i}-th question`);
+          }
+        })
+      );
+
       history.push(`/applications/`);
     }
   };
@@ -105,6 +144,7 @@ const ApplicationCommentInterview: React.FunctionComponent<
             margin="dense"
             component={TextFieldFormik}
             disabled={disabled}
+            required
           />
           <Field
             name={`question-${num}`}
@@ -116,6 +156,7 @@ const ApplicationCommentInterview: React.FunctionComponent<
             rows="4"
             component={TextFieldFormik}
             disabled={disabled}
+            required
           />
         </Grid>
         <Divider variant="middle" className={classes.dividerMargin} />
@@ -159,9 +200,7 @@ const ApplicationCommentInterview: React.FunctionComponent<
               <MinusIcon onClick={decreaseInterviewCount} />
             </Grid>
           </Grid>
-          {Array.from(Array(interviewCount).keys()).map(i =>
-            renderQuestion(i, false)
-          )}
+          {[...Array(interviewCount)].map((_, i) => renderQuestion(i, false))}
           <Grid container spacing={24} className={classes.buttonsGrid}>
             <Grid item xs={8}>
               <Button
