@@ -69,6 +69,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
 
+  console.log(userInfo);
+
   React.useEffect(() => {
     if (userInfo) {
       fetchResumes();
@@ -82,20 +84,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     }
   };
 
-  const mappedResumes = userResumes.map((r: any, i: any) => {
-    return {
-      filename: r.title,
-      filenameWithoutExtension: r.revision,
-      id: r.id
-    };
-  });
-
-  console.log("user res before delete: ", userResumes);
-  console.log("mapped res before delete: ", mappedResumes);
-
   const deleteResumeHandler = async (index: any) => {
     const newResumes = [...userResumes];
-    const toDelete : any = newResumes[index];
+    const toDelete: any = newResumes[index];
     newResumes.splice(index, 1);
 
     if (userInfo) {
@@ -105,17 +96,34 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         toDelete.revision
       );
     }
-    
     setUserResumes(newResumes);
-    console.log("to delete ", toDelete)
-    console.log("newResumes: ", newResumes)
-    console.log("mappedResumes: ", mappedResumes)
-    console.log("state: ", userResumes)
   };
 
+  const postResumeHandler = async (file: File) => {
+    if (userInfo) {
+      const result = await resumesAPI.createResumeUser(
+        userInfo._id,
+        "sm",
+        "1",
+        "test",
+        "aGVsbG8="
+      );
+      console.log(result);
+    }
+  };
 
+  const getBase64 = (file: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result);
+    };
+    reader.onerror = error => {
+      console.log("Error: ", error);
+    };
+  };
 
-  const filteredResumes : any[] = userResumes.filter((resume: any) =>
+  const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
 
@@ -145,7 +153,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableHead>
 
           <TableBody>
-            {filteredResumes.map((resume:any, index:any) => (
+            {filteredResumes.map((resume: any, index: any) => (
               <TableRow key={resume.title}>
                 <TableCell key={index}>
                   <Typography>{filteredResumes[index].title}</Typography>
@@ -164,23 +172,26 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     style={{ margin: "theme.spacing.unit", float: "right" }}
                     onClick={() => deleteResumeHandler(index)}
                   >
-                  
                     <DeleteIcon fontSize="large" />
                   </IconButton>
-
-                  
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        
+
         <div style={{ paddingTop: "40px" }}>
           <FilePond
             allowMultiple={true}
-            onupdatefiles={items => {
-              setResumes(items);
+            onupdatefiles={(items: any) => {
+              // setResumes(items);
+              console.log(items);
+              // postResumeHandler
+              // base64Encode(items[0].file);
+              getBase64(items[0].file);
+              // postResumeHandler(items[0].file)
             }}
+            // onaddfilestart={() => postResumeHandler(items[0].file)}
           />
         </div>
       </Grid>

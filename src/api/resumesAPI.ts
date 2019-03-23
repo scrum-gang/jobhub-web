@@ -3,7 +3,8 @@ import { AxiosPromise } from "axios";
 
 enum ApplicationEndpoints {
   GET_RESUMES = "/resumes",
-  DELETE_RESUME = "/resumes"
+  DELETE_RESUME = "/resumes",
+  CREATE_RESUME = "/resumes"
 }
 
 class ResumesAPI {
@@ -28,6 +29,9 @@ class ResumesAPI {
 
   public deleteResumeUser = (id: string, title: string, revision: string) =>
     this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].delete({ id, title, revision });
+
+  public createResumeUser = (id: string, userName: string, revision: string, title: string, resumeData: string) =>
+    this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create({ id, userName, revision, title, resumeData})
 }
 
 export default new ResumesAPI();
