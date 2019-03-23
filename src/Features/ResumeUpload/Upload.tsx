@@ -66,7 +66,7 @@ interface IProps extends WithStyles<typeof styles> {}
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
   const [resumes, setResumes] = useState<IFile[]>([]);
-  const [userResumes, setUserResumes] = useState<IFile[]>([]);
+  const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
 
   React.useEffect(() => {
@@ -78,23 +78,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const fetchResumes = async () => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      const resultFile = {
-        filename: result.title,
-        filenameWithoutExtension: result.revision,
-        id: result.id
-      }
       setUserResumes(result);
     }
   };
-  
-  // const deleteResume = async () => {
-  //   if (userInfo) {
-  //     const result = (await resumesAPI.deleteResumeUser(userInfo._id)).data;
-  //     setUserResumes(result)
-  //   }
-  // }
-
-  
 
   const mappedResumes = userResumes.map((r: any, i: any) => {
     return {
@@ -104,41 +90,37 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     };
   });
 
-  console.log(userResumes);
-  console.log(mappedResumes);
+  console.log("user res before delete: ", userResumes);
+  console.log("mapped res before delete: ", mappedResumes);
 
-  const deleteResumeHandler =  async (index: any) => {
-    const newResumes = [...mappedResumes];
-    const toDelete = newResumes[index]
-    // const fileDelete = {
-    //   filename: toDelete.title,
-    //   filenameWithoutExtension: toDelete.filenameWithoutExtension,
-    //   id: toDelete.id
-    // }
+  const deleteResumeHandler = async (index: any) => {
+    const newResumes = [...userResumes];
+    const toDelete : any = newResumes[index];
+    newResumes.splice(index, 1);
 
-    // console.log('file del: ', fileDelete)
-    newResumes.splice(index, 1)
-    
-    console.log("resumes before delete:", mappedResumes)
-    console.log("index clicked: ", index)
-    // const temp = newResumes.splice(index, 1)[0];
-    console.log("toDelete: ", toDelete)
-    console.log("typeof delete ", typeof(toDelete))
-    
-    if(userInfo){
-      const response = await resumesAPI.deleteResumeUser(userInfo._id, toDelete.filename, toDelete.filenameWithoutExtension)    
+    if (userInfo) {
+      await resumesAPI.deleteResumeUser(
+        userInfo._id,
+        toDelete.title,
+        toDelete.revision
+      );
     }
-     setUserResumes(newResumes);
-
+    
+    setUserResumes(newResumes);
+    console.log("to delete ", toDelete)
+    console.log("newResumes: ", newResumes)
+    console.log("mappedResumes: ", mappedResumes)
+    console.log("state: ", userResumes)
   };
 
-  const filteredResumes = mappedResumes.filter((resume: any) =>
-    resume.filename.includes(filter)
+
+
+  const filteredResumes : any[] = userResumes.filter((resume: any) =>
+    resume.title.includes(filter)
   );
 
   return (
     <Wrapper title="Resume Upload">
-    <p>{JSON.stringify(filteredResumes)}</p>
       <Grid container direction="column" spacing={24}>
         <TextField
           id="standard-textarea"
@@ -163,13 +145,13 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableHead>
 
           <TableBody>
-            {filteredResumes.map((resume, index) => (
-              <TableRow key={resume.filename}>
+            {filteredResumes.map((resume:any, index:any) => (
+              <TableRow key={resume.title}>
                 <TableCell key={index}>
-                  <Typography>{filteredResumes[index].filename}</Typography>
+                  <Typography>{filteredResumes[index].title}</Typography>
                 </TableCell>
 
-                <TableCell>ll</TableCell>
+                <TableCell>xxx</TableCell>
 
                 <TableCell>
                   <div style={{ float: "left", paddingTop: "20px" }}>
@@ -182,13 +164,17 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     style={{ margin: "theme.spacing.unit", float: "right" }}
                     onClick={() => deleteResumeHandler(index)}
                   >
+                  
                     <DeleteIcon fontSize="large" />
                   </IconButton>
+
+                  
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        
         <div style={{ paddingTop: "40px" }}>
           <FilePond
             allowMultiple={true}
