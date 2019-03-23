@@ -37,7 +37,7 @@ const OpenApplication: React.FunctionComponent<
   const pathname = location.pathname.split("/");
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid
         container
         justify="center"

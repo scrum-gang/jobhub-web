@@ -27,7 +27,7 @@ const styles = createStyles({
 const Dashboard: React.FunctionComponent<WithStyles> = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid container className={classes.main} spacing={32}>
         <Grid item xs={12}>
           <Card className={classes.card}>

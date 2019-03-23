@@ -39,7 +39,7 @@ const styles = (theme: Theme) =>
 const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid
         container
         wrap="wrap"

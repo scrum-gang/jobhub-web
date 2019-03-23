@@ -15,6 +15,8 @@ import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
 import Postings from "./Features/Postings/Postings";
 import ViewPosting from "./Features/Postings/ViewPosting";
+import EditPosting from "./Features/Recruiter/Postings/EditPosting";
+import RecruiterPostings from "./Features/Recruiter/Postings/RecruiterPostings";
 import ResumeUpload from "./Features/ResumeUpload/Upload";
 
 import { AuthConsumer, AuthProvider } from "./Shared/Authorization";
@@ -31,6 +33,22 @@ class App extends Component {
       <Route path="/applications/:appid" component={OpenApplication} />
       <Route path="/postings" component={Postings} exact />
       <Route path="/postings/:postingid" component={ViewPosting} />
+      <Route path="/recruiter/" component={RecruiterPostings} exact />
+      <Route
+        path="/recruiter/postings/:postingid"
+        component={EditPosting}
+        exact
+      />
+      <Route
+        path="/recruiter/postings/:postingid/applications"
+        component={Dashboard}
+        exact
+      />
+      <Route
+        path="/recruiter/postings/:postingid/applications/:appid"
+        component={Dashboard}
+        exact
+      />
     </Switch>
   );
 
