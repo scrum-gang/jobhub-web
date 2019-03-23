@@ -10,7 +10,12 @@ import {
   Typography,
   WithStyles,
   withStyles,
-  CircularProgress
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 import { Add as PlusIcon, Remove as MinusIcon } from "@material-ui/icons";
 import { Field, Form, Formik } from "formik";
@@ -23,11 +28,14 @@ import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const styles = (theme: Theme) =>
   createStyles({
+    buttonMargin: {
+      marginBottom: theme.spacing.unit
+    },
     buttonsGrid: {
-      marginTop: theme.spacing.unit
+      marginTop: 2 * theme.spacing.unit
     },
     dividerMargin: {
-      marginTop: 10
+      marginTop: theme.spacing.unit
     },
     formContainer: {
       maxWidth: 800,
@@ -37,10 +45,10 @@ const styles = (theme: Theme) =>
       width: 400
     },
     titleInputMargin: {
-      marginTop: 9
+      marginTop: theme.spacing.unit
     },
     titleMargin: {
-      marginTop: 10
+      marginTop: theme.spacing.unit
     }
   });
 
@@ -56,6 +64,7 @@ interface IProps extends WithStyles {
 const ApplicationCommentInterview: React.FunctionComponent<
   IProps & RouteComponentProps
 > = ({ id, classes, history }) => {
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [interviewCount, setInterviewCount] = React.useState(0);
   const [initialValues, setInitialValuesForm] = React.useState<any>({});
   const [isLoadingData, setIsLoadingData] = React.useState(true);
@@ -153,6 +162,30 @@ const ApplicationCommentInterview: React.FunctionComponent<
     }
   };
 
+  const handleCancel = () => {
+    history.push(`/applications/`);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDelete = async () => {
+    if (id) {
+      try {
+        const result = await applicationsAPI.deleteApplication({ id });
+        history.push(`/applications/`);
+      } catch (e) {
+        toast.error(`Failed to delete application`);
+        handleCloseDialog();
+      }
+    }
+  };
+
   const renderQuestion = (num: number, disabled: boolean) => {
     return (
       <div>
@@ -239,41 +272,64 @@ const ApplicationCommentInterview: React.FunctionComponent<
               direction="column"
               justify="center"
               alignItems="center"
-              spacing={24}
+              className={classes.buttonsGrid}
             >
-              <Grid item xs={8}>
-                <Button
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  fullWidth
-                >
-                  Save
-                </Button>
-              </Grid>
-              <Grid item xs={8}>
-                <Button
-                  size="large"
-                  variant="contained"
-                  type="button"
-                  fullWidth
-                >
-                  Delete
-                </Button>
-              </Grid>
-              <Grid item xs={8}>
-                <Button
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                  type="submit"
-                  fullWidth
-                >
+              <Button
+                size="large"
+                color="primary"
+                variant="contained"
+                type="submit"
+                fullWidth
+                className={classes.buttonMargin}
+              >
+                Save
+              </Button>
+              <Button
+                size="large"
+                variant="contained"
+                color="secondary"
+                type="button"
+                fullWidth
+                onClick={handleOpenDialog}
+                className={classes.buttonMargin}
+              >
+                Delete
+              </Button>
+              <Button
+                size="large"
+                color="default"
+                variant="contained"
+                fullWidth
+                className={classes.buttonMargin}
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Dialog
+              open={openDialog}
+              onClose={handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Confirm Application Delete"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you want to delete this application? This action
+                  will permanently erase all of the the data associated to it.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog} color="primary">
                   Cancel
                 </Button>
-              </Grid>
-            </Grid>
+                <Button onClick={handleDelete} color="primary" autoFocus>
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Form>
         </Formik>
       );
