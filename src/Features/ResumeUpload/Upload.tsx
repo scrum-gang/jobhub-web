@@ -105,7 +105,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         userInfo._id,
         "sm",
         "1",
-        "test",
+        "test 2",
         "aGVsbG8="
       );
       console.log(result);
@@ -126,6 +126,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
+
 
   return (
     <Wrapper title="Resume Upload">
@@ -190,6 +191,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
               // base64Encode(items[0].file);
               getBase64(items[0].file);
               // postResumeHandler(items[0].file)
+              postResumeHandler(items[0].file)
             }}
             // onaddfilestart={() => postResumeHandler(items[0].file)}
           />

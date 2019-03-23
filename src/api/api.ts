@@ -14,6 +14,14 @@ interface IThreeParam {
   revision: string;
 }
 
+interface IFiveParam {
+  id: string;
+  userName: string;
+  revision: string;
+  title: string;
+  resumeData: string;
+}
+
 interface IEndpoints {
   getAll: (config?: AxiosCfg) => AxiosPromise;
   getOne: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
@@ -21,7 +29,10 @@ interface IEndpoints {
   update: (payload: any, config?: AxiosCfg) => AxiosPromise;
   updateNoId: (payload: any, config?: AxiosCfg) => AxiosPromise;
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
-  delete: (params: IThreeParam, config?: AxiosCfg) => AxiosPromise;
+  delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
+
+  deleteResume: (params: IThreeParam, config?: AxiosCfg) => AxiosPromise;
+  createResume: (params: IFiveParam, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -71,8 +82,17 @@ class API {
       patch: ({ id }: IOneParam, payload: any, config = {}) =>
         this.instance.patch(`${entityUrl}/${id}`, payload, config),
 
-      delete: ({ id, title, revision }: IThreeParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config)
+      delete: ({ id }: IOneParam, config = {}) =>
+        this.instance.delete(`${entityUrl}/${id}`, config),
+
+      deleteResume: ({ id, title, revision }: IThreeParam, config = {}) =>
+        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config),
+      
+      createResume: ({ id, userName, revision, title, resumeData}: IFiveParam, config = {}) =>
+        this.instance.post(`${entityUrl}?user_id=${id}&user_name=${userName}&revision=${revision}&title=${title}&resume_data=${resumeData}`, config)
+
+// https://resume-revision.herokuapp.com/resumes?user_id=5c955d38da317e001778643b&user_name=sm&revision=1&title=gunna&resume_data=aGVsbG8=
+// https://resume-revision.herokuapp.com/resumes?user_id=5c955d38da317e001778643b&user_name=sm&revision=1&title=test&resume_data=aGVsbG8=
     };
 
     return endpoints;

@@ -28,10 +28,10 @@ class ResumesAPI {
     this.api.endpoints[ApplicationEndpoints.GET_RESUMES].getOne({ id });
 
   public deleteResumeUser = (id: string, title: string, revision: string) =>
-    this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].delete({ id, title, revision });
+    this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].deleteResume({ id, title, revision });
 
   public createResumeUser = (id: string, userName: string, revision: string, title: string, resumeData: string) =>
-    this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create({ id, userName, revision, title, resumeData})
+    this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].createResume({ id, userName, revision, title, resumeData})
 }
 
 export default new ResumesAPI();
