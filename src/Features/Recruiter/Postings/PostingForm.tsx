@@ -34,8 +34,8 @@ const styles = (theme: Theme) =>
   });
 
 export enum Modes {
-  CREATE,
-  EDIT
+  CREATE = "Create",
+  EDIT = "Edit"
 }
 
 interface IProps extends WithStyles {
@@ -102,7 +102,7 @@ const PostingForm: React.FunctionComponent<IProps & RouteComponentProps> = ({
               color="primary"
               gutterBottom
             >
-              {mode === Modes.EDIT ? "Edit" : "Create"} Posting
+              {mode} Posting
             </Typography>
             <Field
               name="title"
