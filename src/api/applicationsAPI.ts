@@ -8,7 +8,8 @@ enum ApplicationEndpoints {
   UPDATE_STATUS_EXTERNAL = "/update/status",
   UPDATE_COMMENT = "/update/comment",
   CREATE_INTERVIEW_QUESTION = "/interview/question",
-  GET_INTERVIEW_QUESTIONS = "/interview/question"
+  GET_INTERVIEW_QUESTIONS = "/interview/question",
+  GET_SINGLE_APPLICATION = "/applications"
 }
 
 class ApplicationsAPI {
@@ -33,6 +34,11 @@ class ApplicationsAPI {
 
   public getInterviewQuestionsForApplication = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_INTERVIEW_QUESTIONS].getOne({
+      id
+    });
+
+  public getSingleApplication = (id: string) =>
+    this.api.endpoints[ApplicationEndpoints.GET_SINGLE_APPLICATION].getOne({
       id
     });
 

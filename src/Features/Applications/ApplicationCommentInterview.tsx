@@ -9,7 +9,8 @@ import {
   Theme,
   Typography,
   WithStyles,
-  withStyles
+  withStyles,
+  CircularProgress
 } from "@material-ui/core";
 import { Add as PlusIcon, Remove as MinusIcon } from "@material-ui/icons";
 import { Field, Form, Formik } from "formik";
@@ -18,6 +19,7 @@ import React, { useEffect } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,8 +30,11 @@ const styles = (theme: Theme) =>
       marginTop: 10
     },
     formContainer: {
-      maxWidth: 600,
+      maxWidth: 800,
       padding: 6 * theme.spacing.unit
+    },
+    inputWidth: {
+      width: 400
     },
     titleInputMargin: {
       marginTop: 9
@@ -52,44 +57,62 @@ const ApplicationCommentInterview: React.FunctionComponent<
   IProps & RouteComponentProps
 > = ({ id, classes, history }) => {
   const [interviewCount, setInterviewCount] = React.useState(0);
+  const [initialValues, setInitialValuesForm] = React.useState<any>({});
   const [isLoadingData, setIsLoadingData] = React.useState(true);
+  const { userInfo } = React.useContext(AuthorizationContext);
+  const INTERVIEW_QUESTIONS_LIMIT = 6;
 
   useEffect(() => {
-    console.log(id);
-
     fetchInterviewQuestions();
   }, []);
 
   const fetchInterviewQuestions = async () => {
     setIsLoadingData(true);
 
-    if (id) {
+    if (id && userInfo) {
       try {
-        const result = (await applicationsAPI.getInterviewQuestionsForApplication(
+        const resultInterviewQuestions = (await applicationsAPI.getInterviewQuestionsForApplication(
           `${id}`
         )).data;
 
-        console.log(result);
+        const resultApplicationData = (await applicationsAPI.getSingleApplication(
+          `${id}`
+        )).data;
+
+        const interviewInitialValues: any = {};
+
+        resultInterviewQuestions.forEach((el: any, i: number) => {
+          interviewInitialValues[`title-${i}`] = el.title;
+          interviewInitialValues[`question-${i}`] = el.question;
+        });
+
+        setInitialValuesForm({
+          comment: resultApplicationData.comment,
+          ...interviewInitialValues
+        });
+
+        setInterviewCount(resultInterviewQuestions.length);
       } catch (e) {
-        toast.error(`Failed to fetch interview questions`);
+        toast.error(`Failed to fetch application data`);
       }
     }
 
     setIsLoadingData(false);
   };
 
-  const setInitialValues = () => {
-    return false;
+  const getInitialNumberOfInterviewQuestions = () => {
+    return Object.keys(initialValues).filter(key => key.startsWith(`title`))
+      .length;
   };
 
   const decreaseInterviewCount = () => {
-    if (interviewCount > 0) {
+    if (interviewCount > getInitialNumberOfInterviewQuestions()) {
       setInterviewCount(interviewCount - 1);
     }
   };
 
   const increaseInterviewCount = () => {
-    if (interviewCount < 6) {
+    if (interviewCount < INTERVIEW_QUESTIONS_LIMIT) {
       setInterviewCount(interviewCount + 1);
     }
   };
@@ -106,18 +129,22 @@ const ApplicationCommentInterview: React.FunctionComponent<
 
       Promise.all(
         [...Array(interviewCount)].map(async (_, i) => {
-          const interviewPayload = {
-            application_id: id,
-            question: values[`question-${i}`] || "",
-            title: values[`title-${i}`] || ""
-          };
+          // we only create new interview questions, so we ignore the ones
+          // that are there for display (the disabled inputs)
+          if (!initialValues[`question-${i}`]) {
+            const interviewPayload = {
+              application_id: id,
+              question: values[`question-${i}`] || "",
+              title: values[`title-${i}`] || ""
+            };
 
-          try {
-            const result = await applicationsAPI.createInterviewQuestion(
-              interviewPayload
-            );
-          } catch (e) {
-            toast.error(`Failed to add ${i}-th question`);
+            try {
+              const result = await applicationsAPI.createInterviewQuestion(
+                interviewPayload
+              );
+            } catch (e) {
+              toast.error(`Failed to add ${i}-th question`);
+            }
           }
         })
       );
@@ -143,8 +170,9 @@ const ApplicationCommentInterview: React.FunctionComponent<
             variant="outlined"
             margin="dense"
             component={TextFieldFormik}
-            disabled={disabled}
-            required
+            disabled={initialValues[`title-${num}`]}
+            required={!initialValues[`title-${num}`]}
+            className={classes.inputWidth}
           />
           <Field
             name={`question-${num}`}
@@ -155,8 +183,9 @@ const ApplicationCommentInterview: React.FunctionComponent<
             multiline
             rows="4"
             component={TextFieldFormik}
-            disabled={disabled}
-            required
+            disabled={initialValues[`question-${num}`]}
+            required={!initialValues[`question-${num}`]}
+            className={classes.inputWidth}
           />
         </Grid>
         <Divider variant="middle" className={classes.dividerMargin} />
@@ -164,76 +193,94 @@ const ApplicationCommentInterview: React.FunctionComponent<
     );
   };
 
-  return (
-    <Paper className={classes.formContainer}>
-      <Formik
-        initialValues={{}}
-        onSubmit={async values => handleSubmit(values)}
-      >
-        <Form>
-          <Typography gutterBottom variant="h5" component="h2">
-            Comment
-          </Typography>
-          <Field
-            name="comment"
-            type="text"
-            label="comment"
-            variant="outlined"
-            margin="dense"
-            multiline
-            rows="4"
-            component={TextFieldFormik}
-            required
-          />
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-            className={classes.titleMargin}
-          >
+  const renderForm = () => {
+    if (isLoadingData) {
+      return <CircularProgress />;
+    } else {
+      return (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={async values => handleSubmit(values)}
+        >
+          <Form>
             <Typography gutterBottom variant="h5" component="h2">
-              Interviews
+              Comment
             </Typography>
-            <Grid item direction="row" justify="space-between">
-              <PlusIcon onClick={increaseInterviewCount} />
-              <MinusIcon onClick={decreaseInterviewCount} />
+            <Field
+              name="comment"
+              type="text"
+              label="comment"
+              variant="outlined"
+              margin="dense"
+              multiline
+              rows="4"
+              component={TextFieldFormik}
+              required
+              className={classes.inputWidth}
+            />
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+              className={classes.titleMargin}
+            >
+              <Typography gutterBottom variant="h5" component="h2">
+                Interviews
+              </Typography>
+              <Grid item direction="row" justify="space-between">
+                <PlusIcon onClick={increaseInterviewCount} />
+                <MinusIcon onClick={decreaseInterviewCount} />
+              </Grid>
             </Grid>
-          </Grid>
-          {[...Array(interviewCount)].map((_, i) => renderQuestion(i, false))}
-          <Grid container spacing={24} className={classes.buttonsGrid}>
-            <Grid item xs={8}>
-              <Button
-                size="large"
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Save
-              </Button>
+            {[...Array(interviewCount)].map((_, i) => renderQuestion(i, false))}
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={24}
+            >
+              <Grid item xs={8}>
+                <Button
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                >
+                  Save
+                </Button>
+              </Grid>
+              <Grid item xs={8}>
+                <Button
+                  size="large"
+                  variant="contained"
+                  type="button"
+                  fullWidth
+                >
+                  Delete
+                </Button>
+              </Grid>
+              <Grid item xs={8}>
+                <Button
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <Button size="large" variant="contained" type="button" fullWidth>
-                Delete
-              </Button>
-            </Grid>
-            <Grid item xs={8}>
-              <Button
-                size="large"
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-        </Form>
-      </Formik>
-    </Paper>
-  );
+          </Form>
+        </Formik>
+      );
+    }
+  };
+
+  return <Paper className={classes.formContainer}>{renderForm()}</Paper>;
 };
 
 export default withStyles(styles)(withRouter(ApplicationCommentInterview));
