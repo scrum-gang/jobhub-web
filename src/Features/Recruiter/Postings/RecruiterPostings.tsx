@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import {
   createStyles,
@@ -12,7 +13,7 @@ import {
 import { Add as PlusIcon } from "@material-ui/icons";
 import MUIDataTable from "mui-datatables";
 
-import postingsAPI from "../../../api/postingsAPI";
+import postingsAPI, { IPosting2 } from "../../../api/postingsAPI";
 import { AuthRedirect, Protection } from "../../../Shared/Authorization";
 import AuthorizationContext from "../../../Shared/Authorization/Context";
 import CreatePosting from "./CreatePosting";
@@ -34,7 +35,7 @@ const RecruiterPostings: React.FunctionComponent<
   WithStyles & RouteComponentProps
 > = ({ classes }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [postings, setPostings] = useState([]);
+  const [postings, setPostings] = useState<IPosting2[]>([]);
   const { userInfo } = useContext(AuthorizationContext);
 
   useEffect(() => {
@@ -55,6 +56,25 @@ const RecruiterPostings: React.FunctionComponent<
     setOpenModal(false);
   };
 
+  const handleDelete = async ({ data }: any) => {
+    try {
+      const idsToDelete = (data as any[]).map(
+        row => (postings[row.index] as IPosting2)._id
+      );
+      const promises = idsToDelete.map(id => postingsAPI.deletePosting(id));
+      await Promise.all(promises);
+      const remainingPostings = postings.filter(
+        p => !idsToDelete.includes(p._id)
+      );
+      setPostings(remainingPostings);
+      toast.success(`Successfully deleted ${data.length} job postings.`);
+    } catch (e) {
+      toast.error(
+        "Something with wrong with deletion. Please refresh and try again"
+      );
+    }
+  };
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_RECRUITER} />
@@ -64,30 +84,33 @@ const RecruiterPostings: React.FunctionComponent<
           columns={[
             {
               label: "Title",
-              name: "title",
+              name: "title"
             },
             {
               label: "Company",
-              name: "company",
+              name: "company"
             },
             {
               label: "Location",
-              name: "location",
+              name: "location"
             },
             {
               label: "Start Date",
-              name: "start_date",
+              name: "start_date"
             },
             {
               label: "End Date",
-              name: "end_date",
+              name: "end_date"
             },
             {
               label: "Deadline",
-              name: "deadline",
+              name: "deadline"
             }
           ]}
           data={postings}
+          options={{
+            onRowsDelete: handleDelete
+          }}
         />
       </Grid>
       <Fab color="secondary" className={classes.fab} onClick={handleOpen}>
