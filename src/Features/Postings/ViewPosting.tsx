@@ -42,7 +42,7 @@ const ViewPosting: React.FunctionComponent<
 > = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Paper className={classes.container}>
         <Typography variant="h3" component="h1">
           {data.position}
