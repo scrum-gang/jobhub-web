@@ -59,6 +59,7 @@ class API {
     this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
   };
 
+
   public clearJWT = () => {
     this.instance.defaults.headers.common.Authorization = undefined;
   };
