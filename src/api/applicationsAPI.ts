@@ -73,7 +73,7 @@ class ApplicationsAPI {
     this.api.endpoints[ApplicationEndpoints.UPDATE_COMMENT].updateNoId(payload);
 
   public deleteApplication = (payload: { id: number }) =>
-    this.api.endpoints[ApplicationEndpoints.DELETE_APPLICATION].deleteNoId(
+    this.api.endpoints[ApplicationEndpoints.DELETE_APPLICATION].deleteNoIdOnlyPayload(
       payload
     );
 }
