@@ -15,6 +15,7 @@ import MUIDataTable from "mui-datatables";
 
 import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import IApplication from "../../config/types/applicationType";
 import {
   AuthConsumer,
   AuthRedirect,
@@ -29,7 +30,6 @@ import ResumeColumn from "./ResumeColumn";
 import StatusLabel from "./StatusLabel";
 import TextLimitColumn from "./TextLimitColumn";
 import UrlColumn from "./UrlColumn";
-import IApplication from "../../config/types/applicationType";
 
 const mockData = [
   {

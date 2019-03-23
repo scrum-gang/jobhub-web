@@ -1,6 +1,12 @@
 import {
   Button,
+  CircularProgress,
   createStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Grid,
   Icon,
@@ -8,14 +14,8 @@ import {
   TextField,
   Theme,
   Typography,
-  WithStyles,
   withStyles,
-  CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+  WithStyles
 } from "@material-ui/core";
 import { Add as PlusIcon, Remove as MinusIcon } from "@material-ui/icons";
 import { Field, Form, Formik } from "formik";
