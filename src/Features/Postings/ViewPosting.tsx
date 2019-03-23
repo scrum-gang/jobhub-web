@@ -1,7 +1,8 @@
 import * as React from "react";
+
 import { Field, Form, Formik, FormikActions } from "formik";
-import { RouteComponentProps } from "react-router-dom";
 import { Select, TextField } from "formik-material-ui";
+import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import applicationsAPI from "../../api/applicationsAPI";
@@ -70,11 +71,11 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
       .then(response => {
         if ('status' in response.data){
           setIsLoading(false);
-          toast.error(response.data['status']);
+          toast.error(response.data.status);
         }
         else if ('status' in response.data[0]){
           setIsLoading(false);
-          toast.error(response.data[0]['status']);
+          toast.error(response.data[0].status);
         } else{
           setIsLoading(false);
           toast.success("Applied!");
@@ -103,7 +104,6 @@ const ViewPosting: React.FunctionComponent<WithStyles & RouteComponentProps> = (
 
   const getSubmitButton = () => {
     if (! isLoading) {
-      console.log("we out here");
       return <Button type="submit" color="primary" variant="contained" > Apply </Button>;
     } else {
       return <CircularProgress />;
