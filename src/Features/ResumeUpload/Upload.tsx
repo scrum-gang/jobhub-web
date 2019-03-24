@@ -15,18 +15,11 @@ import {
   WithStyles,
   withStyles
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { FilePond } from "react-filepond";
-import { toast } from "react-toastify";
-
-// tslint:disable-next-line
-import "filepond/dist/filepond.min.css";
-
-import resumesAPI from "../../api/resumesAPI";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import resumesAPI from "../../api/resumesAPI";
 import AuthorizationContext from "../../Shared/Authorization/Context";
-
 import Wrapper from "./Wrapper";
 
 const styles = (theme: Theme) =>
@@ -57,12 +50,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface IFile {
-  filename: string;
-  id: string;
-  filenameWithoutExtension: string;
-}
-
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
@@ -70,6 +57,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+
+  // 4 MB max
+  const MAX_FILE_SIZE = 4194304;
 
   useEffect(() => {
     fetchResumes();
@@ -114,43 +104,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     });
   };
 
-  const post = async (file: any) => {
-    const b64d = await handleBase64Encoding(file.file).then(async data => {
-      const bla = data.toString().split(",")[1];
-      if (userInfo && file) {
-        const postedResume: any = {
-          resume_data: bla,
-          revision: "1",
-          title: file.filenameWithoutExtension.replace(/\s/g, ""),
-          user_id: userInfo._id,
-          user_name: ""
-        };
-        try {
-          await resumesAPI.createResumeUser(postedResume);
-        } catch (e) {
-          toast.error("Failed to upload resume");
-        }
-
-        await resumesAPI.createResumeUser(postedResume);
-        const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-        setUserResumes(result);
-      }
-    });
-  };
-
   const postResumeHandler = async (file: any) => {
     const b64d = await handleBase64Encoding(file).then(
       data => data.toString().split(",")[1]
     );
 
     if (userInfo && file) {
-      // const postedResume: any = {
-      //   resume_data: b64d,
-      //   revision: "1",
-      //   title: file.filenameWithoutExtension.replace(/\s/g, ""),
-      //   user_id: userInfo._id,
-      //   user_name: ""
-      // };
       const postedResume: any = {
         resume_data: b64d,
         revision: "1",
@@ -158,7 +117,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         user_id: userInfo._id,
         user_name: ""
       };
-      console.log(postedResume);
 
       await resumesAPI.createResumeUser(postedResume);
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
@@ -213,8 +171,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   };
 
   const fileUploadHandler = (file: any) => {
-    if (file) {
+    if (file && file.type === "application/pdf" && file.size < MAX_FILE_SIZE) {
       handleResumeUpdate(file);
+    } else if (file.type !== "application/pdf") {
+      throw toast.error("File must be a PDF!");
+    } else if (file.size > MAX_FILE_SIZE) {
+      throw toast.error("Max file size is 4 MB!");
     } else {
       throw toast.error("Must choose a file to upload!");
     }
@@ -271,10 +233,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableBody>
         </Table>
 
-        {/* <Button variant="outlined">
-          <input type="file" onChange={fileSelectedHandler} />
-        </Button> */}
-
         <InputBase type="file" onChange={fileSelectedHandler} />
 
         <Button
@@ -285,18 +243,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         >
           Upload
         </Button>
-
-        {/* <div style={{ paddingTop: "40px" }}>
-          <FilePond
-            
-            onprocessfile={(items: any, err: any) => {
-              // handleResumeUpdate(items[0]);
-              console.log(items);
-            }}
-            server="https://httpbin.org/post"
-            allowRevert={false}
-          />
-        </div> */}
       </Grid>
     </Wrapper>
   );
