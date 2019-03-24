@@ -18,6 +18,7 @@ import AuthorizationContext from "../../Shared/Authorization/Context";
 import { Formik, Form, Field, FormikActions } from "formik";
 import { toast } from "react-toastify";
 import editProfileSchema from "./editProfileSchema";
+import UserType from "../../config/types/accountTypes";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -77,43 +78,20 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
     return userAPI
       .update({
         email: values.email,
-        password: values.password
+        password: values.password,
+        type: (userInfo && userInfo.type) || UserType.UNKNOWN
+      })
+      .then(response => {
+        toast.success("We did it");
       })
       .catch(error => {
         toast.error(error.response.data.message);
+      })
+      .finally(() => {
+        actions.setSubmitting(false);
       });
   };
 
-  const handleEditClick = () => {
-    setEditSaveButton(
-      !isInEditMode ? (
-        <Button size="small" color="primary">
-          Save
-        </Button>
-      ) : (
-        <IconButton color="primary" onClick={handleEditClick}>
-          <Edit />
-        </IconButton>
-      )
-    );
-    if (!isInEditMode) {
-      setEditSaveButton;
-    }
-    setEditMode(!isInEditMode);
-  };
-  const handleChange = (event: any) => {
-    setEmail(event.target.value);
-  };
-
-  const [editSaveButton, setEditSaveButton] = React.useState(
-    <IconButton color="primary" onClick={handleEditClick}>
-      <Edit />
-    </IconButton>
-  );
-
-  if (userInfo) {
-    const user = userInfo;
-  }
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
@@ -150,7 +128,6 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                   label="Email"
                   type="email"
                   margin="dense"
-                  defaultValue={userInfo && userInfo.email}
                 />
                 <Field
                   component={TextField}
@@ -159,7 +136,6 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                   label="Password"
                   type="password"
                   margin="dense"
-                  defaultValue={userInfo && userInfo.password}
                 />
                 <Button
                   type="submit"
@@ -169,15 +145,6 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                   className={classes.buttonsGrid}
                 >
                   Save
-                </Button>
-                <Button
-                  type="submit"
-                  size="small"
-                  variant="contained"
-                  color="secondary"
-                  className={classes.buttonsGrid}
-                >
-                  Cancel
                 </Button>
               </Grid>
             </Form>

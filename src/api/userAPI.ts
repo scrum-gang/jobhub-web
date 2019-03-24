@@ -12,8 +12,7 @@ enum UserEndpoints {
   LOGIN = "/login",
   LOGOUT = "/logout",
   REGISTER = "/signup",
-  RESEND_EMAIL = "/resend",
-  UPDATE = "/users/self"
+  RESEND_EMAIL = "/resend"
 }
 
 class UserAPI {
@@ -52,8 +51,12 @@ class UserAPI {
     return this.api.endpoints[UserEndpoints.REGISTER].create(payload);
   };
 
-  public update = (payload: { email: string; password: string }) => {
-    return this.api.endpoints[UserEndpoints.UPDATE].update(payload);
+  public update = (payload: {
+    email: string;
+    password: string;
+    type: UserType;
+  }) => {
+    return this.api.endpoints[UserEndpoints.SELF].updateNoId(payload);
   };
 
   public getSelf = () => {
