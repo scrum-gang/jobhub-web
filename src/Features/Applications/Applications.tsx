@@ -15,6 +15,8 @@ import MUIDataTable from "mui-datatables";
 
 import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
+import postingsAPI from "../../api/postingsAPI";
+import IApplication from "../../config/types/applicationType";
 import {
   AuthConsumer,
   AuthRedirect,
@@ -199,7 +201,7 @@ const Applications: React.FunctionComponent<
   ] = React.useState(true);
 
   // TODO: Maybe use useMemo?
-  const [applications, setApplications] = React.useState([]);
+  const [applications, setApplications] = React.useState<IApplication[]>([]);
   const { userInfo } = React.useContext(AuthorizationContext);
 
   const getColumns = () => {
@@ -306,21 +308,79 @@ const Applications: React.FunctionComponent<
 
     if (userInfo) {
       try {
-        const result = (await applicationsAPI.getApplicationsUser(userInfo._id))
-          .data;
+        const result = await getProcessedApplications(
+          (await applicationsAPI.getApplicationsUser()).data
+        );
 
-        // temporary, so that it's able to render
-        const appendedComments = result.map((el: any) => ({
-          ...el,
-          comment: "Comes from API"
-        }));
-        setApplications(appendedComments);
+        setApplications(result);
       } catch (e) {
         toast.error(`Failed to fetch applications`);
       }
     }
 
     setIsLoadingApplicationsData(false);
+  };
+
+  const getProcessedApplications = async (data: any[]) => {
+    return Promise.all(
+      data.map(async el => {
+        // [
+        //   {
+        //       "application_id": 2,
+        //       "comment": "",
+        //       "company": "asd",
+        //       "date": "2019-03-23 14:10:00.848466",
+        //       "date_posted": "",
+        //       "deadline": "",
+        //       "is_inhouse_posting": false,
+        //       "position": "asd",
+        //       "resume": "ASd",
+        //       "status": "Applied",
+        //       "url": "asd",
+        //       "user_id": "5c959b92da317e0017786440"
+        //   },
+        //   {
+        //       "application_id": 1,
+        //       "comment": "",
+        //       "date": "2019-03-23 14:09:39.630406",
+        //       "is_inhouse_posting": true,
+        //       "job_id": "asd",
+        //       "resume": "asd",
+        //       "status": "Applied",
+        //       "user_id": "5c959b92da317e0017786440"
+        //   }
+        // ]
+
+        if (!el.is_inhouse_posting) {
+          return el;
+        }
+
+        // TODO: once there's an actual correspondence of ids bt microservice
+        // uncomment this and it should work
+        // const postingData = (await postingsAPI.getPostingById(el.job_id)).data;
+        // // url, position, deadline, date_posted (postintg_date), company
+
+        // const newData = {
+        //   company: postingData.company,
+        //   date_posted: postingData.posting_date,
+        //   deadline: postingData.deadline,
+        //   position: postingData.title,
+        //   url: `${window.location.href.split("/")[0]}/postings/${
+        //     postingData._id[`$oid`]
+        //   }`
+        // };
+
+        const newData = {
+          company: "FILLER",
+          date_posted: new Date(),
+          deadline: new Date(),
+          position: "FILLER",
+          url: `http://${window.location.href.split("/")[2]}/postings/420`
+        };
+
+        return { ...el, ...newData };
+      })
+    );
   };
 
   const handleOpen = () => {
@@ -343,9 +403,11 @@ const Applications: React.FunctionComponent<
           columns={getColumns() as any}
           options={{
             onRowClick: (_, rowMeta) =>
-              history.push(`/applications/${rowMeta.dataIndex}`, {
-                values: applications[rowMeta.dataIndex]
-              }),
+              history.push(
+                `/applications/${
+                  applications[rowMeta.dataIndex].application_id
+                }`
+              ),
             responsive: "scroll",
             selectableRows: false
           }}
@@ -356,7 +418,7 @@ const Applications: React.FunctionComponent<
 
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_APPLICANT} />
       <Grid container direction="column" className={classes.container}>
         {renderApplicationData()}
       </Grid>

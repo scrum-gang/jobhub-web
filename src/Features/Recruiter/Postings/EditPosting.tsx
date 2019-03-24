@@ -9,8 +9,8 @@ import {
   WithStyles
 } from "@material-ui/core";
 
-import { AuthRedirect, Protection } from "../../Shared/Authorization";
-import ApplicationForm from "./ApplicationForm";
+import { AuthRedirect, Protection } from "../../../Shared/Authorization";
+import PostingForm from "./PostingForm";
 
 export enum Modes {
   CREATE,
@@ -32,19 +32,17 @@ const styles = (theme: Theme) =>
 
 const EditApplication: React.FunctionComponent<
   IProps & RouteComponentProps
-> = ({ classes, location }) => {
-  const values = location.state.values;
-
+> = ({ classes }) => {
   return (
     <React.Fragment>
-      <AuthRedirect protection={Protection.LOGGED_IN} />
+      <AuthRedirect protection={Protection.IS_RECRUITER} />
       <Grid
         container
         justify="center"
         alignItems="center"
         className={classes.fullHeight}
       >
-        <ApplicationForm mode={Modes.EDIT} editValues={values} />
+        <PostingForm mode={Modes.EDIT} />
       </Grid>
     </React.Fragment>
   );

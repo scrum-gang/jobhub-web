@@ -23,6 +23,7 @@ interface IEndpoints {
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
   delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
   deleteResume: (params: IThreeParam, config?: AxiosCfg) => AxiosPromise;
+  deleteNoIdOnlyPayload: (payload: any, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -77,6 +78,9 @@ class API {
 
       deleteResume: ({ id, title, revision }: IThreeParam, config = {}) =>
         this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config)
+        ,
+      deleteNoIdOnlyPayload: (payload: any) =>
+        this.instance.delete(`${entityUrl}`, { data: payload })
     };
 
     return endpoints;

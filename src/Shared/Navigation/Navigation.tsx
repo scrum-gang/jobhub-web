@@ -36,7 +36,9 @@ import {
 } from "react-router-dom";
 
 import userAPI from "../../api/userAPI";
+import UserType from "../../config/types/accountTypes";
 import { AuthConsumer } from "../../Shared/Authorization/";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 
 const drawerWidth = 240;
 
@@ -93,38 +95,55 @@ const styles = (theme: Theme) =>
     }
   });
 
+const recruiterDrawerItems = [
+  {
+    icon: <WorkIcon />,
+    route: "/recruiter",
+    text: "My Postings"
+  }
+];
+const applicationDrawerItems = [
+  {
+    icon: <HomeIcon />,
+    route: "/",
+    text: "Home"
+  },
+  {
+    icon: <WorkIcon />,
+    route: "/applications",
+    text: "My Applications"
+  },
+  {
+    icon: <SearchIcon />,
+    route: "/postings",
+    text: "JobHub Postings"
+  },
+  {
+    icon: <AttachmentIcon />,
+    route: "/",
+    text: "Resumé"
+  },
+  {
+    href: "https://github.com/scrum-gang/jobhub-chrome",
+    icon: <ExtensionIcon />,
+    text: "Chrome Extension"
+  }
+];
+
 const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
   classes,
   children,
   history
 }) => {
-  const drawerItems = [
-    {
-      icon: <HomeIcon />,
-      route: "/",
-      text: "Home"
-    },
-    {
-      icon: <WorkIcon />,
-      route: "/applications",
-      text: "My Applications"
-    },
-    {
-      icon: <SearchIcon />,
-      route: "/postings",
-      text: "JobHub Postings"
-    },
-    {
-      icon: <AttachmentIcon />,
-      route: "/resume",
-      text: "Resumé"
-    },
-    {
-      href: "https://github.com/scrum-gang/jobhub-chrome",
-      icon: <ExtensionIcon />,
-      text: "Chrome Extension"
-    }
-  ];
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
+
+  const { userInfo } = React.useContext(AuthorizationContext);
+
+  const drawerItems: any[] =
+    userInfo && userInfo.type === UserType.APPLICANT
+      ? applicationDrawerItems
+      : recruiterDrawerItems;
 
   const drawer = (
     <React.Fragment>
@@ -162,9 +181,6 @@ const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
       </List>
     </React.Fragment>
   );
-
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
 
   const handleMenuOpen = (event: React.SyntheticEvent) => {
     setMenuAnchor(event.currentTarget as HTMLElement);
@@ -237,7 +253,6 @@ const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             variant="temporary"
