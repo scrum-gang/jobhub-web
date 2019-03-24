@@ -31,14 +31,13 @@ class ResumesAPI {
 	// "resume_data":
 
   public createResumeUser = (payload: {
-    userId: string;
-    userName: string;
+    resume_data: string;
     revision: string;
     title: string;
-    resumeData: string;
-  }) => {
-    this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create(payload)
-  }
+    user_id: string;
+    user_name: string;
+  }) => this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create(payload)
+
   public getResumesUser = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_RESUMES].getOne({ id });
 

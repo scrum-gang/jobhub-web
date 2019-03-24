@@ -108,17 +108,18 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   };
 
   const postResumeHandler = async (file: any) => {
+
     if (userInfo && file) {
       const postedResume: any = {
-        resumeData: "aGVsbG8=",
+        resume_data: "aGVsbG8=",
         revision: "1",
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
-        userId: userInfo._id,
-        userName: ""
+        user_id: userInfo._id,
+        user_name: ""
       };
-      console.log(userInfo)
 
       await resumesAPI.createResumeUser(postedResume)
+
       // await resumesAPI.createResumeUser(
       //   postedResume.userId,
       //   postedResume.userName,
@@ -131,6 +132,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
       setUserResumes(result);
     }
   };
+
+  console.log(userInfo)
 
   // const getRevision = async (file:any) => {
   //   if (userInfo) {
