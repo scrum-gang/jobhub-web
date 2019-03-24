@@ -74,7 +74,7 @@ class ApplicationsAPI {
       payload
     );
 
-  public updateStatusExternalApplication = (payload: {
+  public updateStatusApplication = (payload: {
     id: number;
     new_status: string;
   }) =>

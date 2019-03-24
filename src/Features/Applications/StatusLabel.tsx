@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem } from "@material-ui/core";
 import * as React from "react";
+import { toast } from "react-toastify";
 import applicationsAPI from "../../api/applicationsAPI";
 import APPLICATION_STATUSES from "../../config/constants/statusOptions";
 
@@ -13,11 +14,16 @@ const StatusLabel: React.FunctionComponent<IStatusProps> = props => {
   const [open, setOpen] = React.useState(null);
 
   const handleStatusChange = async (status: string) => {
-    const result = await applicationsAPI.updateStatusExternalApplication({
-      id: props.application.application_id,
-      new_status: status
-    });
-    props.updateValue(status);
+    try {
+      const result = (await applicationsAPI.updateStatusApplication({
+        id: props.application.application_id,
+        new_status: status
+      })).data;
+
+      props.updateValue(status);
+    } catch (e) {
+      toast.error(`Failed to change status`);
+    }
   };
 
   const handleMenuItemClick = (status: string, e: React.MouseEvent) => {
