@@ -4,7 +4,8 @@ import { AxiosPromise } from "axios";
 enum ApplicationEndpoints {
   GET_RESUMES = "/resumes",
   DELETE_RESUME = "/resumes",
-  CREATE_RESUME = "/resumes"
+  CREATE_RESUME = "/resumes",
+  PATCH_RESUME = "/resumes"
 }
 
 class ResumesAPI {
@@ -41,6 +42,14 @@ class ResumesAPI {
       title,
       revision
     });
+
+  public patchResumeRevision = (
+    id: string,
+    payload: {
+      title: string;
+      revision: string;
+    }
+  ) => this.api.endpoints[ApplicationEndpoints.PATCH_RESUME].patch({id}, payload);
 }
 
 export default new ResumesAPI();

@@ -108,23 +108,66 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   };
 
   const postResumeHandler = async (file: any) => {
-
     if (userInfo && file) {
       const postedResume: any = {
         resume_data: "aGVsbG8=",
-        revision: "1",
+        revision: "1", // getRevision(file)? "1" : getRevision(file),
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
         user_id: userInfo._id,
         user_name: ""
       };
 
-      await resumesAPI.createResumeUser(postedResume)
+      await resumesAPI.createResumeUser(postedResume);
 
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
     }
+
+    console.log("post handler: ", file);
   };
 
+  const patchResumeRevisionHandler = async (file: any) => {
+    if (userInfo && file) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+      // console.log(result)
+      if (result.find((r: any) => r.title === file.filenameWithoutExtension)) {
+        const found = result.findIndex(
+          (r: any) => r.title === file.filenameWithoutExtension
+        );
+        const resumeToPatchId = result[found].id;
+        const newRevision = (result[found].revision = (
+          parseInt(result[found].revision) + 1
+        ).toString());
+        const payload = {
+          title: result[found].title,
+          revision: newRevision
+        };
+        console.log(resumeToPatchId);
+        await resumesAPI.patchResumeRevision(resumeToPatchId, payload);
+        const res = (await resumesAPI.getResumesUser(userInfo._id)).data;
+        setUserResumes(res);
+      }
+    }
+  };
+
+  // const getRevision = async (file:any) => {
+  //   if(userInfo) {
+  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+  //     if(result.find((r:any) => r.title === file.filenameWithoutExtension)) {
+  //        const found = result.findIndex((r:any) => r.title === file.filenameWithoutExtension)
+  //        const newRevision = result[found].revision = (parseInt(result[found].revision) + 1).toString()
+  //        result[found].revision = newRevision
+  //       // postResumeHandler(result[found])
+  //       // const res = (await resumesAPI.getResumesUser(userInfo._id)).data
+  //       // setUserResumes(res)
+  //       console.log("result", result)
+  //       console.log("index of found object in result", found)
+  //       console.log("new rev", newRevision)
+  //     } else {
+  //       return "1"
+  //     }
+  //   }
+  // }
 
   // const getRevision = async (file:any) => {
   //   if (userInfo) {
@@ -144,17 +187,18 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
   //     // const match = result.find((el:any, index:any) => el.id === result[index].id )
   //     // console.log("found match: ", match)
-  //     // 
+  //     //
   //     console.log("uploaded file: ",file.filenameWithoutExtension)
   //   }
-    
+
   // }
   // console.log("state: ", userResumes)
-
 
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
+
+  console.log("state: ", userResumes);
 
   return (
     <Wrapper title="Resume Upload">
@@ -193,6 +237,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                 <TableCell>
                   <div style={{ float: "left", paddingTop: "20px" }}>
                     <Typography>{new Date().toLocaleString()}</Typography>
+                    {/* <Typography>{resume.}</Typography> */}
                   </div>
 
                   <IconButton
@@ -214,6 +259,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
             onupdatefiles={(items: any) => {
               postResumeHandler(items[0]);
               // getRevision(items[0])
+              patchResumeRevisionHandler(items[0]);
             }}
             server="https://httpbin.org/post"
             allowRevert={false}
