@@ -32,11 +32,13 @@ import {
 import {
   Link as RouterLink,
   RouteComponentProps,
-  withRouter
+  withRouter,
+  Redirect
 } from "react-router-dom";
 
 import userAPI from "../../api/userAPI";
 import { AuthConsumer } from "../../Shared/Authorization/";
+import { render } from "timeago.js";
 
 const drawerWidth = 240;
 
@@ -215,7 +217,7 @@ const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
             >
               <MenuItem
                 onClick={() => {
-                  /**/
+                  history.push("/profile");
                 }}
               >
                 My account

@@ -19,6 +19,7 @@ import ResumeUpload from "./Features/ResumeUpload/Upload";
 
 import { AuthConsumer, AuthProvider } from "./Shared/Authorization";
 import Navigation from "./Shared/Navigation/Navigation";
+import Profile from "./Features/Profile/Profile";
 
 class App extends Component {
   private routes = (
@@ -31,6 +32,7 @@ class App extends Component {
       <Route path="/applications/:appid" component={EditApplication} />
       <Route path="/postings" component={Postings} exact />
       <Route path="/postings/:postingid" component={ViewPosting} />
+      <Route path="/profile" component={Profile} />
     </Switch>
   );
 
