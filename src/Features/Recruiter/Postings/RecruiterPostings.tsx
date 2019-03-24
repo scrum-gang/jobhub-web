@@ -33,7 +33,7 @@ const styles = (theme: Theme) =>
 
 const RecruiterPostings: React.FunctionComponent<
   WithStyles & RouteComponentProps
-> = ({ classes }) => {
+> = ({ classes, history, match }) => {
   const [openModal, setOpenModal] = useState(false);
   const [postings, setPostings] = useState<IPosting2[]>([]);
   const { userInfo } = useContext(AuthorizationContext);
@@ -75,6 +75,13 @@ const RecruiterPostings: React.FunctionComponent<
     }
   };
 
+  const handleCellClick = (
+    _: any,
+    rowMeta: any
+  ) => {
+    history.push(`${match.path}postings/${postings[rowMeta.dataIndex]._id}`);
+  };
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_RECRUITER} />
@@ -109,6 +116,7 @@ const RecruiterPostings: React.FunctionComponent<
           ]}
           data={postings}
           options={{
+            onCellClick: handleCellClick,
             onRowsDelete: handleDelete
           }}
         />
