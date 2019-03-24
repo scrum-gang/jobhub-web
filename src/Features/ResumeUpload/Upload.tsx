@@ -99,7 +99,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     if (userInfo && file) {
       const postedResume: any = {
         resume_data: "aGVsbG8=",
-        revision: "1", // getRevision(file)? "1" : getRevision(file),
+        revision: "1",
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
         user_id: userInfo._id,
         user_name: ""
@@ -110,17 +110,20 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
     }
-
-    console.log("post handler: ", file);
   };
 
   const patchResumeRevisionHandler = async (file: any) => {
     if (userInfo && file) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      // console.log(result)
-      if (result.find((r: any) => r.title === file.filenameWithoutExtension)) {
+      if (
+        result.find(
+          (r: any) =>
+            r.title === file.filenameWithoutExtension.replace(/\s/g, "")
+        )
+      ) {
         const found = result.findIndex(
-          (r: any) => r.title === file.filenameWithoutExtension
+          (r: any) =>
+            r.title === file.filenameWithoutExtension.replace(/\s/g, "")
         );
         const resumeToPatchId = result[found].id;
         const newRevision = (result[found].revision = (
@@ -130,7 +133,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           title: result[found].title,
           revision: newRevision
         };
-        console.log(resumeToPatchId);
         await resumesAPI.patchResumeRevision(resumeToPatchId, payload);
         const res = (await resumesAPI.getResumesUser(userInfo._id)).data;
         setUserResumes(res);
@@ -141,7 +143,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const handleResumeUpdate = async (file: any) => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      if (result.some((e: any) => e.title === file.filenameWithoutExtension)) {
+      if (
+        result.some(
+          (e: any) =>
+            e.title === file.filenameWithoutExtension.replace(/\s/g, "")
+        )
+      ) {
         patchResumeRevisionHandler(file);
       } else {
         postResumeHandler(file);
@@ -173,8 +180,8 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           <TableHead>
             <TableRow>
               <TableCell>Resume Name</TableCell>
-              <TableCell>Revision Number</TableCell>
-              <TableCell>Uploaded At</TableCell>
+              <TableCell align="center">Revision Number</TableCell>
+              <TableCell> </TableCell>
             </TableRow>
           </TableHead>
 
@@ -185,13 +192,14 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                   <Typography>{filteredResumes[index].title}</Typography>
                 </TableCell>
 
-                <TableCell>{filteredResumes[index].revision}</TableCell>
+                <TableCell align="center">
+                  {filteredResumes[index].revision}
+                </TableCell>
 
                 <TableCell>
-                  <div style={{ float: "left", paddingTop: "20px" }}>
+                  {/* <div style={{ float: "left", paddingTop: "20px" }}>
                     <Typography>{new Date().toLocaleString()}</Typography>
-                    {/* <Typography>{resume.}</Typography> */}
-                  </div>
+                  </div> */}
 
                   <IconButton
                     key={index}
