@@ -104,16 +104,24 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     });
   };
 
+  const waitForEncoding = async (file:any) => {
+    return Promise.resolve(handleBase64Encoding(file.file)).then(data => data.toString().split(",")[1])
+  }
+
   const postResumeHandler = async (file: any) => {
+    const b64d = await handleBase64Encoding(file.file).then(data => data.toString().split(",")[1])
+
     if (userInfo && file) {
       const postedResume: any = {
-        download_resume_url: "https://google.com",
-        resume_data: handleBase64Encoding(file.file).then(data => data.toString().split(",")[1]),
+        resume_data: b64d,
         revision: "1",
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
         user_id: userInfo._id,
         user_name: ""
       };
+      // console.log("posted: ", postedResume)
+      // console.log('b64', b64d)
+
       await resumesAPI.createResumeUser(postedResume);
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
@@ -151,12 +159,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const handleResumeUpdate = async (file: any) => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      if (
-        result.some(
-          (e: any) =>
-            e.title === file.filenameWithoutExtension.replace(/\s/g, "")
-        )
-      ) {
+      if (result.some((e: any) =>e.title === file.filenameWithoutExtension.replace(/\s/g, ""))) {
         patchResumeRevisionHandler(file);
       } else {
         postResumeHandler(file);
@@ -227,6 +230,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           <FilePond
             onupdatefiles={(items: any) => {
               handleResumeUpdate(items[0]);
+              // handleBase64Encoding(items[0].file).then(data => console.log(data.toString().split(",")[1]))
             }}
             server="https://httpbin.org/post"
             allowRevert={false}

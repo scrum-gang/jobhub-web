@@ -31,7 +31,6 @@ class ResumesAPI {
     title: string;
     user_id: string;
     user_name: string;
-    download_resume_url: string;
   }) => this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create(payload);
 
   public getResumesUser = (id: string) =>
