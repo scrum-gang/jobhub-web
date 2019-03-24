@@ -322,63 +322,46 @@ const Applications: React.FunctionComponent<
   };
 
   const getProcessedApplications = async (data: any[]) => {
+    const getInhouseApplicationMissingFields = (
+      jobId: string,
+      company: string = "Failed to load",
+      datePosted: Date = new Date(),
+      deadline: Date = new Date(),
+      position: string = "Failed to load"
+    ) => ({
+      company,
+      date_posted: datePosted,
+      deadline,
+      position,
+      url: `http://${window.location.href.split("/")[2]}/postings/${jobId}`
+    });
+
     return Promise.all(
       data.map(async el => {
-        // [
-        //   {
-        //       "application_id": 2,
-        //       "comment": "",
-        //       "company": "asd",
-        //       "date": "2019-03-23 14:10:00.848466",
-        //       "date_posted": "",
-        //       "deadline": "",
-        //       "is_inhouse_posting": false,
-        //       "position": "asd",
-        //       "resume": "ASd",
-        //       "status": "Applied",
-        //       "url": "asd",
-        //       "user_id": "5c959b92da317e0017786440"
-        //   },
-        //   {
-        //       "application_id": 1,
-        //       "comment": "",
-        //       "date": "2019-03-23 14:09:39.630406",
-        //       "is_inhouse_posting": true,
-        //       "job_id": "asd",
-        //       "resume": "asd",
-        //       "status": "Applied",
-        //       "user_id": "5c959b92da317e0017786440"
-        //   }
-        // ]
-
         if (!el.is_inhouse_posting) {
           return el;
         }
 
-        // TODO: once there's an actual correspondence of ids bt microservice
-        // uncomment this and it should work
-        // const postingData = (await postingsAPI.getPostingById(el.job_id)).data;
-        // // url, position, deadline, date_posted (postintg_date), company
+        try {
+          const postingData = (await postingsAPI.getPostingById(el.job_id))
+            .data;
 
-        // const newData = {
-        //   company: postingData.company,
-        //   date_posted: postingData.posting_date,
-        //   deadline: postingData.deadline,
-        //   position: postingData.title,
-        //   url: `${window.location.href.split("/")[0]}/postings/${
-        //     postingData._id[`$oid`]
-        //   }`
-        // };
-
-        const newData = {
-          company: "FILLER",
-          date_posted: new Date(),
-          deadline: new Date(),
-          position: "FILLER",
-          url: `http://${window.location.href.split("/")[2]}/postings/420`
-        };
-
-        return { ...el, ...newData };
+          return {
+            ...el,
+            ...getInhouseApplicationMissingFields(
+              el.job_id,
+              postingData.company,
+              postingData.posting_date,
+              postingData.deadline,
+              postingData.title
+            )
+          };
+        } catch (e) {
+          return {
+            ...el,
+            ...getInhouseApplicationMissingFields(el.job_id)
+          };
+        }
       })
     );
   };
