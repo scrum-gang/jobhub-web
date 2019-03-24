@@ -3,31 +3,21 @@ import {
   createStyles,
   WithStyles,
   Grid,
-  Avatar,
   withStyles,
-  Icon,
-  Card,
-  CardContent,
   Typography,
-  ListItem,
   Button,
   IconButton,
-  Fab,
-  List,
-  ListSubheader,
-  ListItemText,
-  ListItemIcon,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  ExpansionPanelActions,
-  TextField
+  TextField,
+  Paper
 } from "@material-ui/core";
 import React from "react";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 import { AccountCircle, Edit } from "@material-ui/icons";
 import userAPI from "../../api/userAPI";
 import AuthorizationContext from "../../Shared/Authorization/Context";
+import { Formik, Form, Field, FormikActions } from "formik";
+import { toast } from "react-toastify";
+import editProfileSchema from "./editProfileSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -54,6 +44,19 @@ const styles = (theme: Theme) =>
     },
     resize: {
       fontSize: 50
+    },
+    buttonsGrid: {
+      marginTop: theme.spacing.unit
+    },
+    grid: {
+      height: "100vh",
+      padding: 0,
+      width: "100%"
+    },
+    registerContainer: {
+      maxWidth: 400,
+      padding: 6 * theme.spacing.unit,
+      width: "90%"
     }
   });
 
@@ -62,6 +65,24 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
   const [userData, setUserData] = React.useState([]);
   const [isInEditMode, setEditMode] = React.useState(false);
   const [email, setEmail] = React.useState(userInfo && userInfo.email);
+
+  const handleEdit = (
+    values: {
+      email: string;
+      password: string;
+    },
+    actions: FormikActions<any>
+  ) => {
+    setEmail(values.email);
+    return userAPI
+      .update({
+        email: values.email,
+        password: values.password
+      })
+      .catch(error => {
+        toast.error(error.response.data.message);
+      });
+  };
 
   const handleEditClick = () => {
     setEditSaveButton(
@@ -96,79 +117,72 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.LOGGED_IN} />
-      <Grid className={classes.container}>
-        <Card className={classes.card}>
-          <CardContent>
-            <Avatar className={classes.largeIcon}>
-              <AccountCircle className={classes.largeIcon} />
-            </Avatar>
-            <ExpansionPanel>
-              <ExpansionPanelSummary expandIcon={<Edit />}>
-                <Typography className={classes.heading}>Email</Typography>
-                <Typography className={classes.heading}>
-                  {userInfo && userInfo.email}
+      <Grid
+        container
+        className={classes.grid}
+        justify="center"
+        alignItems="center"
+      >
+        <Paper className={classes.registerContainer}>
+          <Formik
+            initialValues={{
+              email: "",
+              password: ""
+            }}
+            validationSchema={editProfileSchema}
+            onSubmit={handleEdit}
+          >
+            <Form>
+              <Grid container justify="space-around" direction="column">
+                <Typography
+                  component="h1"
+                  variant="h4"
+                  color="primary"
+                  align="center"
+                  gutterBottom
+                >
+                  Edit
                 </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <TextField
-                  id="standard-name"
-                  label="New Email"
-                  className={classes.textField}
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  margin="dense"
                   defaultValue={userInfo && userInfo.email}
-                  fullWidth
                 />
-              </ExpansionPanelDetails>
-              <ExpansionPanelActions>
-                <Button size="small">Cancel</Button>
-                <Button size="small" color="primary">
+                <Field
+                  component={TextField}
+                  variant="outlined"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  margin="dense"
+                  defaultValue={userInfo && userInfo.password}
+                />
+                <Button
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  className={classes.buttonsGrid}
+                >
                   Save
                 </Button>
-              </ExpansionPanelActions>
-            </ExpansionPanel>
-            <List>
-              <TextField
-                id="outlined-read-only-input"
-                label="Email"
-                className={classes.textField}
-                defaultValue={userInfo && userInfo.email}
-                onChange={handleChange}
-                InputProps={{
-                  readOnly: !isInEditMode,
-                  input: classes.resize
-                }}
-                variant="outlined"
-              />
-              <IconButton color="primary" onClick={handleEditClick}>
-                {editSaveButton}
-              </IconButton>
-            </List>
-
-            <List>
-              <ListItem>
-                <ListItemText primary="Email" />
-                <ListItemText primary={userInfo && userInfo.email} />
-                <ListItemIcon>
-                  <IconButton color="primary">
-                    <Edit />
-                  </IconButton>
-                </ListItemIcon>
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Password" />
-                <ListItemText primary={userInfo && userInfo.password} />
-                <ListItemIcon>
-                  <IconButton color="primary">
-                    <Edit />
-                  </IconButton>
-                </ListItemIcon>
-              </ListItem>
-              <ListItem>
-                <ListItemText primary="Account Type" />
-                <ListItemText primary={userInfo && userInfo.type} />
-              </ListItem>
-            </List>
-          </CardContent>
-        </Card>
+                <Button
+                  type="submit"
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.buttonsGrid}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </Form>
+          </Formik>
+        </Paper>
       </Grid>
     </React.Fragment>
   );

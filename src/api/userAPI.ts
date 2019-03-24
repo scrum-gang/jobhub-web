@@ -4,6 +4,7 @@ import UserType from "../config/types/accountTypes";
 import ILoginResponse from "../config/types/loginResponse";
 import IUser from "../config/types/user";
 import API from "./api";
+import { userInfo } from "os";
 
 enum UserEndpoints {
   USERS = "/users",
@@ -11,7 +12,8 @@ enum UserEndpoints {
   LOGIN = "/login",
   LOGOUT = "/logout",
   REGISTER = "/signup",
-  RESEND_EMAIL = "/resend"
+  RESEND_EMAIL = "/resend",
+  UPDATE = "/users/self"
 }
 
 class UserAPI {
@@ -48,6 +50,10 @@ class UserAPI {
     type: UserType;
   }) => {
     return this.api.endpoints[UserEndpoints.REGISTER].create(payload);
+  };
+
+  public update = (payload: { email: string; password: string }) => {
+    return this.api.endpoints[UserEndpoints.UPDATE].update(payload);
   };
 
   public getSelf = () => {
