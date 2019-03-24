@@ -113,6 +113,7 @@ const ApplicationForm: React.FunctionComponent<
               variant="outlined"
               margin="dense"
               component={TextField}
+              required
             />
             <Field
               name="position"
@@ -121,6 +122,7 @@ const ApplicationForm: React.FunctionComponent<
               variant="outlined"
               margin="dense"
               component={TextField}
+              required
             />
             <Field
               name="company"
@@ -129,6 +131,7 @@ const ApplicationForm: React.FunctionComponent<
               variant="outlined"
               margin="dense"
               component={TextField}
+              required
             />
             <Field
               name="deadline"
@@ -140,6 +143,7 @@ const ApplicationForm: React.FunctionComponent<
               InputLabelProps={{
                 shrink: true
               }}
+              required
             />
             <FormControl variant="outlined" margin="dense">
               <InputLabel htmlFor="resume-simple">resume</InputLabel>
@@ -176,6 +180,7 @@ const ApplicationForm: React.FunctionComponent<
                     id="status-simple"
                   />
                 }
+                required
               >
                 {Object.keys(APPLICATION_STATUSES).map(statusOption => (
                   <MenuItem key={statusOption} value={statusOption}>
