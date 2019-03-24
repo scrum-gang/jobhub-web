@@ -1,9 +1,10 @@
 import * as Yup from "yup";
 
 const changePasswordSchema = Yup.object().shape({
-  oldPassword: Yup.string()
+  confirm: Yup.string()
     .min(6)
-    .required(),
+    .required()
+    .oneOf([Yup.ref("newPassword"), null], "Passwords must match."),
   newPassword: Yup.string()
     .min(6)
     .required()
@@ -11,10 +12,9 @@ const changePasswordSchema = Yup.object().shape({
       [Yup.ref("oldPassword"), null],
       "New password must not be the same as old one."
     ),
-  confirm: Yup.string()
+  oldPassword: Yup.string()
     .min(6)
     .required()
-    .oneOf([Yup.ref("newPassword"), null], "Passwords must match.")
 });
 
 export default changePasswordSchema;

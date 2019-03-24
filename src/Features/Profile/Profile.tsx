@@ -1,67 +1,68 @@
 import {
-  Theme,
-  createStyles,
-  WithStyles,
-  Grid,
-  withStyles,
-  Typography,
-  Button,
-  Paper,
   Avatar,
-  Icon,
-  ExpansionPanelSummary,
+  Button,
+  createStyles,
   ExpansionPanel,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Grid,
+  Icon,
+  Paper,
+  Theme,
+  Typography,
+  withStyles,
+  WithStyles
 } from "@material-ui/core";
-import React from "react";
-import { AuthRedirect, Protection } from "../../Shared/Authorization";
-import userAPI from "../../api/userAPI";
-import AuthorizationContext from "../../Shared/Authorization/Context";
-import { Formik, Form, Field, FormikActions } from "formik";
-import { toast } from "react-toastify";
-import editProfileSchema from "./editProfileSchema";
-import UserType from "../../config/types/accountTypes";
-import { TextField } from "formik-material-ui";
 import { AccountCircle, KeyboardArrowDown } from "@material-ui/icons";
-import deleteAccountSchema from "./deleteAccountSchema";
+import { Field, Form, Formik, FormikActions } from "formik";
+import { TextField } from "formik-material-ui";
+import React from "react";
+import { toast } from "react-toastify";
+import userAPI from "../../api/userAPI";
+import UserType from "../../config/types/accountTypes";
+import { AuthRedirect, Protection } from "../../Shared/Authorization";
+import AuthorizationContext from "../../Shared/Authorization/Context";
 import changePasswordSchema from "./changePasswordSchema";
+import deleteAccountSchema from "./deleteAccountSchema";
+import editProfileSchema from "./editProfileSchema";
 
 const styles = (theme: Theme) =>
   createStyles({
-    avatar: {
-      margin: -40,
-      width: 100,
-      height: 100,
-      alignSelf: "center"
+    accountContainer: {
+      justifyContent: "center",
+      maxWidth: 800,
+      padding: 6 * theme.spacing.unit,
+      width: "90%"
     },
-    icon: {
-      width: 110,
-      height: 110,
-      alignSelf: "center"
+    avatar: {
+      alignSelf: "center",
+      height: 100,
+      margin: -40,
+      width: 100
     },
     buttonsGrid: {
       marginTop: theme.spacing.unit
-    },
-    grid: {
-      height: "100vh",
-      padding: 10,
-      width: "100%",
-      justifyContent: "center"
-    },
-    accountContainer: {
-      maxWidth: 800,
-      padding: 6 * theme.spacing.unit,
-      width: "90%",
-      justifyContent: "center"
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular
     },
     flexContainer: {
       display: "flex",
       flexDirection: "column",
       padding: 0
+    },
+    grid: {
+      height: "100vh",
+      justifyContent: "center",
+      padding: 10,
+      width: "100%"
+    },
+    icon: {
+      alignSelf: "center",
+      height: 110,
+      width: 110
+    },
+
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      fontWeight: theme.typography.fontWeightRegular
     }
   });
 
@@ -216,9 +217,9 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
             <ExpansionPanelDetails>
               <Formik
                 initialValues={{
-                  oldPassword: "",
+                  confirm: "",
                   newPassword: "",
-                  confirm: ""
+                  oldPassword: ""
                 }}
                 validationSchema={changePasswordSchema}
                 onSubmit={handleChangePassword}

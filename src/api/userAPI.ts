@@ -4,7 +4,6 @@ import UserType from "../config/types/accountTypes";
 import ILoginResponse from "../config/types/loginResponse";
 import IUser from "../config/types/user";
 import API from "./api";
-import { userInfo } from "os";
 
 enum UserEndpoints {
   USERS = "/users",

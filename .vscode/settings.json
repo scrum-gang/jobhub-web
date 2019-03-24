@@ -1,3 +1,4 @@
 {
-  "tslint.packageManager": "yarn"
+  "tslint.packageManager": "yarn",
+  "python.linting.pylintEnabled": false
 }

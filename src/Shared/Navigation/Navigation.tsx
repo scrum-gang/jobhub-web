@@ -31,16 +31,15 @@ import {
 } from "@material-ui/icons";
 import {
   Link as RouterLink,
+  Redirect,
   RouteComponentProps,
-  withRouter,
-  Redirect
+  withRouter
 } from "react-router-dom";
 
 import userAPI from "../../api/userAPI";
 import UserType from "../../config/types/accountTypes";
 import { AuthConsumer } from "../../Shared/Authorization/";
 import AuthorizationContext from "../../Shared/Authorization/Context";
-import { render } from "timeago.js";
 
 const drawerWidth = 240;
 
