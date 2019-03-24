@@ -17,17 +17,6 @@ import { format } from "timeago.js";
 import postingsAPI, { IPosting2 } from "../../api/postingsAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 
-const mockData = new Array(9).fill({
-  company: "JobHub",
-  deadline: new Date(),
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  location: "Montreal, Quebec",
-  posting_date: new Date(),
-  salary: 60000,
-  title: "Software Developer",
-});
-
 const styles = (theme: Theme) =>
   createStyles({
     container: {
