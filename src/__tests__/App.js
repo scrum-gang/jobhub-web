@@ -66,7 +66,6 @@ it("postings route should work", () => {
   expect(wrapper.find(Postings)).toHaveLength(1);
 });
 
-
 it("recruiter route should work", () => {
   const wrapper = mount(
     <MemoryRouter initialEntries={["/recruiter"]}>
@@ -75,7 +74,6 @@ it("recruiter route should work", () => {
   );
   expect(wrapper.find(RecruiterPostings)).toHaveLength(1);
 });
-
 
 it("apps for posting should be viewable for recruiter", () => {
   const wrapper = mount(
@@ -132,7 +130,7 @@ it("no nav on login", () => {
 });
 
 it("api", () => {
-  const api = new API('hello.com');
+  const api = new API("hello.com");
   assert(api);
   assert(userAPI);
   assert(userAPI.clearJWT);
@@ -165,4 +163,4 @@ it("api", () => {
   assert(resumesAPI.getResumesUser);
   assert(resumesAPI.setJWT);
   assert(resumesAPI.clearJWT);
-})
+});
