@@ -77,7 +77,7 @@ const RecruiterPostings: React.FunctionComponent<
 
   const handleCellClick = (
     _: any,
-    rowMeta: { dataIndex: number; rowIndex: number }
+    rowMeta: any
   ) => {
     history.push(`${match.path}postings/${postings[rowMeta.dataIndex]._id}`);
   };
