@@ -8,6 +8,10 @@ import Register from "../Features/Authentication/Register";
 import Postings from "../Features/Postings/Postings";
 import RecruiterPostings from "../Features/Recruiter/Postings/RecruiterPostings";
 import ViewPostingApplications from "../Features/Recruiter/Postings/ViewPostingApplications";
+import ViewPosting from "../Features/Postings/ViewPosting";
+import OpenApplication from "../Features/Applications/OpenApplication";
+import ResumeUpload from "../Features/ResumeUpload/Upload";
+import Dashboard from "../Features/Dashboard/Dashboard";
 
 it("invalid path should not render anything", () => {
   const wrapper = mount(
@@ -72,4 +76,40 @@ it("apps for posting should be viewable for recruiter", () => {
     </MemoryRouter>
   );
   expect(wrapper.find(ViewPostingApplications)).toHaveLength(1);
+});
+
+it("individual postings viewable", () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={["/postings/12412"]}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(wrapper.find(ViewPosting)).toHaveLength(1);
+});
+
+it("open application", () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={["/applications/123123"]}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(wrapper.find(OpenApplication)).toHaveLength(1);
+});
+
+it("resume", () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={["/resume"]}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(wrapper.find(ResumeUpload)).toHaveLength(1);
+});
+
+it("dashboard", () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={["/"]}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(wrapper.find(Dashboard)).toHaveLength(1);
 });
