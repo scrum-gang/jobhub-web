@@ -81,9 +81,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
 
-  console.log("user resumes state: ", userResumes);
-  console.log("local storage", localStorage);
-
   React.useEffect(() => {
     if (userInfo) {
       fetchResumes();
@@ -94,8 +91,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
-      console.log("fetch: ",result)
-
     }
   };
 
@@ -112,21 +107,18 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
       );
     }
     setUserResumes(newResumes);
-    console.log("new resumes from delete: ", newResumes)
-
+    console.log(toDelete)
   };
-
-  const newPostedResumes = [...userResumes];
 
   const postResumeHandler = async (file: any) => {
     if (userInfo) {
-      const postedResume:any = {
+      const postedResume: any = {
         resumeData: "aGVsbG8=",
-        revision: "76",
-        title: file.filename,
+        revision: "760",
+        title: file.filenameWithoutExtension.replace(/\s/g, ""),
         userId: userInfo._id,
         userName: ""
-      }; 
+      };
 
       const stateResume = {
         download_resume_url: "",
@@ -135,9 +127,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         title: postedResume.title,
         user_id: postedResume.userId,
         user_name: postedResume.userName
-      }
-            
-      const create = await resumesAPI.createResumeUser(
+      };
+
+      await resumesAPI.createResumeUser(
         postedResume.userId,
         postedResume.userName,
         postedResume.revision,
@@ -147,45 +139,59 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
-
-      console.log("posted resume: ", postedResume);
-      console.log("state resume: ", stateResume)
-      
     }
-
-
   };
 
-  console.log("user resumes:dddd ", newPostedResumes)
+  // const setRevision = async (file:any) => {
+  //   if (userInfo) {
+  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+  //     console.log("revision function", result);
 
+  //     // const found = result.find( (el:any, index:any) => {
+  //     //   if(el.revision === result.revision) {
+  //     //     return el
+  //     //   }
+  //     // })
+      
+  //     // console.log(found)
 
-  const encode = (file: File, callback: any) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      callback(reader.result);
-    };
-    reader.readAsText(file);
-  };
+  //     if(result.some( (e:any) => e.title === file.title)) {
+  //       console.log('found')
+  //       // take the input object and set its revision number to the existing objects revision number + 1
+  //     } else {
+  //       console.log('not found')
+  //     }
+  //   }
+  // };
 
-  const getBase64 = (file: File) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      if (reader) {
-        // console.log(reader.result.toString())
-      }
-    };
-    reader.onerror = error => {
-      console.log("Error: ", error);
-    };
-  };
+  // setRevision("")
+  
+
+  // const encode = (file: File, callback: any) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = () => {
+  //     callback(reader.result);
+  //   };
+  //   reader.readAsText(file);
+  // };
+
+  // const getBase64 = (file: File) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = () => {
+  //     if (reader) {
+  //       // console.log(reader.result.toString())
+  //     }
+  //   };
+  //   reader.onerror = error => {
+  //     console.log("Error: ", error);
+  //   };
+  // };
 
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
-
-  const serverUrl: string = "https://resume-revision.herokuapp.com/resumes";
 
   return (
     <Wrapper title="Resume Upload">
