@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import { format } from "timeago.js";
 
+import postingsAPI, { IPosting2 } from "../../api/postingsAPI";
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 
 const mockData = new Array(9).fill({
@@ -22,9 +23,9 @@ const mockData = new Array(9).fill({
   description:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   location: "Montreal, Quebec",
-  position: "Software Developer",
-  posted: new Date(),
-  salary: 60000
+  posting_date: new Date(),
+  salary: 60000,
+  title: "Software Developer",
 });
 
 const styles = (theme: Theme) =>
@@ -37,6 +38,16 @@ const styles = (theme: Theme) =>
   });
 
 const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
+  const [postings, setPostings] = useState<IPosting2[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await postingsAPI.getAllPostings();
+      setPostings(data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_APPLICANT} />
@@ -47,7 +58,7 @@ const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
         className={classes.container}
         alignItems="center"
       >
-        {mockData.map((posting, i) => (
+        {postings.map((posting, i) => (
           <Grid item key={i} xs={12} sm={6} md={4}>
             <article>
               <Link to={`/postings/${i}`}>
@@ -55,7 +66,7 @@ const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
                   <CardActionArea>
                     <CardContent>
                       <Typography variant="h6" component="h1">
-                        {posting.position}
+                        {posting.title}
                       </Typography>
                       <Typography variant="body1" component="h2">
                         {posting.company}
@@ -64,7 +75,7 @@ const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
                         {posting.location}
                       </Typography>
                       <Typography variant="caption">
-                        {format(posting.posted)}
+                        {format(posting.posting_date)}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
