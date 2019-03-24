@@ -116,23 +116,16 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         userId: userInfo._id,
         userName: ""
       };
+      console.log(userInfo)
 
-      // const stateResume = {
-      //   download_resume_url: "",
-      //   id: 140,
-      //   revision: postedResume.revision,
-      //   title: postedResume.title,
-      //   user_id: postedResume.userId,
-      //   user_name: postedResume.userName
-      // };
-
-      await resumesAPI.createResumeUser(
-        postedResume.userId,
-        postedResume.userName,
-        postedResume.revision,
-        postedResume.title,
-        postedResume.resumeData
-      );
+      await resumesAPI.createResumeUser(postedResume)
+      // await resumesAPI.createResumeUser(
+      //   postedResume.userId,
+      //   postedResume.userName,
+      //   postedResume.revision,
+      //   postedResume.title,
+      //   postedResume.resumeData
+      // );
 
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);

@@ -90,10 +90,9 @@ class API {
         this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config),
       
       createResume: ({ id, userName, revision, title, resumeData}: IFiveParam, config = {}) =>
-        this.instance.post(`${entityUrl}?user_id=${id}&user_name=${userName}&revision=${revision}&title=${title}&resume_data=${resumeData}`, config)
+        this.instance.post(`${entityUrl}?user_id=${id}&user_name=${userName}&revision=${revision}&title=${title}&resume_data=${resumeData}`, config),
 
-// https://resume-revision.herokuapp.com/resumes?user_id=5c955d38da317e001778643b&user_name=sm&revision=1&title=gunna&resume_data=aGVsbG8=
-// https://resume-revision.herokuapp.com/resumes?user_id=5c955d38da317e001778643b&user_name=sm&revision=1&title=test&resume_data=aGVsbG8=
+
     };
 
     return endpoints;
