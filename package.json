@@ -33,6 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -46,6 +47,7 @@
   ],
   "devDependencies": {
     "@types/react-router-dom": "^4.3.1",
+    "coveralls": "^3.0.3",
     "prettier": "1.16.1",
     "tslint-config-prettier": "^1.17.0"
   }
