@@ -63,9 +63,6 @@ const ViewPosting: React.FunctionComponent<
       .then(response => {
         if ("status" in response.data) {
           toast.error(response.data.status);
-        } else if ("status" in response.data[0]) {
-          toast.error(response.data.status);
-          setHasAlreadyApplied(true);
         } else {
           toast.success("Applied!");
           setHasAlreadyApplied(true);
