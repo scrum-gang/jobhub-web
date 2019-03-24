@@ -1,4 +1,6 @@
 import React from "react";
+import assert from "assert";
+
 import App from "../App";
 import Applications from "../Features/Applications/Applications";
 import Login from "../Features/Authentication/Login";
@@ -12,6 +14,12 @@ import ViewPosting from "../Features/Postings/ViewPosting";
 import OpenApplication from "../Features/Applications/OpenApplication";
 import ResumeUpload from "../Features/ResumeUpload/Upload";
 import Dashboard from "../Features/Dashboard/Dashboard";
+import Navigation from "../Shared/Navigation/Navigation";
+import API from "../api/api";
+import userAPI from "../api/userAPI";
+import postingsAPI from "../api/postingsAPI";
+import applicationsAPI from "../api/applicationsAPI";
+import resumesAPI from "../api/resumesAPI";
 
 it("invalid path should not render anything", () => {
   const wrapper = mount(
@@ -113,3 +121,48 @@ it("dashboard", () => {
   );
   expect(wrapper.find(Dashboard)).toHaveLength(1);
 });
+
+it("no nav on login", () => {
+  const wrapper = mount(
+    <MemoryRouter initialEntries={["/login"]}>
+      <App />
+    </MemoryRouter>
+  );
+  expect(wrapper.find(Navigation)).toHaveLength(0);
+});
+
+it("api", () => {
+  const api = new API('hello.com');
+  assert(api);
+  assert(userAPI);
+  assert(userAPI.clearJWT);
+  assert(userAPI.getSelf);
+  assert(userAPI.login);
+  assert(userAPI.logout);
+  assert(userAPI.register);
+  assert(userAPI.resendVerification);
+  assert(userAPI.setJWT);
+  assert(postingsAPI);
+  assert(postingsAPI.clearJWT);
+  assert(postingsAPI.setJWT);
+  assert(postingsAPI.createPosting);
+  assert(postingsAPI.deletePosting);
+  assert(postingsAPI.getAllPostings);
+  assert(postingsAPI.getPostingById);
+  assert(postingsAPI.getPostingByRecruiter);
+  assert(applicationsAPI);
+  assert(applicationsAPI.clearJWT);
+  assert(applicationsAPI.setJWT);
+  assert(applicationsAPI.createExternalApplication);
+  assert(applicationsAPI.createInternalApplication);
+  assert(applicationsAPI.createInterviewQuestion);
+  assert(applicationsAPI.deleteApplication);
+  assert(applicationsAPI.getApplicationsPerPosting);
+  assert(applicationsAPI.getApplicationsUser);
+  assert(applicationsAPI.getInterviewQuestionsForApplication);
+  assert(applicationsAPI.getSingleApplication);
+  assert(resumesAPI);
+  assert(resumesAPI.getResumesUser);
+  assert(resumesAPI.setJWT);
+  assert(resumesAPI.clearJWT);
+})
