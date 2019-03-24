@@ -113,8 +113,6 @@ const ViewPosting: React.FunctionComponent<
       // setHasAlreadyApplied(result.job_id);
 
       // if this job is already part of our applications
-      // TODO: MAKE SURE TO REPLACE `data._id` WITH ACTUAL DATA PROPS FOR WHEN FECTHING
-      // JOB POSTING DATA
       const result = (await applicationsAPI.getApplicationsUser()).data.filter(
         (el: any) => el.job_id && el.job_id === posting._id
       );
