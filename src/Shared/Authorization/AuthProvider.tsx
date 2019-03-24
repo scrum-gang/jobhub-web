@@ -54,6 +54,7 @@ const Provider: React.FunctionComponent = ({ children }) => {
   const loadTokensForApis = (token: string) => {
     userAPI.setJWT(token);
     applicationsAPI.setJWT(token);
+    postingsAPI.setJWT(token);
     resumesAPI.setJWT(token);
   };
 
