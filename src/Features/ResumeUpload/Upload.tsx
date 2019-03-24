@@ -59,18 +59,6 @@ interface IFile {
   filenameWithoutExtension: string;
 }
 
-interface IFilePondProps {
-  server: {
-    process: {
-      headers: {};
-      method: string;
-    };
-    url: string;
-    ServerUrl: string;
-    load: string;
-  };
-}
-
 interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
@@ -150,55 +138,20 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     }
   };
 
-  // const getRevision = async (file:any) => {
-  //   if(userInfo) {
-  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-  //     if(result.find((r:any) => r.title === file.filenameWithoutExtension)) {
-  //        const found = result.findIndex((r:any) => r.title === file.filenameWithoutExtension)
-  //        const newRevision = result[found].revision = (parseInt(result[found].revision) + 1).toString()
-  //        result[found].revision = newRevision
-  //       // postResumeHandler(result[found])
-  //       // const res = (await resumesAPI.getResumesUser(userInfo._id)).data
-  //       // setUserResumes(res)
-  //       console.log("result", result)
-  //       console.log("index of found object in result", found)
-  //       console.log("new rev", newRevision)
-  //     } else {
-  //       return "1"
-  //     }
-  //   }
-  // }
-
-  // const getRevision = async (file:any) => {
-  //   if (userInfo) {
-  //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-  //     // console.log("result ", result)
-  //     // console.log("file ", file)
-  //     if(result.find((r:any) => r.title === file.filenameWithoutExtension)) {
-  //       //  console.log("true")
-  //       const found = result.findIndex((r:any) => r.title === file.filenameWithoutExtension)
-  //       console.log("index of found object in result", found)
-  //       result[found].revision = (parseInt(result[found].revision) + 1).toString()
-  //       postResumeHandler(file)
-  //       const result2 = (await resumesAPI.getResumesUser(userInfo._id)).data;
-  //       setUserResumes(result2)
-
-  //     }
-
-  //     // const match = result.find((el:any, index:any) => el.id === result[index].id )
-  //     // console.log("found match: ", match)
-  //     //
-  //     console.log("uploaded file: ",file.filenameWithoutExtension)
-  //   }
-
-  // }
-  // console.log("state: ", userResumes)
+  const handleResumeUpdate = async (file: any) => {
+    if (userInfo) {
+      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+      if (result.some((e: any) => e.title === file.filenameWithoutExtension)) {
+        patchResumeRevisionHandler(file);
+      } else {
+        postResumeHandler(file);
+      }
+    }
+  };
 
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
-
-  console.log("state: ", userResumes);
 
   return (
     <Wrapper title="Resume Upload">
@@ -257,9 +210,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         <div style={{ paddingTop: "40px" }}>
           <FilePond
             onupdatefiles={(items: any) => {
-              postResumeHandler(items[0]);
-              // getRevision(items[0])
-              patchResumeRevisionHandler(items[0]);
+              handleResumeUpdate(items[0]);
             }}
             server="https://httpbin.org/post"
             allowRevert={false}
