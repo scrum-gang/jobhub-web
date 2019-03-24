@@ -15,15 +15,16 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { FilePond } from "react-filepond";
+import { toast } from "react-toastify";
 
 // tslint:disable-next-line
 import "filepond/dist/filepond.min.css";
 
 import resumesAPI from "../../api/resumesAPI";
 import DeleteIcon from "@material-ui/icons/Delete";
-
 import AuthorizationContext from "../../Shared/Authorization/Context";
 import Wrapper from "./Wrapper";
+// import { IFilepondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -63,20 +64,21 @@ interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
-  // const [resumes, setResumes] = useState<IFile[]>([]);
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
 
-  React.useEffect(() => {
-    if (userInfo) {
-      fetchResumes();
-    }
+  useEffect(() => {
+    fetchResumes();
   }, []);
 
   const fetchResumes = async () => {
     if (userInfo) {
-      const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      setUserResumes(result);
+      try {
+        const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+        setUserResumes(result);
+      } catch (e) {
+        toast.error(`Failed to fetch resumes`);
+      }
     }
   };
 
@@ -86,11 +88,15 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     newResumes.splice(index, 1);
 
     if (userInfo) {
-      await resumesAPI.deleteResumeUser(
-        userInfo._id,
-        toDelete.title,
-        toDelete.revision
-      );
+      try {
+        await resumesAPI.deleteResumeUser(
+          userInfo._id,
+          toDelete.title,
+          toDelete.revision
+        );
+      } catch (e) {
+        toast.error(`Failed to delete resume`);
+      }
     }
     setUserResumes(newResumes);
   };
@@ -104,12 +110,10 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     });
   };
 
-  const waitForEncoding = async (file:any) => {
-    return Promise.resolve(handleBase64Encoding(file.file)).then(data => data.toString().split(",")[1])
-  }
-
   const postResumeHandler = async (file: any) => {
-    const b64d = await handleBase64Encoding(file.file).then(data => data.toString().split(",")[1])
+    const b64d = await handleBase64Encoding(file.file).then(
+      data => data.toString().split(",")[1]
+    );
 
     if (userInfo && file) {
       const postedResume: any = {
@@ -119,12 +123,20 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         user_id: userInfo._id,
         user_name: ""
       };
-      // console.log("posted: ", postedResume)
-      // console.log('b64', b64d)
 
-      await resumesAPI.createResumeUser(postedResume);
+      // throws error even though resume gets posted (first get 500 then success 200)
+      // try {
+      //   await resumesAPI.createResumeUser(postedResume);
+      // } catch (e) {
+      //   toast.error(`Failed to upload resume`);
+      // }
+
+      const post = await resumesAPI.createResumeUser(postedResume);
+
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
+
+      console.log("POST CALLED");
     }
   };
 
@@ -149,7 +161,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           revision: newRevision,
           title: result[found].title
         };
-        await resumesAPI.patchResumeRevision(resumeToPatchId, payload);
+
+        try {
+          await resumesAPI.patchResumeRevision(resumeToPatchId, payload);
+        } catch (e) {
+          toast.error("Failed to edit resume revision");
+        }
         const res = (await resumesAPI.getResumesUser(userInfo._id)).data;
         setUserResumes(res);
       }
@@ -159,7 +176,12 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const handleResumeUpdate = async (file: any) => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      if (result.some((e: any) =>e.title === file.filenameWithoutExtension.replace(/\s/g, ""))) {
+      if (
+        result.some(
+          (e: any) =>
+            e.title === file.filenameWithoutExtension.replace(/\s/g, "")
+        )
+      ) {
         patchResumeRevisionHandler(file);
       } else {
         postResumeHandler(file);
@@ -208,10 +230,6 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                 </TableCell>
 
                 <TableCell>
-                  {/* <div style={{ float: "left", paddingTop: "20px" }}>
-                    <Typography>{new Date().toLocaleString()}</Typography>
-                  </div> */}
-
                   <IconButton
                     key={index}
                     aria-label="Delete"
@@ -230,10 +248,10 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           <FilePond
             onupdatefiles={(items: any) => {
               handleResumeUpdate(items[0]);
-              // handleBase64Encoding(items[0].file).then(data => console.log(data.toString().split(",")[1]))
             }}
             server="https://httpbin.org/post"
             allowRevert={false}
+            acceptedFileTypes={["image/png"]}
           />
         </div>
       </Grid>
