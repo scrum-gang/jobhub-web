@@ -15,7 +15,6 @@ import Register from "./Features/Authentication/Register";
 import Dashboard from "./Features/Dashboard/Dashboard";
 import Postings from "./Features/Postings/Postings";
 import ViewPosting from "./Features/Postings/ViewPosting";
-import EditPosting from "./Features/Recruiter/Postings/EditPosting";
 import RecruiterPostings from "./Features/Recruiter/Postings/RecruiterPostings";
 import ViewPostingApplications from "./Features/Recruiter/Postings/ViewPostingApplications";
 import ResumeUpload from "./Features/ResumeUpload/Upload";
