@@ -1,10 +1,6 @@
-// tslint:disable-next-line
-import "filepond/dist/filepond.min.css";
-
 import {
-  Button,
+  createStyles,
   Grid,
-  Icon,
   IconButton,
   Table,
   TableBody,
@@ -15,17 +11,19 @@ import {
   Theme,
   Typography,
   WithStyles,
-  createStyles,
   withStyles
 } from "@material-ui/core";
-import { FilePond, setOptions } from "react-filepond";
 import React, { useEffect, useState } from "react";
+import { FilePond } from "react-filepond";
+
+// tslint:disable-next-line
+import "filepond/dist/filepond.min.css";
+
+import resumesAPI from "../../api/resumesAPI";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import AuthorizationContext from "../../Shared/Authorization/Context";
-import DeleteIcon from "@material-ui/icons/Delete";
 import Wrapper from "./Wrapper";
-import axios from "axios";
-import resumesAPI from "../../api/resumesAPI";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -77,7 +75,7 @@ interface IProps extends WithStyles<typeof styles> {}
 
 const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
-  const [resumes, setResumes] = useState<IFile[]>([]);
+  // const [resumes, setResumes] = useState<IFile[]>([]);
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
 
@@ -107,27 +105,26 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
       );
     }
     setUserResumes(newResumes);
-    console.log(toDelete)
   };
 
   const postResumeHandler = async (file: any) => {
-    if (userInfo) {
+    if (userInfo && file) {
       const postedResume: any = {
         resumeData: "aGVsbG8=",
-        revision: "760",
+        revision: "1",
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
         userId: userInfo._id,
         userName: ""
       };
 
-      const stateResume = {
-        download_resume_url: "",
-        id: 140,
-        revision: postedResume.revision,
-        title: postedResume.title,
-        user_id: postedResume.userId,
-        user_name: postedResume.userName
-      };
+      // const stateResume = {
+      //   download_resume_url: "",
+      //   id: 140,
+      //   revision: postedResume.revision,
+      //   title: postedResume.title,
+      //   user_id: postedResume.userId,
+      //   user_name: postedResume.userName
+      // };
 
       await resumesAPI.createResumeUser(
         postedResume.userId,
@@ -142,52 +139,31 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     }
   };
 
-  // const setRevision = async (file:any) => {
+  // const getRevision = async (file:any) => {
   //   if (userInfo) {
   //     const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-  //     console.log("revision function", result);
+  //     // console.log("result ", result)
+  //     // console.log("file ", file)
+  //     if(result.find((r:any) => r.title === file.filenameWithoutExtension)) {
+  //       //  console.log("true")
+  //       const found = result.findIndex((r:any) => r.title === file.filenameWithoutExtension)
+  //       console.log("index of found object in result", found)
+  //       result[found].revision = (parseInt(result[found].revision) + 1).toString()
+  //       postResumeHandler(file)
+  //       const result2 = (await resumesAPI.getResumesUser(userInfo._id)).data;
+  //       setUserResumes(result2)
 
-  //     // const found = result.find( (el:any, index:any) => {
-  //     //   if(el.revision === result.revision) {
-  //     //     return el
-  //     //   }
-  //     // })
-      
-  //     // console.log(found)
-
-  //     if(result.some( (e:any) => e.title === file.title)) {
-  //       console.log('found')
-  //       // take the input object and set its revision number to the existing objects revision number + 1
-  //     } else {
-  //       console.log('not found')
   //     }
+
+  //     // const match = result.find((el:any, index:any) => el.id === result[index].id )
+  //     // console.log("found match: ", match)
+  //     // 
+  //     console.log("uploaded file: ",file.filenameWithoutExtension)
   //   }
-  // };
+    
+  // }
+  // console.log("state: ", userResumes)
 
-  // setRevision("")
-  
-
-  // const encode = (file: File, callback: any) => {
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = () => {
-  //     callback(reader.result);
-  //   };
-  //   reader.readAsText(file);
-  // };
-
-  // const getBase64 = (file: File) => {
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = () => {
-  //     if (reader) {
-  //       // console.log(reader.result.toString())
-  //     }
-  //   };
-  //   reader.onerror = error => {
-  //     console.log("Error: ", error);
-  //   };
-  // };
 
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
@@ -249,9 +225,11 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         <div style={{ paddingTop: "40px" }}>
           <FilePond
             onupdatefiles={(items: any) => {
-              console.log(items[0]);
               postResumeHandler(items[0]);
+              // getRevision(items[0])
             }}
+            server="https://httpbin.org/post"
+            allowRevert={false}
           />
         </div>
       </Grid>
