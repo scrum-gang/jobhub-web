@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
-import { WithStyles, Grid } from "@material-ui/core";
+import { Grid, WithStyles } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import applicationsAPI from "../../../api/applicationsAPI";
 import { AuthRedirect, Protection } from "../../../Shared/Authorization";
@@ -28,7 +28,6 @@ const ViewPostingApplications: React.FunctionComponent<
     }
   };
 
-
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_RECRUITER} />
@@ -37,7 +36,7 @@ const ViewPostingApplications: React.FunctionComponent<
           title="Applicants"
           data={applications}
           options={{
-            selectableRows: false,
+            selectableRows: false
           }}
           columns={[
             {
