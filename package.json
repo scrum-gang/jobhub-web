@@ -34,7 +34,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "coverage": "react-scripts test --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codecov": "codecov -f coverage/*.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,6 +48,7 @@
   ],
   "devDependencies": {
     "@types/react-router-dom": "^4.3.1",
+    "codecov": "^3.2.0",
     "coveralls": "^3.0.3",
     "prettier": "1.16.1",
     "tslint-config-prettier": "^1.17.0"

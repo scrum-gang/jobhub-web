@@ -4,7 +4,6 @@ node_js:
 install:
   - npm install
 scripts:
-  - npm install codecov -g
   - npm run coverage
 after_success:
-  - codecov -f coverage/*.json
+  - npm run codecov
