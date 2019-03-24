@@ -120,20 +120,11 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
 
       await resumesAPI.createResumeUser(postedResume)
 
-      // await resumesAPI.createResumeUser(
-      //   postedResume.userId,
-      //   postedResume.userName,
-      //   postedResume.revision,
-      //   postedResume.title,
-      //   postedResume.resumeData
-      // );
-
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
     }
   };
 
-  console.log(userInfo)
 
   // const getRevision = async (file:any) => {
   //   if (userInfo) {

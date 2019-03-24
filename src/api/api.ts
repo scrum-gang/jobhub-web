@@ -14,14 +14,6 @@ interface IThreeParam {
   revision: string;
 }
 
-interface IFiveParam {
-  id: string;
-  userName: string;
-  revision: string;
-  title: string;
-  resumeData: string;
-}
-
 interface IEndpoints {
   getAll: (config?: AxiosCfg) => AxiosPromise;
   getOne: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
@@ -30,9 +22,7 @@ interface IEndpoints {
   updateNoId: (payload: any, config?: AxiosCfg) => AxiosPromise;
   patch: (params: IOneParam, payload: any, config?: AxiosCfg) => AxiosPromise;
   delete: (params: IOneParam, config?: AxiosCfg) => AxiosPromise;
-
   deleteResume: (params: IThreeParam, config?: AxiosCfg) => AxiosPromise;
-  createResume: (params: IFiveParam, config?: AxiosCfg) => AxiosPromise;
 }
 
 class API {
@@ -58,7 +48,6 @@ class API {
   public setJWT = (token: string) => {
     this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
   };
-
 
   public clearJWT = () => {
     this.instance.defaults.headers.common.Authorization = undefined;
@@ -87,12 +76,7 @@ class API {
         this.instance.delete(`${entityUrl}/${id}`, config),
 
       deleteResume: ({ id, title, revision }: IThreeParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config),
-      
-      createResume: ({ id, userName, revision, title, resumeData}: IFiveParam, config = {}) =>
-        this.instance.post(`${entityUrl}?user_id=${id}&user_name=${userName}&revision=${revision}&title=${title}&resume_data=${resumeData}`, config),
-
-
+        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config)
     };
 
     return endpoints;
