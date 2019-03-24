@@ -402,7 +402,7 @@ const Applications: React.FunctionComponent<
           data={applications}
           columns={getColumns() as any}
           options={{
-            onRowClick: (_, rowMeta) =>
+            onRowClick: (_: any, rowMeta: any) =>
               history.push(
                 `/applications/${
                   applications[rowMeta.dataIndex].application_id
