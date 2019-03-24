@@ -61,7 +61,7 @@ const ViewPosting: React.FunctionComponent<
         resume: values.resume
       })
       .then(response => {
-        if ("status" in response.data) {
+        if (response.data.status) {
           toast.error(response.data.status);
         } else {
           toast.success("Applied!");
