@@ -75,11 +75,11 @@ const RecruiterPostings: React.FunctionComponent<
     }
   };
 
-  const handleRowClick = (
+  const handleCellClick = (
     _: any,
     rowMeta: { dataIndex: number; rowIndex: number }
   ) => {
-    history.push(`${match.url}/postings/${postings[rowMeta.dataIndex]._id}`);
+    history.push(`${match.path}postings/${postings[rowMeta.dataIndex]._id}`);
   };
 
   return (
@@ -116,7 +116,7 @@ const RecruiterPostings: React.FunctionComponent<
           ]}
           data={postings}
           options={{
-            onRowClick: handleRowClick,
+            onCellClick: handleCellClick,
             onRowsDelete: handleDelete
           }}
         />
