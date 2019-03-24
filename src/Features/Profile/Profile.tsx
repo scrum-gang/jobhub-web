@@ -8,12 +8,7 @@ import {
   Button,
   Paper,
   Avatar,
-  IconButton,
-  Tooltip,
   Icon,
-  List,
-  ListItem,
-  ListItemText,
   ExpansionPanelSummary,
   ExpansionPanel,
   ExpansionPanelDetails
@@ -34,7 +29,7 @@ import changePasswordSchema from "./changePasswordSchema";
 const styles = (theme: Theme) =>
   createStyles({
     avatar: {
-      margin: 50,
+      margin: -40,
       width: 100,
       height: 100,
       alignSelf: "center"
@@ -49,7 +44,7 @@ const styles = (theme: Theme) =>
     },
     grid: {
       height: "100vh",
-      padding: 0,
+      padding: 10,
       width: "100%",
       justifyContent: "center"
     },
@@ -166,14 +161,14 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
         className={classes.grid}
         justify="center"
         alignItems="center"
+        direction="column"
       >
+        <Avatar className={classes.avatar}>
+          <Icon className={classes.icon}>
+            <AccountCircle className={classes.icon} color="primary" />
+          </Icon>
+        </Avatar>
         <Paper className={classes.accountContainer}>
-          <Avatar className={classes.avatar}>
-            <Icon className={classes.icon}>
-              <AccountCircle className={classes.icon} />
-            </Icon>
-          </Avatar>
-
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<KeyboardArrowDown />}>
               <Typography className={classes.heading}>
@@ -189,14 +184,14 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                 onSubmit={handleEdit}
               >
                 <Form>
-                  <Grid container justify="space-around" direction="column">
+                  <Grid container justify="center" direction="column">
                     <Field
                       component={TextField}
                       variant="outlined"
                       name="email"
                       label="Email"
                       type="email"
-                      margin="dense"
+                      margin="normal"
                     />
                     <Button
                       type="submit"
@@ -301,7 +296,6 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                     type="submit"
                     size="large"
                     variant="contained"
-                    color="secondary"
                     className={classes.buttonsGrid}
                   >
                     Delete
