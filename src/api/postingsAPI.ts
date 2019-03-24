@@ -1,10 +1,8 @@
-import { AxiosPromise } from "axios";
-
 import API from "./api";
 
 enum PostingEndpoints {
   CREATE = "/posting/create",
-  GET = "posting",
+  GET = "posting/id",
   GET_ALL = "posting/allpostings",
   DELETE = "/posting/id",
   GET_BY_RECRUITER = "posting/recruiter"

@@ -59,9 +59,9 @@ const Postings: React.FunctionComponent<WithStyles> = ({ classes }) => {
         alignItems="center"
       >
         {postings.map((posting, i) => (
-          <Grid item key={i} xs={12} sm={6} md={4}>
+          <Grid item key={posting._id} xs={12} sm={6} md={4}>
             <article>
-              <Link to={`/postings/${i}`}>
+              <Link to={`/postings/${posting._id}`}>
                 <Card>
                   <CardActionArea>
                     <CardContent>
