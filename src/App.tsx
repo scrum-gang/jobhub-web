@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 // tslint:disable-next-line
@@ -44,15 +44,17 @@ class App extends Component {
 
   public render() {
     return (
-      <AuthProvider>
-        <CssBaseline />
-        <ToastContainer />
-        <AuthConsumer>
-          {({ userInfo }) =>
-            !!userInfo ? <Navigation>{this.routes}</Navigation> : this.routes
-          }
-        </AuthConsumer>
-      </AuthProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <CssBaseline />
+          <ToastContainer />
+          <AuthConsumer>
+            {({ userInfo }) =>
+              !!userInfo ? <Navigation>{this.routes}</Navigation> : this.routes
+            }
+          </AuthConsumer>
+        </AuthProvider>
+      </BrowserRouter>
     );
   }
 }
