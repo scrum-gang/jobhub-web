@@ -45,7 +45,7 @@ class ApplicationsAPI {
       id
     });
 
-  public getSinglePostingApplication = (id: string) =>
+  public getApplicationsPerPosting = (id: string) =>
     this.api.endpoints[ApplicationEndpoints.GET_SINGLE_JOB_APPLICATION].getOne({
       id
     });
