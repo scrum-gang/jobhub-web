@@ -95,18 +95,26 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     setUserResumes(newResumes);
   };
 
+  const handleBase64Encoding = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const reader: any = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error: any) => reject(error);
+    });
+  };
+
   const postResumeHandler = async (file: any) => {
     if (userInfo && file) {
       const postedResume: any = {
-        resume_data: "aGVsbG8=",
+        download_resume_url: "https://google.com",
+        resume_data: handleBase64Encoding(file.file).then(data => data.toString().split(",")[1]),
         revision: "1",
         title: file.filenameWithoutExtension.replace(/\s/g, ""),
         user_id: userInfo._id,
         user_name: ""
       };
-
       await resumesAPI.createResumeUser(postedResume);
-
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
     }
@@ -127,11 +135,11 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         );
         const resumeToPatchId = result[found].id;
         const newRevision = (result[found].revision = (
-          parseInt(result[found].revision) + 1
+          parseInt(result[found].revision, 10) + 1
         ).toString());
         const payload = {
-          title: result[found].title,
-          revision: newRevision
+          revision: newRevision,
+          title: result[found].title
         };
         await resumesAPI.patchResumeRevision(resumeToPatchId, payload);
         const res = (await resumesAPI.getResumesUser(userInfo._id)).data;

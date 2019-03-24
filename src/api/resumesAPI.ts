@@ -31,6 +31,7 @@ class ResumesAPI {
     title: string;
     user_id: string;
     user_name: string;
+    download_resume_url: string;
   }) => this.api.endpoints[ApplicationEndpoints.CREATE_RESUME].create(payload);
 
   public getResumesUser = (id: string) =>
@@ -39,8 +40,8 @@ class ResumesAPI {
   public deleteResumeUser = (id: string, title: string, revision: string) =>
     this.api.endpoints[ApplicationEndpoints.DELETE_RESUME].deleteResume({
       id,
-      title,
-      revision
+      revision,
+      title
     });
 
   public patchResumeRevision = (
