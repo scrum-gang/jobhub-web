@@ -1,7 +1,9 @@
 import {
+  Button,
   createStyles,
   Grid,
   IconButton,
+  InputBase,
   Table,
   TableBody,
   TableCell,
@@ -22,9 +24,10 @@ import "filepond/dist/filepond.min.css";
 
 import resumesAPI from "../../api/resumesAPI";
 import DeleteIcon from "@material-ui/icons/Delete";
+
 import AuthorizationContext from "../../Shared/Authorization/Context";
+
 import Wrapper from "./Wrapper";
-// import { IFilepondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -66,6 +69,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const { userInfo } = React.useContext(AuthorizationContext);
   const [userResumes, setUserResumes] = useState([]);
   const [filter, setFilter] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     fetchResumes();
@@ -77,7 +81,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
         const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
         setUserResumes(result);
       } catch (e) {
-        toast.error(`Failed to fetch resumes`);
+        toast.error(`Failed to fetch resumes!`);
       }
     }
   };
@@ -95,7 +99,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           toDelete.revision
         );
       } catch (e) {
-        toast.error(`Failed to delete resume`);
+        toast.error(`Failed to delete resume ${toDelete.title}!`);
       }
     }
     setUserResumes(newResumes);
@@ -110,48 +114,64 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
     });
   };
 
+  const post = async (file: any) => {
+    const b64d = await handleBase64Encoding(file.file).then(async data => {
+      const bla = data.toString().split(",")[1];
+      if (userInfo && file) {
+        const postedResume: any = {
+          resume_data: bla,
+          revision: "1",
+          title: file.filenameWithoutExtension.replace(/\s/g, ""),
+          user_id: userInfo._id,
+          user_name: ""
+        };
+        try {
+          await resumesAPI.createResumeUser(postedResume);
+        } catch (e) {
+          toast.error("Failed to upload resume");
+        }
+
+        await resumesAPI.createResumeUser(postedResume);
+        const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
+        setUserResumes(result);
+      }
+    });
+  };
+
   const postResumeHandler = async (file: any) => {
-    const b64d = await handleBase64Encoding(file.file).then(
+    const b64d = await handleBase64Encoding(file).then(
       data => data.toString().split(",")[1]
     );
 
     if (userInfo && file) {
+      // const postedResume: any = {
+      //   resume_data: b64d,
+      //   revision: "1",
+      //   title: file.filenameWithoutExtension.replace(/\s/g, ""),
+      //   user_id: userInfo._id,
+      //   user_name: ""
+      // };
       const postedResume: any = {
         resume_data: b64d,
         revision: "1",
-        title: file.filenameWithoutExtension.replace(/\s/g, ""),
+        title: file.name.split(".")[0],
         user_id: userInfo._id,
         user_name: ""
       };
+      console.log(postedResume);
 
-      // throws error even though resume gets posted (first get 500 then success 200)
-      // try {
-      //   await resumesAPI.createResumeUser(postedResume);
-      // } catch (e) {
-      //   toast.error(`Failed to upload resume`);
-      // }
-
-      const post = await resumesAPI.createResumeUser(postedResume);
-
+      await resumesAPI.createResumeUser(postedResume);
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
       setUserResumes(result);
-
-      console.log("POST CALLED");
     }
   };
 
   const patchResumeRevisionHandler = async (file: any) => {
     if (userInfo && file) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      if (
-        result.find(
-          (r: any) =>
-            r.title === file.filenameWithoutExtension.replace(/\s/g, "")
-        )
-      ) {
+      if (result.find((r: any) => r.title === file.name.split(".")[0])) {
         const found = result.findIndex(
-          (r: any) =>
-            r.title === file.filenameWithoutExtension.replace(/\s/g, "")
+          (r: any) => r.title === file.name.split(".")[0]
         );
         const resumeToPatchId = result[found].id;
         const newRevision = (result[found].revision = (
@@ -176,12 +196,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const handleResumeUpdate = async (file: any) => {
     if (userInfo) {
       const result = (await resumesAPI.getResumesUser(userInfo._id)).data;
-      if (
-        result.some(
-          (e: any) =>
-            e.title === file.filenameWithoutExtension.replace(/\s/g, "")
-        )
-      ) {
+      if (result.some((e: any) => e.title === file.name.split(".")[0])) {
         patchResumeRevisionHandler(file);
       } else {
         postResumeHandler(file);
@@ -192,6 +207,18 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const filteredResumes: any[] = userResumes.filter((resume: any) =>
     resume.title.includes(filter)
   );
+
+  const fileSelectedHandler = (event: any) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const fileUploadHandler = (file: any) => {
+    if (file) {
+      handleResumeUpdate(file);
+    } else {
+      throw toast.error("Must choose a file to upload!");
+    }
+  };
 
   return (
     <Wrapper title="Resume Upload">
@@ -244,16 +271,32 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
           </TableBody>
         </Table>
 
-        <div style={{ paddingTop: "40px" }}>
+        {/* <Button variant="outlined">
+          <input type="file" onChange={fileSelectedHandler} />
+        </Button> */}
+
+        <InputBase type="file" onChange={fileSelectedHandler} />
+
+        <Button
+          variant="outlined"
+          color="primary"
+          style={{ maxWidth: "100px" }}
+          onClick={() => fileUploadHandler(selectedFile)}
+        >
+          Upload
+        </Button>
+
+        {/* <div style={{ paddingTop: "40px" }}>
           <FilePond
-            onupdatefiles={(items: any) => {
-              handleResumeUpdate(items[0]);
+            
+            onprocessfile={(items: any, err: any) => {
+              // handleResumeUpdate(items[0]);
+              console.log(items);
             }}
             server="https://httpbin.org/post"
             allowRevert={false}
-            acceptedFileTypes={["image/png"]}
           />
-        </div>
+        </div> */}
       </Grid>
     </Wrapper>
   );
