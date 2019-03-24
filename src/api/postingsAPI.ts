@@ -1,10 +1,9 @@
-import { AxiosPromise } from "axios";
-
 import API from "./api";
 
 enum PostingEndpoints {
   CREATE = "/posting/create",
-  GET = "posting",
+  GET = "posting/id",
+  GET_ALL = "posting/allpostings",
   DELETE = "/posting/id",
   GET_BY_RECRUITER = "posting/recruiter"
 }
@@ -58,6 +57,10 @@ class PostingAPI {
     return this.api.endpoints[PostingEndpoints.GET_BY_RECRUITER].getOne({
       id: recruiterId
     });
+  };
+
+  public getAllPostings = () => {
+    return this.api.endpoints[PostingEndpoints.GET_ALL].getAll();
   };
 }
 
