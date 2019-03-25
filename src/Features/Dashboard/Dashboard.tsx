@@ -13,14 +13,12 @@ import {
 
 import { AuthRedirect, Protection } from "../../Shared/Authorization";
 
+import JobImage from "../../assets/job.svg";
+
 const styles = createStyles({
-  card: {
-    minHeight: 250
-  },
   main: {
     margin: "0 auto",
-    marginTop: 100,
-    maxWidth: 800
+    marginTop: 200
   }
 });
 
@@ -28,41 +26,8 @@ const Dashboard: React.FunctionComponent<WithStyles> = ({ classes }) => {
   return (
     <React.Fragment>
       <AuthRedirect protection={Protection.IS_APPLICANT} />
-      <Grid container className={classes.main} spacing={32}>
-        <Grid item xs={12}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography variant="overline" component="h2" gutterBottom>
-                  My Applications
-                </Typography>
-                <Typography>0 applications submitted</Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography variant="overline" component="h2">
-                  JobHub Postings
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card className={classes.card}>
-            <CardActionArea>
-              <CardContent>
-                <Typography variant="overline" component="h2">
-                  Resumes
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Grid>
+      <Grid className={classes.main}>
+        <img style={{ width: "400px", height: "auto" }} src={JobImage} />
       </Grid>
     </React.Fragment>
   );
