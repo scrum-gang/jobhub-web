@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  colors,
   createStyles,
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -13,7 +14,6 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
 import { AccountCircle, KeyboardArrowDown } from "@material-ui/icons";
 import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
@@ -47,10 +47,10 @@ const styles = (theme: Theme) =>
     },
     deleteButton: {
       "&:hover": {
-        backgroundColor: red[900]
+        backgroundColor: colors.red[900]
       },
-      backgroundColor: red[700],
-      color: theme.palette.getContrastText(red[500]),
+      backgroundColor: colors.red[700],
+      color: theme.palette.getContrastText(colors.red[500]),
       marginTop: theme.spacing.unit
     },
     flexContainer: {

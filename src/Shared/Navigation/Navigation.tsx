@@ -31,7 +31,6 @@ import {
 } from "@material-ui/icons";
 import {
   Link as RouterLink,
-  Redirect,
   RouteComponentProps,
   withRouter
 } from "react-router-dom";
