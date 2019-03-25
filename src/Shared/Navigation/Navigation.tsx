@@ -231,7 +231,7 @@ const Navigation: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
             >
               <MenuItem
                 onClick={() => {
-                  /**/
+                  history.push("/profile");
                 }}
               >
                 My account

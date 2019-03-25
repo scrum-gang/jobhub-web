@@ -50,6 +50,18 @@ class UserAPI {
     return this.api.endpoints[UserEndpoints.REGISTER].create(payload);
   };
 
+  public update = (payload: {
+    email: string;
+    password: string;
+    type: UserType;
+  }) => {
+    return this.api.endpoints[UserEndpoints.SELF].updateNoId(payload);
+  };
+
+  public delete = () => {
+    return this.api.endpoints[UserEndpoints.SELF].deleteNoId();
+  };
+
   public getSelf = () => {
     return this.api.endpoints[UserEndpoints.SELF].getAll() as AxiosPromise<
       IUser

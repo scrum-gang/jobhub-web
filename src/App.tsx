@@ -19,6 +19,7 @@ import RecruiterPostings from "./Features/Recruiter/Postings/RecruiterPostings";
 import ViewPostingApplications from "./Features/Recruiter/Postings/ViewPostingApplications";
 import ResumeUpload from "./Features/ResumeUpload/Upload";
 
+import Profile from "./Features/Profile/Profile";
 import { AuthConsumer, AuthProvider } from "./Shared/Authorization";
 import Navigation from "./Shared/Navigation/Navigation";
 
@@ -39,6 +40,7 @@ class App extends Component {
         component={ViewPostingApplications}
         exact
       />
+      <Route path="/profile" component={Profile} />
     </Switch>
   );
 
