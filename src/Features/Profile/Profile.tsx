@@ -13,12 +13,12 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { red } from "@material-ui/core/";
+import { red } from "@material-ui/core/colors";
 import { AccountCircle, KeyboardArrowDown } from "@material-ui/icons";
 import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 import React from "react";
-import { RouteComponentProps, withRouter } from "react-router";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import userAPI from "../../api/userAPI";
 import UserType from "../../config/types/accountTypes";
