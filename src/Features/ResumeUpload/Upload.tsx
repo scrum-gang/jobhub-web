@@ -15,7 +15,7 @@ import {
   WithStyles,
   withStyles
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Delete } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import resumesAPI from "../../api/resumesAPI";
@@ -225,7 +225,7 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
                     style={{ margin: "theme.spacing.unit", float: "right" }}
                     onClick={() => deleteResumeHandler(index)}
                   >
-                    <DeleteIcon fontSize="large" />
+                    <Delete fontSize="large" />
                   </IconButton>
                 </TableCell>
               </TableRow>
