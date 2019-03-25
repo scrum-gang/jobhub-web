@@ -13,6 +13,7 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
 import { AccountCircle, KeyboardArrowDown } from "@material-ui/icons";
 import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
@@ -43,6 +44,14 @@ const styles = (theme: Theme) =>
     buttonsGrid: {
       marginTop: theme.spacing.unit
     },
+    deleteButton: {
+      "&:hover": {
+        backgroundColor: red[900]
+      },
+      backgroundColor: red[700],
+      color: theme.palette.getContrastText(red[500]),
+      marginTop: theme.spacing.unit
+    },
     flexContainer: {
       display: "flex",
       flexDirection: "column",
@@ -54,15 +63,14 @@ const styles = (theme: Theme) =>
       padding: 10,
       width: "100%"
     },
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      fontWeight: theme.typography.fontWeightRegular
+    },
     icon: {
       alignSelf: "center",
       height: 110,
       width: 110
-    },
-
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular
     }
   });
 
@@ -163,6 +171,7 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
         justify="center"
         alignItems="center"
         direction="column"
+        wrap="nowrap"
       >
         <Avatar className={classes.avatar}>
           <Icon className={classes.icon}>
@@ -201,7 +210,7 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
                       color="primary"
                       className={classes.buttonsGrid}
                     >
-                      Save
+                      Save Changes
                     </Button>
                   </Grid>
                 </Form>
@@ -271,38 +280,40 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>
-                Are you sure you want to delete your account? All data
-                pertaining to it will be wiped from JobHub's servers.
-              </Typography>
-              <Formik
-                initialValues={{
-                  password: ""
-                }}
-                validationSchema={deleteAccountSchema}
-                onSubmit={handleDelete}
-              >
-                <Form>
-                  <Grid container justify="space-around" direction="column">
-                    <Field
-                      component={TextField}
-                      variant="outlined"
-                      name="password"
-                      label="Password"
-                      type="password"
-                      margin="dense"
-                    />
-                  </Grid>
-                  <Button
-                    type="submit"
-                    size="large"
-                    variant="contained"
-                    className={classes.buttonsGrid}
-                  >
-                    Delete
-                  </Button>
-                </Form>
-              </Formik>
+              <Grid direction="column">
+                <Typography>
+                  Are you sure you want to delete your account? All data
+                  pertaining to it will be wiped from JobHub's servers.
+                </Typography>
+                <Formik
+                  initialValues={{
+                    password: ""
+                  }}
+                  validationSchema={deleteAccountSchema}
+                  onSubmit={handleDelete}
+                >
+                  <Form>
+                    <Grid container justify="space-around" direction="column">
+                      <Field
+                        component={TextField}
+                        variant="outlined"
+                        name="password"
+                        label="Password"
+                        type="password"
+                        margin="dense"
+                      />
+                    </Grid>
+                    <Button
+                      type="submit"
+                      size="large"
+                      variant="contained"
+                      className={classes.deleteButton}
+                    >
+                      Delete
+                    </Button>
+                  </Form>
+                </Formik>
+              </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Paper>
