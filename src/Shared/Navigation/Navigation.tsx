@@ -120,7 +120,7 @@ const applicationDrawerItems = [
   },
   {
     icon: <AttachmentIcon />,
-    route: "/",
+    route: "/resume",
     text: "Resumé"
   },
   {
