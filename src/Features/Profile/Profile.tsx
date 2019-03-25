@@ -13,11 +13,12 @@ import {
   withStyles,
   WithStyles
 } from "@material-ui/core";
-import { red } from "@material-ui/core/colors";
+import { red } from "@material-ui/core/";
 import { AccountCircle, KeyboardArrowDown } from "@material-ui/icons";
 import { Field, Form, Formik, FormikActions } from "formik";
 import { TextField } from "formik-material-ui";
 import React from "react";
+import { RouteComponentProps, withRouter } from "react-router";
 import { toast } from "react-toastify";
 import userAPI from "../../api/userAPI";
 import UserType from "../../config/types/accountTypes";
@@ -74,8 +75,13 @@ const styles = (theme: Theme) =>
     }
   });
 
-const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
-  const { userInfo } = React.useContext(AuthorizationContext);
+const Profile: React.FunctionComponent<WithStyles & RouteComponentProps> = ({
+  classes,
+  history
+}) => {
+  const { clearStateAndCache, userInfo } = React.useContext(
+    AuthorizationContext
+  );
 
   const handleEdit = (
     values: {
@@ -148,7 +154,8 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
         return userAPI
           .delete()
           .then(() => {
-            toast.success("Account deleted.");
+            clearStateAndCache();
+            history.push("/login");
           })
           .catch(error => {
             toast.error(error.response.data.message);
@@ -322,4 +329,4 @@ const Profile: React.FunctionComponent<WithStyles> = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(Profile);
+export default withStyles(styles)(withRouter(Profile));
