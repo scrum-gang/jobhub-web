@@ -1,5 +1,4 @@
 import API from "./api";
-import { AxiosPromise } from "axios";
 
 enum ApplicationEndpoints {
   GET_RESUMES = "/resumes",
@@ -49,7 +48,11 @@ class ResumesAPI {
       title: string;
       revision: string;
     }
-  ) => this.api.endpoints[ApplicationEndpoints.PATCH_RESUME].patch({id}, payload);
+  ) =>
+    this.api.endpoints[ApplicationEndpoints.PATCH_RESUME].patch(
+      { id },
+      payload
+    );
 }
 
 export default new ResumesAPI();

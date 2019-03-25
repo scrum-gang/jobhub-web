@@ -1,7 +1,7 @@
 import axios, {
-  AxiosRequestConfig as AxiosCfg,
   AxiosInstance,
-  AxiosPromise
+  AxiosPromise,
+  AxiosRequestConfig as AxiosCfg
 } from "axios";
 
 interface IOneParam {
@@ -56,31 +56,25 @@ class API {
 
   private createCRUDEndpoints = (entityUrl: string) => {
     const endpoints: IEndpoints = {
-      getAll: (config = {}) => this.instance.get(entityUrl, config),
-
-      getOne: ({ id }: IOneParam, config = {}) =>
-        this.instance.get(`${entityUrl}/${id}`, config),
-
       create: (payload: any, config = {}) =>
         this.instance.post(entityUrl, payload, config),
-
-      update: (payload: any, config = {}) =>
-        this.instance.put(`${entityUrl}/${payload.id}`, payload, config),
-
-      updateNoId: (payload: any, config = {}) =>
-        this.instance.put(entityUrl, payload, config),
-
-      patch: ({ id }: IOneParam, payload: any, config = {}) =>
-        this.instance.patch(`${entityUrl}/${id}`, payload, config),
-
       delete: ({ id }: IOneParam, config = {}) =>
         this.instance.delete(`${entityUrl}/${id}`, config),
-
-      deleteResume: ({ id, title, revision }: IThreeParam, config = {}) =>
-        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config)
-        ,
       deleteNoIdOnlyPayload: (payload: any) =>
-        this.instance.delete(`${entityUrl}`, { data: payload })
+        this.instance.delete(`${entityUrl}`, {
+          data: payload
+        }),
+      deleteResume: ({ id, title, revision }: IThreeParam, config = {}) =>
+        this.instance.delete(`${entityUrl}/${id}/${title}/${revision}`, config),
+      getAll: (config = {}) => this.instance.get(entityUrl, config),
+      getOne: ({ id }: IOneParam, config = {}) =>
+        this.instance.get(`${entityUrl}/${id}`, config),
+      patch: ({ id }: IOneParam, payload: any, config = {}) =>
+        this.instance.patch(`${entityUrl}/${id}`, payload, config),
+      update: (payload: any, config = {}) =>
+        this.instance.put(`${entityUrl}/${payload.id}`, payload, config),
+      updateNoId: (payload: any, config = {}) =>
+        this.instance.put(entityUrl, payload, config)
     };
 
     return endpoints;
