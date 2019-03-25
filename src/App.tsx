@@ -29,7 +29,7 @@ class App extends Component {
       <Route path="/" component={Dashboard} exact />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/resume" component={ResumeUpload} />
+      <Route path="/resume" component={ResumeUpload} exact/>
       <Route path="/applications" component={Applications} exact />
       <Route path="/applications/:appid" component={OpenApplication} />
       <Route path="/postings" component={Postings} exact />
