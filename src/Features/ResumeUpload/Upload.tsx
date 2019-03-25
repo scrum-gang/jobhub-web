@@ -173,9 +173,9 @@ const Upload: React.FunctionComponent<IProps> = ({ classes, children }) => {
   const fileUploadHandler = (file: any) => {
     if (file && file.type === "application/pdf" && file.size < MAX_FILE_SIZE) {
       handleResumeUpdate(file);
-    } else if (file.type !== "application/pdf") {
+    } else if (file && file.type !== "application/pdf") {
       throw toast.error("File must be a PDF!");
-    } else if (file.size > MAX_FILE_SIZE) {
+    } else if (file && file.size > MAX_FILE_SIZE) {
       throw toast.error("Max file size is 4 MB!");
     } else {
       throw toast.error("Must choose a file to upload!");
